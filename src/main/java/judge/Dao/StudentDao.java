@@ -1,17 +1,8 @@
 package judge.Dao;
 
 import judge.Entity.Student;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
 
-public interface StudentDao {
-    Collection<Student> getAllStudents();
-
-    Student getStudentById(int id);
-
-    void deleteStudentById(int id);
-
-    void updateStudent(Student student);
-
-    void insertStudent(Student student);
+public interface StudentDao extends CrudRepository<Student, Integer> {
 }

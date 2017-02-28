@@ -1,8 +1,13 @@
 package judge.Entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Student {
 
-    private int id;
+    @Id
+    private Integer id;
     private String name;
     private String course;
 
