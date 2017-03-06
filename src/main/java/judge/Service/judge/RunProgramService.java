@@ -1,36 +1,18 @@
-package judge.Service;
+package judge.Service.judge;
 
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
 
 @Service
-public class JudgeService {
+class RunProgramService {
 
-    public void compile(String code) throws IOException {
-        sourceCodeFile(code);
-        execProcess("gcc source_code.c");
-        execProcess("./a.out");
-    }
-
-    private static void sourceCodeFile(String code) throws IOException {
-        List<String> lines = Collections.singletonList(code);
-        Path file = Paths.get("source_code.c");
-        Files.write(file, lines, Charset.forName("UTF-8"));
-    }
-
-    private static void execProcess(String process) {
+    static int runProgram(String name) {
         String s = null;
         try {
-            Process p = Runtime.getRuntime().exec(process);
+            Process p = Runtime.getRuntime().exec("./" + name);
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));
 
@@ -52,8 +34,8 @@ public class JudgeService {
         catch (IOException e) {
             System.out.println("exception happened - here's what I know: ");
             e.printStackTrace();
-            System.exit(-1);
+            return -1;
         }
+        return 0;
     }
-
 }
