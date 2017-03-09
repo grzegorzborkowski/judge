@@ -3,7 +3,7 @@ To run, set up PostgreSQL locally.
 * Install PostgresSQL - for Ubuntu:
 ```
 sudo apt-get update
-udo apt-get install postgresql
+sudo apt-get install postgresql
 ```
 * Alter initial user:
 ```

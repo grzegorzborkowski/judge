@@ -18,7 +18,7 @@ class SourceCodeCreatorService {
     static String  createSourceCodeFile(String code) {
             List<String> lines = Collections.singletonList(code);
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-            String fileName = "soure_code" + timestamp + ".c";
+            String fileName = "source_code" + timestamp + ".c";
             Path file = Paths.get(fileName);
             try {
                 Files.write(file, lines, Charset.forName("UTF-8"));

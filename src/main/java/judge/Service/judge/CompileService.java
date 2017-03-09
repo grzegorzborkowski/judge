@@ -3,15 +3,17 @@ package judge.Service.judge;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
 class CompileService {
     static int compileSourceCode(String compilerName, String filename) {
             String s = null;
+            int exitCode = 0;
             try {
                 Process p = Runtime.getRuntime().exec(compilerName + " " + filename);
+                p.waitFor();
+                exitCode = p.exitValue();
                 BufferedReader stdInput = new BufferedReader(new
                         InputStreamReader(p.getInputStream()));
 
@@ -30,11 +32,12 @@ class CompileService {
                     System.out.println(s);
                 }
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 System.out.println("exception happened - here's what I know: ");
                 e.printStackTrace();
                 return -1;
             }
-            return 0;
+            if(exitCode==0) return 0;
+            else return -1;
         }
 }
