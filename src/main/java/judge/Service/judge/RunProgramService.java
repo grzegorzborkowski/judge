@@ -1,16 +1,18 @@
 package judge.Service.judge;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import static judge.Utils.*;
 
 @Service
 class RunProgramService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(RunProgramService.class);
 
     static int runProgram(String name) {
-        String s = null;
+        String output;
         try {
             Process p = Runtime.getRuntime().exec("./" + name);
             BufferedReader stdInput = new BufferedReader(new
@@ -19,23 +21,18 @@ class RunProgramService {
             BufferedReader stdError = new BufferedReader(new
                     InputStreamReader(p.getErrorStream()));
 
-            // read the output from the command
-            System.out.println("Here is the standard output of the command:\n");
-            while ((s = stdInput.readLine()) != null) {
-                System.out.println(s);
+            logger.info("Here is the standard output of the program (if any):");
+            while ((output = stdInput.readLine()) != null) {
+                logger.info(output);
             }
-
-            // read any errors from the attempted command
-            System.out.println("Here is the standard error of the command (if any):\n");
-            while ((s = stdError.readLine()) != null) {
-                System.out.println(s);
+            logger.info("Here is the standard error of the program (if any):");
+            while ((output = stdError.readLine()) != null) {
+                logger.info(output);
             }
+        } catch (IOException e) {
+            logger.error("Exception happened while running a program.", e);
+            return RUN_FAILURE_CODE;
         }
-        catch (IOException e) {
-            System.out.println("exception happened - here's what I know: ");
-            e.printStackTrace();
-            return -1;
-        }
-        return 0;
+        return RUN_SUCCESS_CODE;
     }
 }

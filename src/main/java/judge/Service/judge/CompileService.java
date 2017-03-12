@@ -1,43 +1,44 @@
 package judge.Service.judge;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import static judge.Utils.*;
 
 @Service
 class CompileService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(CompileService.class);
+
     static int compileSourceCode(String compilerName, String filename) {
-            String s = null;
-            int exitCode = 0;
-            try {
-                Process p = Runtime.getRuntime().exec(compilerName + " " + filename);
-                p.waitFor();
-                exitCode = p.exitValue();
-                BufferedReader stdInput = new BufferedReader(new
-                        InputStreamReader(p.getInputStream()));
+        int compilationExitCode;
+        String output;
+        try {
+            Process p = Runtime.getRuntime().exec(compilerName + " " + filename);
+            p.waitFor();
+            compilationExitCode = p.exitValue();
+            BufferedReader stdOut = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                BufferedReader stdError = new BufferedReader(new
-                        InputStreamReader(p.getErrorStream()));
-
-                // read the output from the command
-                System.out.println("Here is the standard output of the command:\n");
-                while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
-                }
-
-                // read any errors from the attempted command
-                System.out.println("Here is the standard error of the command (if any):\n");
-                while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
-                }
+            logger.debug("Here is the standard output of the compilation (if any):");
+            while ((output = stdOut.readLine()) != null) {
+                logger.debug(output);
             }
-            catch (Exception e) {
-                System.out.println("exception happened - here's what I know: ");
-                e.printStackTrace();
-                return -1;
+            logger.debug("Here is the standard error of the compilation (if any):");
+            while ((output = stdError.readLine()) != null) {
+                logger.debug(output);
             }
-            if(exitCode==0) return 0;
-            else return -1;
+        } catch (Exception e) {
+            logger.error("Exception happened during compilation.", e);
+            return COMPILATION_FAILURE_CODE;
         }
+        if (compilationExitCode == COMPILATION_SUCCESS_CODE) {
+            logger.info("Compilation successful.");
+            return COMPILATION_SUCCESS_CODE;
+        }
+        else {
+            logger.warn("Compilation failed.");
+            return COMPILATION_FAILURE_CODE;
+        }
+    }
 }

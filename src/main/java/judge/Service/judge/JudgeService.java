@@ -1,13 +1,14 @@
 package judge.Service.judge;
 
-import org.json.simple.JSONObject;
+import judge.Entity.Submission;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
+import static judge.Utils.*;
 
 @Service
 public class JudgeService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(JudgeService.class);
 
     @Autowired
     SourceCodeCreatorService sourceCodeCreatorService;
@@ -16,16 +17,19 @@ public class JudgeService {
     @Autowired
     RunProgramService runProgramService;
 
-    public JSONObject compileAndRun(String code) throws IOException {
-        JSONObject result = new JSONObject();
+    public Submission compileAndRun(String code) {
+        Submission submission = new Submission();
+        logger.info("Processing new submission.");
+        submission.setCode(code);
         String filename = SourceCodeCreatorService.createSourceCodeFile(code);
         int compileResult = CompileService.compileSourceCode("gcc", filename);
-        if(compileResult == 0) {
-            result.put("exitCode",this.runProgramService.runProgram("a.out"));
+        submission.setCompilationCode(compileResult);
+        if (compileResult == COMPILATION_SUCCESS_CODE) {
+            submission.setRunCode(this.runProgramService.runProgram("a.out"));
         } else {
-            result.put("exitCode",compileResult);
+            submission.setRunCode(RUN_FAILURE_CODE);
         }
-        return result;
+        logger.info("Processing of the submission has finished.");
+        return submission;
     }
-
 }
