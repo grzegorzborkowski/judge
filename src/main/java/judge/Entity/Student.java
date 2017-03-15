@@ -2,45 +2,34 @@ package judge.Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Student {
+public class Student extends User {
 
-    @Id
-    private Integer id;
-    private String name;
     private String course;
+    @OneToMany(mappedBy = "author")
+    private Set<Submission> submissions = new HashSet<>();
 
-    public Student(int id, String name, String course) {
-        this.id = id;
-        this.name = name;
-        this.course = course;
-    }
-
-    public Student() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCourse() {
+    public String getCourse()
+    {
         return course;
     }
 
-    public void setCourse(String course) {
+    public void setCourse(String course)
+    {
         this.course = course;
+    }
+
+    public Set<Submission> getSubmissions()
+    {
+        return submissions;
+    }
+
+    public void setSubmissions(Set<Submission> submissions)
+    {
+        this.submissions = submissions;
     }
 }
