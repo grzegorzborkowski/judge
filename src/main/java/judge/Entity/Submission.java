@@ -5,10 +5,8 @@ import javax.persistence.*;
 @Entity
 public class Submission
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Integer id;
-    @ManyToOne
     private Student author;
     private String code;
     private Integer compilationCode;
@@ -26,24 +24,17 @@ public class Submission
     {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
+    @ManyToOne
     public Student getAuthor()
     {
         return author;
-    }
-
-    public void setAuthor(Student author)
-    {
-        this.author = author;
     }
 
     public String getCode()
@@ -51,24 +42,34 @@ public class Submission
         return code;
     }
 
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
-
     public Integer getCompilationCode()
     {
         return compilationCode;
     }
 
-    public void setCompilationCode(Integer compilationCode)
-    {
-        this.compilationCode = compilationCode;
-    }
-
     public Integer getRunCode()
     {
         return runCode;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
+
+    public void setAuthor(Student author)
+    {
+        this.author = author;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public void setCompilationCode(Integer compilationCode)
+    {
+        this.compilationCode = compilationCode;
     }
 
     public void setRunCode(Integer runCode)

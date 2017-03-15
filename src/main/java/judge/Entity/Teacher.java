@@ -7,9 +7,11 @@ import java.util.Set;
 @Entity
 public class Teacher extends User
 {
-    @OneToMany(mappedBy = "author")
+
     private Set<Problem> problems = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "author")
     public Set<Problem> getProblems()
     {
         return problems;

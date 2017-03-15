@@ -5,10 +5,8 @@ import javax.persistence.*;
 @Entity
 public class Problem
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Integer id;
-    @ManyToOne
     private Teacher author;
     private String title;
     private String description;
@@ -18,24 +16,17 @@ public class Problem
     {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
+    @ManyToOne
     public Teacher getAuthor()
     {
         return author;
-    }
-
-    public void setAuthor(Teacher author)
-    {
-        this.author = author;
     }
 
     public String getTitle()
@@ -43,24 +34,34 @@ public class Problem
         return title;
     }
 
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
     public String getDescription()
     {
         return description;
     }
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
     public String getPath()
     {
         return path;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
+
+    public void setAuthor(Teacher author)
+    {
+        this.author = author;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public void setPath(String path)
