@@ -3,6 +3,7 @@
 ### Java template
 *.class
 
+.idea
 # Mobile Tools for Java (J2ME)
 judge-backend/.mtj.tmp/
 

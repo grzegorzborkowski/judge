@@ -15,10 +15,9 @@ class CodeFormComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {code : '', compilationResult : "", executionResult: ""};
+        this.state = {code : '', compilationCode : "", runCode: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        console.log(this.state);
     }
 
     handleChange(event) {
@@ -26,17 +25,22 @@ class CodeFormComponent extends React.Component {
     }
 
     handleSubmit(event) {
+        var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.JUDGE_ENDPOINT, {
-           code: this.state.code}, {
+            code: this.state.code}, {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(function (response) {
-            console.log(response);
-        })
-            .catch(function (error) {
-                console.log(error);
+        }).then(response => {
+            self.setState
+            ({
+                compilationCode : response["data"].compilationCode,
+                runCode : response["data"].runCode
             });
+        }).catch(function (error) {
+            console.log("ERROR");
+            console.log(error);
+        });
         event.preventDefault();
     }
 
@@ -49,21 +53,21 @@ class CodeFormComponent extends React.Component {
                 <div className="col-xs-12">
                     <form onSubmit={this.handleSubmit}>
                         <AceEditor mode="c_cpp"
-                           theme="dreamweaver"
-                           value={this.state.code}
-                           width="1000px"
-                           fontSize={18}
-                           wrapEnabled={true}
-                           onChange={this.handleChange}/>
+                                   theme="dreamweaver"
+                                   value={this.state.code}
+                                   width="1000px"
+                                   fontSize={18}
+                                   wrapEnabled={true}
+                                   onChange={this.handleChange}/>
                         <Button
-                                type="submit"
-                                bsStyle="primary"
-                                className="codeFormButton"> Submit
+                            type="submit"
+                            bsStyle="primary"
+                            className="codeFormButton"> Submit
                         </Button>
                     </form>
 
-                <div> Rezultat kompilacji: {this.state.compilationResult} </div>
-                <div> Rezultat wykonania: {this.state.executionResult} </div>
+                    <div> Rezultat kompilacji: {this.state.compilationCode} </div>
+                    <div> Rezultat wykonania: {this.state.runCode} </div>
                 </div>
             </div>
         );
