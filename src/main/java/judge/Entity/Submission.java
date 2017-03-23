@@ -20,6 +20,13 @@ public class Submission
         this.runCode = runCode;
     }
 
+    public Submission(String code, Integer compilationCode, Integer runCode)
+    {
+        this.code = code;
+        this.compilationCode = compilationCode;
+        this.runCode = runCode;
+    }
+
     public Submission()
     {
     }
