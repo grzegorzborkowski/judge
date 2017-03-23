@@ -1,9 +1,11 @@
+# BACKEND
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 *.class
 
+.idea
 # Mobile Tools for Java (J2ME)
-.mtj.tmp/
+judge-backend/.mtj.tmp/
 
 # Package Files #
 *.jar
@@ -17,26 +19,26 @@ hs_err_pid*
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/dictionaries
-.idea/vcs.xml
-.idea/jsLibraryMappings.xml
+judge-backend/.idea/workspace.xml
+judge-backend/.idea/tasks.xml
+judge-backend/.idea/dictionaries
+judge-backend/.idea/vcs.xml
+judge-backend/.idea/jsLibraryMappings.xml
 
 # Sensitive or high-churn files:
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/dataSources.local.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
+judge-backend/.idea/dataSources.ids
+judge-backend/.idea/dataSources.xml
+judge-backend/.idea/dataSources.local.xml
+judge-backend/.idea/sqlDataSources.xml
+judge-backend/.idea/dynamic.xml
+judge-backend/.idea/uiDesigner.xml
 
 # Gradle:
-.idea/gradle.xml
-.idea/libraries
+judge-backend/.idea/gradle.xml
+judge-backend/.idea/libraries
 
 # Mongo Explorer plugin:
-.idea/mongoSettings.xml
+judge-backend/.idea/mongoSettings.xml
 
 ## File-based project format:
 *.iws
@@ -44,16 +46,21 @@ hs_err_pid*
 ## Plugin-specific files:
 
 # IntelliJ
-/out/
+judge-backend/out/
 
 # mpeltonen/sbt-idea plugin
-.idea_modules/
+judge-backend/.idea_modules/
 
 # JIRA plugin
-atlassian-ide-plugin.xml
+judge-backend/atlassian-ide-plugin.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
+judge-backend/com_crashlytics_export_strings.xml
+judge-backend/crashlytics.properties
+judge-backend/crashlytics-build.properties
+judge-backend/fabric.properties
+
+# FRONTEND
+judge-frontend/node_modules
+judge-frontend/.idea
+judge-frontend/src/client/public/bundle.js
