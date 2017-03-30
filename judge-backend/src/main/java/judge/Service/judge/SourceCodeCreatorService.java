@@ -16,10 +16,14 @@ import java.util.List;
 class SourceCodeCreatorService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(SourceCodeCreatorService.class);
 
-    static String createSourceCodeFile(String code) {
+    String createSourceCodeFile(String code) {
         List<String> lines = Collections.singletonList(code);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String fileName = "source_code" + timestamp + ".c";
+        /*
+            Math.random() will be replaced by user ID.
+            It is used to avoid overwriting generated source files during parallel tests.
+         */
+        String fileName = "source_code" + timestamp + Math.random()  + ".c";
         Path file = Paths.get(fileName);
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
