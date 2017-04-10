@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/judge")
 @CrossOrigin
-public class JudgeController {
+class JudgeController {
     private static org.apache.log4j.Logger logger = Logger.getLogger(JudgeService.class);
 
     @Autowired
@@ -21,7 +21,7 @@ public class JudgeController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody public String insertSolution(@RequestBody JsonNode submission) {
-        String code = new String();
+        String code;
         try {
             code = submission.get("code").asText();
         } catch (Exception e) {
@@ -31,5 +31,13 @@ public class JudgeController {
         }
         JsonNode result = this.resultGenerator.generateResult(this.judgeService.compileAndRun(code));
         return result.toString();
+    }
+
+    public void setJudgeService(JudgeService judgeService) {
+        this.judgeService = judgeService;
+    }
+
+    public void setResultGenerator(ResultGenerator resultGenerator) {
+        this.resultGenerator = resultGenerator;
     }
 }

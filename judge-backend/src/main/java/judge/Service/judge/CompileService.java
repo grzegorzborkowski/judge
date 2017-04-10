@@ -10,7 +10,7 @@ import static judge.Utils.*;
 class CompileService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(CompileService.class);
 
-    static int compileSourceCode(String compilerName, String filename) {
+    int compileSourceCode(String compilerName, String filename) {
         int compilationExitCode;
         String output;
         try {
