@@ -25,6 +25,9 @@ judge-backend/.idea/dictionaries
 judge-backend/.idea/vcs.xml
 judge-backend/.idea/jsLibraryMappings.xml
 
+# Files generated in runtime:
+judge-backend/generated-in-runtime/*
+
 # Sensitive or high-churn files:
 judge-backend/.idea/dataSources.ids
 judge-backend/.idea/dataSources.xml

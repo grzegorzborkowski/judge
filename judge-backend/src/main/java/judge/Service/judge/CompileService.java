@@ -10,11 +10,11 @@ import static judge.Utils.*;
 class CompileService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(CompileService.class);
 
-    int compileSourceCode(String compilerName, String filename) {
+    int compileSourceCode(String compilerName, String compilationParams, String filename) {
         int compilationExitCode;
         String output;
         try {
-            Process p = Runtime.getRuntime().exec(compilerName + " " + filename);
+            Process p = Runtime.getRuntime().exec(compilerName + " " + compilationParams + " " + filename);
             p.waitFor();
             compilationExitCode = p.exitValue();
             BufferedReader stdOut = new BufferedReader(new InputStreamReader(p.getInputStream()));

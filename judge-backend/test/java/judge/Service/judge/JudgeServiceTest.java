@@ -23,7 +23,8 @@ public class JudgeServiceTest {
     @Before
     public void init() {
         when(sourceCodeCreatorService.createSourceCodeFile(sourceCodeFile)).thenReturn(sourceCodeFile);
-        when(compileService.compileSourceCode("gcc",sourceCodeFile)).thenReturn(COMPILATION_SUCCESS_CODE);
+        when(compileService.compileSourceCode("gcc", "-o " + sourceCodeFile + ".out", sourceCodeFile))
+                .thenReturn(COMPILATION_SUCCESS_CODE);
         when(runProgramService.runProgram("a.out")).thenReturn(RUN_SUCCESS_CODE);
 
         judgeService.setSourceCodeCreatorService(sourceCodeCreatorService);

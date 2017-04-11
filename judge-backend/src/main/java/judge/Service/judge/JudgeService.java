@@ -21,9 +21,10 @@ public class JudgeService {
         Submission submission = new Submission();
         logger.info("Processing new submission.");
         submission.setCode(code);
-        String filename = sourceCodeCreatorService.createSourceCodeFile(code);
-        String executableFilename = filename + ".out";
-        int compileResult = compileService.compileSourceCode(String.format("gcc -o %s", executableFilename), filename);
+        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code);
+        String executableFilename = sourceCodeFilename + ".out";
+        String compilationParams = "-o " + executableFilename;
+        int compileResult = compileService.compileSourceCode("gcc", compilationParams, sourceCodeFilename);
         submission.setCompilationCode(compileResult);
         if (compileResult == COMPILATION_SUCCESS_CODE) {
             submission.setRunCode(runProgramService.runProgram(executableFilename));

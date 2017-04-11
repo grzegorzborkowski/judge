@@ -10,4 +10,6 @@ public final class Utils {
 
     public static final int TIMEOUT_VALUE_SECONDS = 10;
 
+    public static final String RUNTIME_DIR_NAME = "generated-in-runtime/";
+
 }
