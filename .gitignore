@@ -68,3 +68,7 @@ judge-frontend/node_modules
 judge-frontend/.idea
 judge-frontend/src/client/public/bundle.js
 judge-frontend/src/client.min.js
+
+# EXTERNAL RUNNER
+judge-external-runner/go/examine/*
+

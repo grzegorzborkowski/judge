@@ -97,9 +97,9 @@ public class SimulatedRequestTest {
         }
     }
 
-    /*
-    Response time is estimated to be less than program processing time limit plus 5 seconds.
-    After this time test fails.
+    /**
+     * Response time is estimated to be less than program processing time limit plus 5 seconds.
+     * After this time test fails.
      */
     private int estimateResponseTimeMilliseconds() {
         return TIMEOUT_VALUE_SECONDS*1000+5000;
