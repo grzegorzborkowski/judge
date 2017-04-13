@@ -67,3 +67,4 @@ judge-backend/fabric.properties
 judge-frontend/node_modules
 judge-frontend/.idea
 judge-frontend/src/client/public/bundle.js
+judge-frontend/src/client.min.js

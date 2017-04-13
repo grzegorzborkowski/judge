@@ -6,7 +6,7 @@ class ProblemDescription extends React.Component {
     render() {
         return (
             <div>
-                <div><b>1. Ciąg Fibonacciego</b></div>
+                <div><b>Ciąg Fibonacciego</b></div>
                 <div> Mając podaną liczbę naturalną n, podaj n-ty wyraz ciągu fibonacciego </div>
             </div>
         );

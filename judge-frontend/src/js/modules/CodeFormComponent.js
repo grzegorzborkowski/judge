@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import * as constants from './util.jsx'
+import * as constants from './util.js'
 import { Button } from 'react-bootstrap';
 import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
