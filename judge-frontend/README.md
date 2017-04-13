@@ -1,5 +1,4 @@
-#judge-frontend
-
+<h1> Judge frontend </h1>
 
 * Install dependencies (npm required):
 ```
@@ -11,8 +10,7 @@ npm install
 npm run dev
 ```
 
-* Open :
+* Open in your browser :
 ```
-src\client\index.html
+localhost:3008
 ```
-
