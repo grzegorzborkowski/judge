@@ -21,9 +21,10 @@
     "react-ace": "^4.1.6",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^0.14.6",
-    "react-facebook-login": "file:react-facebook-login",
+    "react-facebook-login": "^3.6.0",
     "react-facebook-login-component": "^0.7.0",
     "react-router": "^1.0.3",
+    "universal-cookie": "^2.0.7",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"
   },

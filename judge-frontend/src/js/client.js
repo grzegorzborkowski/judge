@@ -21,10 +21,12 @@ class LoginControl extends React.Component {
 
     render() {
         const isLoggedIn = this.state.isLoggedIn;
+        console.log("Rendering. isLoggedIn :",isLoggedIn);
         const responseFacebook = (response) => {
             var token = response["accessToken"];
+            var facebookID = response["id"];
             cookies.set("token",token);
-            console.log("My token: ", cookies.get("token"));
+            cookies.set("facebookID", facebookID);
             console.log(response);
             if (!response.status) {
                 console.log("Success!");
