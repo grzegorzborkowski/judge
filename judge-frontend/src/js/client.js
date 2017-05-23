@@ -53,14 +53,17 @@ class LoginControl extends React.Component {
                 </Router>;
         } else {
             content =
-                <div>
-                    <h2>To use Judge app please log in:</h2>
-                    <FacebookLogin
-                        appId="667095053501525"
-                        language="en_US"
-                        autoLoad={true}
-                        callback={responseFacebook}
-                        fields="id,name,email,picture"/>
+                <div class="container">
+                    <div class="center">
+                        <h4>To use Judge app please log in:</h4>
+                        <FacebookLogin
+                            appId="667095053501525"
+                            language="en_US"
+                            autoLoad={true}
+                            callback={responseFacebook}
+                            cssClass="my-facebook-button-class"
+                            fields="id,name,email,picture"/>
+                    </div>
                 </div>;
         }
 
