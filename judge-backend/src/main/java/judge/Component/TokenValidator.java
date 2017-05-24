@@ -12,6 +12,7 @@ public class TokenValidator {
     private static org.apache.log4j.Logger logger = Logger.getLogger(TokenValidator.class);
 
     public Boolean validateToken (String token, String givenID) {
+        logger.info("Token validation has started.");
         RestTemplate restTemplate = new RestTemplate();
         String verifiedID;
         try {

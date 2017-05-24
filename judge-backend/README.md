@@ -1,5 +1,6 @@
 To run, set up PostgreSQL locally.
 
+**First usage only:**
 * Install PostgresSQL - for Ubuntu:
 ```
 sudo apt-get update
@@ -16,7 +17,14 @@ postgres=# ALTER USER postgres PASSWORD 'init';
 createdb -h localhost -p 5432 -U postgres springbootdb
 ```
 
-**External runner**
+**Every usage:**
+
+***Database:***
+* run PostgresSQL on your machine
+
+`sudo -u postgres psql`
+
+***External runner***
 
 External runner is designed as a GO web server now.
 To run the project with external runner, you have to:
@@ -27,4 +35,46 @@ To run the project with external runner, you have to:
 
     server works on
     `localhost:8123/submission`
+
+***Spring application***
+* IntelliJ users: if IntelliJ didn't do it by itself, mark Beans.xml as a valid xml source for judge module
 * run Spring application
+
+
+
+****FLOW SUMMARY****
+
+Backend supports the following requests:
+
+**GET**
+
+* /student/getAll
+* /submission/getAll
+* /student/getById
+
+param: id = [student id]
+* /submission/getAllForUser
+
+param: id = [student id]
+
+
+**POST**
+
+* /judge/submit
+
+{   "code":"[code as string]",
+	"token":"[token]",
+	"facebookID":"[id]"
+}
+
+* /student/add
+
+{   "facebookID":"[id]",
+    "email":"[email]",
+    "password":"[password]",
+    "course":"[course name]",
+    "username":"[name surname]"
+}
+
+If Student A with id=X exists in the database and we add Student B with id=X, then Student B overwrites Student A!
+It'll be changed.

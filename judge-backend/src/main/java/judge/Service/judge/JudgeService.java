@@ -1,14 +1,20 @@
 package judge.Service.judge;
 
+import judge.Dao.SubmissionDao;
+import judge.Entity.Student;
 import judge.Entity.Submission;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Map;
 
+import static judge.Utils.PROCESSING_ERROR_CODE;
+
 @Service
+@Configurable
 @EnableTransactionManagement
 public class JudgeService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(JudgeService.class);
@@ -17,6 +23,8 @@ public class JudgeService {
     SourceCodeCreatorService sourceCodeCreatorService;
     @Autowired
     AgentService agentService;
+    @Autowired
+    SubmissionDao submissionDao;
 
     /**
      * Takes student's input, produces a source code file, pass it to the external runner,
@@ -24,11 +32,12 @@ public class JudgeService {
      * @param code  student's input (now: program, target: function)
      * @returns Submission object based on examination results
      */
-    public Submission compileAndRun(String code) {
+    public Submission compileAndRun(String code, Student author) {
 
         Submission submission = new Submission();
         logger.info("Processing new submission.");
         submission.setCode(code);
+        submission.setAuthor(author);
 
         String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code);
 
@@ -37,11 +46,16 @@ public class JudgeService {
             submission.setCompilationCode(externalExaminationResult.get("compilationCode"));
             submission.setRunCode(externalExaminationResult.get("runCode"));
         } catch (Exception e) {
+            submission.setCompilationCode(PROCESSING_ERROR_CODE);
+            submission.setRunCode(PROCESSING_ERROR_CODE);
+            //TODO: DELETE this line!!! Left only for testing
+            this.submissionDao.save(submission);
             logger.error("Error while passing examination request to the external runner (server may be unreachable)." +
                     " Submission can't be processed.");
             logger.error(e.toString());
         }
 
+        this.submissionDao.save(submission);
         logger.info("Processing of the submission has finished.");
         return submission;
     }

@@ -46,7 +46,6 @@ class CodeFormComponent extends React.Component {
                 runCode : response["data"].runCode
             });
         }).catch(function (error) {
-            console.log("ERROR");
             console.log(error);
         });
         event.preventDefault();

@@ -10,6 +10,8 @@ import Problem from './modules/Problem';
 import Problems from './modules/Problems';
 import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
+import * as constants from './modules/util.js'
 
 const cookies = new Cookies();
 
@@ -17,6 +19,23 @@ class LoginControl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {isLoggedIn: false};
+        this.addNewUser = this.addNewUser.bind(this);
+    }
+
+    addNewUser(response) {
+        var self = this;
+        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENT_ENDPOINT, {
+            username: response["name"],
+            email: response["email"],
+            facebookID: response["id"]}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            console.log(response["data"].status);
+        }).catch(function (error) {
+            console.log(error);
+        });
     }
 
     render() {
@@ -31,6 +50,7 @@ class LoginControl extends React.Component {
             if (!response.status) {
                 console.log("Success!");
                 this.setState({isLoggedIn: true});
+                this.addNewUser(response);
             } else {
                 console.log("Authorization failed : " + response.status)
             }

@@ -1,12 +1,18 @@
 package judge.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
+@Table(name = "submission")
 public class Submission
 {
 
     private Integer id;
+    //To break infinite recursion with JSON and JPA (we have bi-directional relationships now)
+    //TODO: do in in a better way, delete bi-directional relationships
+    @JsonIgnore
     private Student author;
     private String code;
     private Integer compilationCode;
