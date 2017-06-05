@@ -10,7 +10,15 @@ import (
     //"bytes"
     "io/ioutil"
     //"strings"
+    "encoding/json"
 )
+
+type Result struct {
+    CompilationCode int
+    RunCode int
+    TestsPositive int
+    TestsTotal int
+}
 
 func upload(w http.ResponseWriter, r *http.Request) {
     log.Println("method:", r.Method)
@@ -34,8 +42,15 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
         compilationCode, runCode := process("examine/" + handler.Filename)
 
-        w.Header().Set("compilationCode", compilationCode)
-        w.Header().Set("runCode", runCode)
+        result := Result{
+            CompilationCode: compilationCode,
+            RunCode: runCode,
+        }
+        resultMarshaled, _ := json.Marshal(result)
+        w.Write(resultMarshaled)
+
+        s := string(resultMarshaled)
+        log.Println(s)
     } else {
         w.Write([]byte("GO server is active. Use POST to submit your solution."))
     }
@@ -48,7 +63,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 // TODO: somehow capture if compilation wasn't successful and
 // TODO: distinguish it from possible execution / time limit / memory limit error
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
-func process(filename string) (string, string) {
+func process(filename string) (int, int) {
     cmdRun := exec.Command("docker", getDockerExecutionCommanand(filename)...)
 
     // Temporary solution! Result file is being overwritten every time.
@@ -80,8 +95,7 @@ func process(filename string) (string, string) {
     }
     log.Printf("Result file created with the following content:\n%s", string(fileContent))
 
-    return "2", "8"
-
+    return 2, 8
 }
 
 func getDockerExecutionCommanand(filename string) []string {

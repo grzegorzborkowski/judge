@@ -11,6 +11,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -56,18 +58,19 @@ class AgentService {
         System.out.println("executing request " + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
         try {
-            int compilationCode = Integer.parseInt(response.getFirstHeader("compilationCode").getValue());
-            int runCode = Integer.parseInt(response.getFirstHeader("runCode").getValue());
-            logger.info("Received from runner: runCode = " + runCode + "compilationCode = " + compilationCode);
-
-            result.put("compilationCode", compilationCode);
-            result.put("runCode", runCode);
-
             logger.debug(response.getStatusLine());
             HttpEntity resEntity = response.getEntity();
             ResponseHandler<String> handler = new BasicResponseHandler();
             String body = handler.handleResponse(response);
-            logger.debug(body);
+
+            JSONParser parser = new JSONParser();
+            JSONObject bodyJson = (JSONObject) parser.parse(body);
+            logger.info("Response from external runner: \n" + bodyJson.toString());
+
+            int compilationCode = Integer.parseInt(bodyJson.get("CompilationCode").toString());
+            int runCode = Integer.parseInt(bodyJson.get("RunCode").toString());
+            result.put("compilationCode", compilationCode);
+            result.put("runCode", runCode);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());
