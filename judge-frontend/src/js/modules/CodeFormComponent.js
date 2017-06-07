@@ -33,6 +33,7 @@ class CodeFormComponent extends React.Component {
         console.log("Your facebookID: ", facebookID);
         var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.JUDGE_ENDPOINT, {
+            problemID: this.props.problem_id,
             code: this.state.code,
             token: token,
             facebookID: facebookID}, {

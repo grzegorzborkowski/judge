@@ -36,6 +36,7 @@ class JudgeController {
         String code;
         String token;
         BigInteger facebookID;
+        Integer problemID = submission.get("problemID").asInt();
         try {
             code = submission.get("code").asText();
         } catch (Exception e) {
@@ -59,7 +60,7 @@ class JudgeController {
         if(isTokenValid) {
             if (author != null) {
                 logger.info("Found author: " + author.getUsername());
-                JsonNode result = this.resultGenerator.generateResult(this.judgeService.compileAndRun(code, author));
+                JsonNode result = this.resultGenerator.generateResult(this.judgeService.compileAndRun(code, author, problemID));
                 return result.toString();
             } else {
                 //it should never happen

@@ -63,12 +63,12 @@ class LoginControl extends React.Component {
                         <IndexRoute component={Home}/>
                         <Route path="/problems" components={Problems}>
                         </Route>
-                        <Route path="/problem/:problemName" component={Problem} />
+                        <Route path="/problem/:problemID" component={Problem} />
 
                         <Route path="/submissions" component={Submissions}>
                             <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>
-                        <Route path="/statistics" component={Statistics}/>
+                        {/*<Route path="/statistics" component={Statistics}/>*/}
                     </Route>
                 </Router>;
         } else {
