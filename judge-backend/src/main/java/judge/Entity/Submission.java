@@ -1,5 +1,6 @@
 package judge.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -42,6 +43,7 @@ public class Submission {
     }
 
     @ManyToOne
+    @JsonBackReference
     public Student getAuthor() {
         return author;
     }

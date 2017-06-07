@@ -1,5 +1,7 @@
 package judge.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ public class Teacher extends User
 
 
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     public Set<Problem> getProblems()
     {
         return problems;

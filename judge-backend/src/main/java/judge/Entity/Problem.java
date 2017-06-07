@@ -1,5 +1,7 @@
 package judge.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +27,7 @@ public class Problem
     }
 
     @ManyToOne
+    @JsonBackReference
     public Teacher getAuthor()
     {
         return author;
