@@ -1,5 +1,7 @@
 package judge.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,6 +17,7 @@ public class Student extends User {
 
 
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     public Set<Submission> getSubmissions()
     {
         return submissions;
