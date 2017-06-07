@@ -10,20 +10,23 @@ class Problem extends React.Component {
         this.state = {
             id: this.props.routeParams.problemID,
             description: "",
-            title: ""
+            title: "",
+            signature: ""
         };
     }
 
 
-    componentWillMount() {
+    componentDidMount() {
         var self = this;
         axios.get(constants.BACKEND_ADDRESS + constants.PROBLEM_ID_ENDPOINT + self.state.id)
             .then(function (response) {
                 let data = response['data'];
                 self.setState({
                     description: data['description'],
-                    title: data['title']
+                    title: data['title'],
+                    signature: data['signature']
                 });
+                console.log(self.state.signature);
             })
             .catch(function (error) {
                 console.log(error);
@@ -35,7 +38,9 @@ class Problem extends React.Component {
             <div>
                 <div><b>{this.state.title}</b></div>
                 <div> {this.state.description} </div>
-                <CodeFormComponent problem_id={this.state.id}/>
+                <div> {this.state.signature} </div>
+                <CodeFormComponent
+                    signature={this.state.signature} problem_id={this.state.id}/>
             </div>
         )
     }

@@ -15,13 +15,20 @@ class CodeFormComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {code : '', compilationCode : "", runCode: ""};
+        console.log(props);
+        this.state = {code : this.props.signature, compilationCode : "", runCode: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({code: event});
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.signature !== nextProps.signature) {
+            this.handleChange(nextProps.signature);
+        }
     }
 
     handleSubmit(event) {
@@ -73,7 +80,7 @@ class CodeFormComponent extends React.Component {
                             className="codeFormButton"> Submit
                         </Button>
                     </form>
-
+                    {this.props.signature};
                     <div> Rezultat kompilacji: {this.state.compilationCode} </div>
                     <div> Rezultat wykonania: {this.state.runCode} </div>
                 </div>

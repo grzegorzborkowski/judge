@@ -11,6 +11,7 @@ public class Problem
     private Teacher author;
     private String title;
     private String description;
+    private String signature;
 
     public Problem()
     {
@@ -39,7 +40,6 @@ public class Problem
         return description;
     }
 
-
     public void setId(Integer id)
     {
         this.id = id;
@@ -60,4 +60,11 @@ public class Problem
         this.description = description;
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 }
