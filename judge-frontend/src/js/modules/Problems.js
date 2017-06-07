@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
 import {Link} from 'react-router';
+import { Table } from 'react-bootstrap';
 
 class Problems extends React.Component {
     constructor(props) {
@@ -32,13 +33,38 @@ class Problems extends React.Component {
                 <h2>Problems</h2>
                 {this.props.children}
 
-                <div>
+                <Table bordered condensed hover>
+                    <thead>
+                    <tr>
+                        <th> ProblemID </th>
+                        <th> Problem Title </th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {this.state.problems.map(problem =>
-                        <div>
-                    <Link to={`/problem/${problem.id}`}> {problem.title}  </Link>
-                        </div>
+                        <tr key={problem.id}>
+
+                            <td>  <Link to={`/problem/${problem.id}`}>{problem.id} </Link></td>
+                            <td> <Link to={`/problem/${problem.id}`}> {problem.title} </Link></td>
+
+                            {/*<td>{submission.id} </td>*/}
+                            {/*<td> {submission.problem.id}</td>*/}
+                            {/*<td> {submission.problem.title}</td>*/}
+                            {/*<td>{submission.compilationCode}</td>*/}
+                            {/*<td>{submission.runCode}</td>*/}
+
+                        </tr>
                     )}
-                </div>
+                    </tbody>
+                </Table>
+
+
+                {/*<div>*/}
+                    {/*{this.state.problems.map(problem =>*/}
+                        {/*<div>*/}
+                    {/*<Link to={`/problem/${problem.id}`}> {problem.title}  </Link>*/}
+                        {/*</div>*/}
+                    {/*)}*/}
             </div>
         )
     }
