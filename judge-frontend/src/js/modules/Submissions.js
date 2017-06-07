@@ -1,7 +1,7 @@
 import React from 'react'
-import NavLink from './NavLink'
 import axios from 'axios';
 import * as constants from './util.js'
+import { Table } from 'react-bootstrap';
 
 class Submissions extends React.Component {
 
@@ -31,7 +31,7 @@ class Submissions extends React.Component {
       <div>
         <h2>Submissions</h2>
         <div>
-            <table class="table">
+            <Table bordered condensed hover>
                 <thead>
                 <tr>
                     <th> Submission ID </th>
@@ -54,7 +54,7 @@ class Submissions extends React.Component {
                 )}
                 </tbody>
 
-            </table>
+            </Table>
            </div>
           {this.props.children}
       </div>
