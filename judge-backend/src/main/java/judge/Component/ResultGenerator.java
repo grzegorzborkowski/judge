@@ -23,4 +23,11 @@ public class ResultGenerator {
         result.put("runCode", RUN_FAILURE_CODE);
         return result;
     }
+
+    public JsonNode generateProcessingErrorSubmissionResult() {
+        ObjectNode result = JsonNodeFactory.instance.objectNode();
+        result.put("compilationCode", PROCESSING_ERROR_CODE);
+        result.put("runCode", PROCESSING_ERROR_CODE);
+        return result;
+    }
 }

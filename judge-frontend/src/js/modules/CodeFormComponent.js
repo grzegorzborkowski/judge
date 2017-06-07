@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
-
+import Cookies from 'universal-cookie';
 
 /** This plugin is a workaround to CROS problem.
  * Another (non-hacky) solution is necessary.
@@ -25,9 +25,18 @@ class CodeFormComponent extends React.Component {
     }
 
     handleSubmit(event) {
+        var cookies = new Cookies();
+        var token = cookies.get("token");
+        var facebookID = cookies.get("facebookID");
+        //TODO: delete logging token and ID (left only for debug purpose)
+        console.log("Your token: ", token);
+        console.log("Your facebookID: ", facebookID);
         var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.JUDGE_ENDPOINT, {
-            code: this.state.code}, {
+            problemID: this.props.problem_id,
+            code: this.state.code,
+            token: token,
+            facebookID: facebookID}, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -38,7 +47,6 @@ class CodeFormComponent extends React.Component {
                 runCode : response["data"].runCode
             });
         }).catch(function (error) {
-            console.log("ERROR");
             console.log(error);
         });
         event.preventDefault();

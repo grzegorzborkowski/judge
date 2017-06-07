@@ -32,7 +32,7 @@ export default class Navbar extends React.Component {
                     <ul class="nav navbar-nav">
                         <li><NavLink to="/" onlyActiveOnIndex>Home</NavLink></li>
                         <li><NavLink to="/problems"> Problems</NavLink> </li>
-                        <li><NavLink to="/statistics">Statistics</NavLink></li>
+                        {/*<li><NavLink to="/statistics">Statistics</NavLink></li>*/}
                         <li><NavLink to="/submissions">Submissions</NavLink></li>
                     </ul>
                 </div>

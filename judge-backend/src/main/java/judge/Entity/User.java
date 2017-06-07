@@ -1,12 +1,13 @@
 package judge.Entity;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 
 @MappedSuperclass
 public class User
 {
 
-    private Integer id;
+    private BigInteger id;
     private String username;
     private String password;
     private String email;
@@ -16,8 +17,7 @@ public class User
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId()
+    public BigInteger getId()
     {
         return id;
     }
@@ -37,7 +37,7 @@ public class User
         return email;
     }
 
-    public void setId(Integer id)
+    public void setId(BigInteger id)
     {
         this.id = id;
     }

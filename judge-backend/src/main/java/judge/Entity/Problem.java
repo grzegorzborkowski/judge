@@ -3,6 +3,7 @@ package judge.Entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Problem")
 public class Problem
 {
 
@@ -10,7 +11,6 @@ public class Problem
     private Teacher author;
     private String title;
     private String description;
-    private String path;
 
     public Problem()
     {
@@ -39,10 +39,6 @@ public class Problem
         return description;
     }
 
-    public String getPath()
-    {
-        return path;
-    }
 
     public void setId(Integer id)
     {
@@ -64,8 +60,4 @@ public class Problem
         this.description = description;
     }
 
-    public void setPath(String path)
-    {
-        this.path = path;
-    }
 }
