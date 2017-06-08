@@ -11,6 +11,13 @@ import (
     "io/ioutil"
     //"strings"
     "encoding/json"
+
+    "github.com/docker/docker/client"
+    dockertypes "github.com/docker/docker/api/types"
+    "github.com/docker/docker/api/types/container"
+    "golang.org/x/net/context"
+    "path"
+    "bytes"
 )
 
 type Result struct {
@@ -40,7 +47,8 @@ func upload(w http.ResponseWriter, r *http.Request) {
         defer f.Close()
         io.Copy(f, file)
 
-        compilationCode, runCode := process("examine/" + handler.Filename)
+        //compilationCode, runCode := process("examine/" + handler.Filename)
+        compilationCode, runCode := processWithDocker("examine/" + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
@@ -97,6 +105,77 @@ func process(filename string) (int, int) {
 
     return 2, 8
 }
+
+func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int) {
+    ctx := context.Background()
+    cli, err := client.NewEnvClient()
+    if err != nil {
+        panic(err)
+    }
+
+    ex, err := os.Executable()
+    if err != nil {
+        panic(err)
+    }
+    exPath := path.Dir(ex)
+
+    var hostConfig = &container.HostConfig{
+        Binds: []string{exPath + filenameWithDir + ":/WORKING_FOLDER/" + filenameWithoutDir},
+    }
+
+    resp, err := cli.ContainerCreate(ctx, &container.Config{
+        Image: "tusty53/c_runner",
+        Env: []string{"F00="+filenameWithoutDir},
+        Volumes: map[string]struct{}{
+            exPath + filenameWithDir: struct{}{},
+        },
+    }, hostConfig, nil, "")
+    if err != nil {
+        panic(err)
+    }
+
+    if err := cli.ContainerStart(ctx, resp.ID, dockertypes.ContainerStartOptions{}); err != nil {
+        panic(err)
+    }
+
+    fmt.Println(resp.ID)
+
+    var exited=false
+
+    for !exited {
+
+        json, err := cli.ContainerInspect(ctx, resp.ID)
+        if err != nil {
+            panic(err)
+        }
+
+        exited = json.State.Running
+
+        fmt.Println(json.State.Status)
+    }
+
+    /*if json.State.Running{
+	    _, errC := cli.ContainerWait(ctx, resp.ID, "")
+	    if err := <-errC; err != nil {
+		panic(err)
+	    }
+    }*/
+
+    out, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
+    if err != nil {
+        panic(err)
+    }
+
+    buf := new(bytes.Buffer)
+    buf.ReadFrom(out)
+    s := buf.String()
+
+    log.Printf("start\n")
+    log.Printf(s)
+    log.Printf("end\n")
+    return 1,1
+}
+
 
 func getDockerExecutionCommanand(filename string) []string {
     // get current directory
