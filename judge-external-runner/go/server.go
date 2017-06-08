@@ -48,11 +48,13 @@ func upload(w http.ResponseWriter, r *http.Request) {
         io.Copy(f, file)
 
         //compilationCode, runCode := process("examine/" + handler.Filename)
-        compilationCode, runCode := processWithDocker("examine/" + handler.Filename, handler.Filename)
+        compilationCode, runCode, testsPositive, testsTotal := processWithDocker("examine/" + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
             RunCode: runCode,
+            TestsPositive:testsPositive,
+            TestsTotal:testsTotal,
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
@@ -106,12 +108,13 @@ func process(filename string) (int, int) {
     return 2, 8
 }
 
-func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int) {
+func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int) {
     ctx := context.Background()
     cli, err := client.NewEnvClient()
     if err != nil {
         panic(err)
     }
+
 
     ex, err := os.Executable()
     if err != nil {
@@ -119,13 +122,21 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     }
     exPath := path.Dir(ex)
 
+    log.Printf("Ex path:\n");
+    log.Printf(exPath);
+    log.Printf("With:\n");
+    log.Printf(filenameWithDir);
+    log.Printf("Without:\n");
+    log.Printf(filenameWithoutDir);
+
     var hostConfig = &container.HostConfig{
         Binds: []string{exPath + filenameWithDir + ":/WORKING_FOLDER/" + filenameWithoutDir},
     }
 
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/c_runner",
-        Env: []string{"F00="+filenameWithoutDir},
+        Image: "tusty53/ubuntu_c_runner:tag",
+        //Image: "hello-world",
+        Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
             exPath + filenameWithDir: struct{}{},
         },
@@ -140,7 +151,7 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     fmt.Println(resp.ID)
 
-    var exited=false
+    var exited = false
 
     for !exited {
 
@@ -155,25 +166,47 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     }
 
     /*if json.State.Running{
-	    _, errC := cli.ContainerWait(ctx, resp.ID, "")
-	    if err := <-errC; err != nil {
-		panic(err)
-	    }
-    }*/
+        _, errC := cli.ContainerWait(ctx, resp.ID, "")
+        if err := <-errC; err != nil {
+            panic(err)
+        }
+}*/
 
-    out, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
+    normalOut, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
+    if err != nil {
+        panic(err)
+    }
+
+    errorOut, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: false, ShowStderr: true})
     if err != nil {
         panic(err)
     }
 
     buf := new(bytes.Buffer)
-    buf.ReadFrom(out)
-    s := buf.String()
+    buf.ReadFrom(normalOut)
+    sOut := buf.String()
+
+    buf2 := new(bytes.Buffer)
+    buf2.ReadFrom(errorOut)
+    sErr := buf2.String()
 
     log.Printf("start\n")
-    log.Printf(s)
+    log.Printf(sOut)
     log.Printf("end\n")
-    return 1,1
+
+    var testsPositive=0
+    var testsTotal=0
+
+    if(sErr!=""){
+        return 0,0,0,0
+    }
+
+    if(sOut!=""){
+        fmt.Sscanf(sOut, "%d %d", &testsPositive, &testsTotal)
+        return 1,1,testsPositive,testsTotal
+    }
+    return 1,0,0,0
+
 }
 
 
