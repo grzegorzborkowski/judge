@@ -28,4 +28,9 @@ public class ProblemService {
         Problem problem = this.problemDao.findById(id);
         return problem;
     }
+
+    public String getTemplateByProblemID(Integer problemID) {
+        Problem problem = this.getProblemById(problemID);
+        return problem.getTemplate();
+    }
 }

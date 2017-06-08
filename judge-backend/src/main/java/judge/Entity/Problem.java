@@ -12,6 +12,7 @@ public class Problem
     private String title;
     private String description;
     private String signature;
+    private String template;
 
     public Problem()
     {
@@ -66,5 +67,13 @@ public class Problem
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 }

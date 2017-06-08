@@ -43,7 +43,7 @@ public class JudgeService {
         submission.setAuthor(author);
         submission.setProblem(problemDao.findById(problemID));
 
-        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code);
+        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(problemID, code);
 
         try{
             Map<String,Integer> externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
