@@ -18,6 +18,7 @@ public class Submission {
     private Integer compilationCode;
     private Integer runCode;
     private Problem problem;
+    private String fullCode;
 
 
     public Submission(Student author, String code, Integer compilationCode, Integer runCode, Integer problemID) {
@@ -88,5 +89,13 @@ public class Submission {
 
     public void setProblem(Problem problem) {
         this.problem = problem;
+    }
+
+    public String getFullCode() {
+        return fullCode;
+    }
+
+    public void setFullCode(String fullCode) {
+        this.fullCode = fullCode;
     }
 }
