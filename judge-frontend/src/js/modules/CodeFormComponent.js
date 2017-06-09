@@ -87,7 +87,6 @@ class CodeFormComponent extends React.Component {
             </div>
         );
     }
-
 }
 
 export default CodeFormComponent;

@@ -8,7 +8,7 @@ import (
     "os/exec"
     "log"
     //"bytes"
-    "io/ioutil"
+//    "io/ioutil"
     //"strings"
     "encoding/json"
 
@@ -66,47 +66,12 @@ func upload(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-// @filename contains "examine" directory
 // there is assumption that docker is installed where server.go is running
 // and the container is already pulled
 // TODO: handle situation when container is not pulled
 // TODO: somehow capture if compilation wasn't successful and
 // TODO: distinguish it from possible execution / time limit / memory limit error
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
-func process(filename string) (int, int) {
-    cmdRun := exec.Command("docker", getDockerExecutionCommanand(filename)...)
-
-    // Temporary solution! Result file is being overwritten every time.
-    outfile, errCreate := os.Create("./out.txt")
-    if errCreate != nil {
-        panic(errCreate)
-    }
-    defer outfile.Close()
-
-    //var out bytes.Buffer
-    //var stderr bytes.Buffer
-    //cmdRun.Stdout = &out
-    //cmdRun.Stderr = &stderr
-    cmdRun.Stdout = outfile
-    cmdRun.Stderr = outfile
-
-    errStart := cmdRun.Start()
-    if errStart != nil {
-        panic(errStart)
-    }
-    errStart = cmdRun.Wait()
-    //log.Printf("Command finished with error: %v", err)
-    //log.Printf("Full error message: %s", stderr.String())
-    //log.Printf("Command output: %s", out.String())
-
-    fileContent, errRead := ioutil.ReadFile("./out.txt")
-    if errRead != nil {
-        panic(errRead)
-    }
-    log.Printf("Result file created with the following content:\n%s", string(fileContent))
-
-    return 2, 8
-}
 
 func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int) {
     ctx := context.Background()
@@ -129,16 +94,21 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     log.Printf("Without:\n");
     log.Printf(filenameWithoutDir);
 
+    var hostVolumeString = exPath + "/" + filenameWithDir
+    var hostConfigBindString = hostVolumeString  + ":/WORKING_FOLDER/" + filenameWithoutDir
+    log.Printf(hostVolumeString)
+    log.Printf(hostConfigBindString)
+
     var hostConfig = &container.HostConfig{
-        Binds: []string{exPath + filenameWithDir + ":/WORKING_FOLDER/" + filenameWithoutDir},
+        Binds: []string{hostConfigBindString},
     }
 
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/ubuntu_c_runner:tag",
+        Image: "tusty53/ubuntu_c_runner:ls_chain",
         //Image: "hello-world",
         Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
-            exPath + filenameWithDir: struct{}{},
+            hostVolumeString: struct{}{},
         },
     }, hostConfig, nil, "")
     if err != nil {
@@ -193,6 +163,10 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     log.Printf("start\n")
     log.Printf(sOut)
     log.Printf("end\n")
+
+    log.Printf("start error\n")
+    log.Printf(sErr)
+    log.Printf("end error\n")
 
     var testsPositive=0
     var testsTotal=0
