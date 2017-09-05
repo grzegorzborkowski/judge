@@ -1,0 +1,15 @@
+version: "2"
+services:
+ go:
+  build:
+   context: judge-external-runner/go
+   dockerfile: Dockerfile
+  ports:
+   - "8123:8123"
+ web:
+  build:
+   context: judge-frontend
+   dockerfile: Dockerfile
+  ports:
+   - "3008:3008"
+
