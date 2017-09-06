@@ -1,5 +1,11 @@
 version: "2"
 services:
+ db:
+  build:
+   context: judge-db
+   dockerfile: Dockerfile
+  ports:
+   - "5432:5432"
  go:
   build:
    context: judge-external-runner/go
