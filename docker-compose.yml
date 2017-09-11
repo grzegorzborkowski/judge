@@ -1,5 +1,11 @@
 version: "2"
 services:
+ web-back:
+  build:
+   context: judge-backend
+   dockerfile: Dockerfile
+  ports:
+   - "8080:8080"
  db:
   build:
    context: judge-db
@@ -12,10 +18,9 @@ services:
    dockerfile: Dockerfile
   ports:
    - "8123:8123"
- web:
+ web-front:
   build:
    context: judge-frontend
    dockerfile: Dockerfile
   ports:
    - "3008:3008"
-
