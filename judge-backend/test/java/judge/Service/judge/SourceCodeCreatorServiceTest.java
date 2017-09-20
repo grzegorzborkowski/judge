@@ -13,26 +13,27 @@ import static org.junit.Assert.assertTrue;
 public class SourceCodeCreatorServiceTest {
     private SourceCodeCreatorService sourceCodeCreatorService;
 
-//    @Before
-//    public void init() {
-//        this.sourceCodeCreatorService = new SourceCodeCreatorService();
-//    }
+    //TODO: rewrite it to fit oauth and database changes
+    /*
 
-    // TODO: refactor this test, as createSourceCodeFile receives now ProblemID as parameter
-//    @Test
-//    public void testCreateSourceCodeFile() {
-//        String expectedFilePath = "test/resources/judge/Service/judge/source_code_01_ok.c";
-//        String submissionData = HELLO_WORLD_SUBMISSION_CODE;
-//        String outputFile = sourceCodeCreatorService.createSourceCodeFile(submissionData);
-//        File expectedFile = new File(expectedFilePath);
-//        File createdFile = new File(outputFile);
-//
-//        try {
-//            assertTrue(FileUtils.contentEquals(expectedFile, createdFile));
-//        } catch (IOException e) {
-//            Assert.fail("Test failed: " + e.getMessage());
-//        } finally {
-//            createdFile.delete();
-//        }
-//    }
+    @Before
+    public void init() {
+        this.sourceCodeCreatorService = new SourceCodeCreatorService();
+    }
+    @Test
+    public void testCreateSourceCodeFile() {
+        String expectedFilePath = "test/resources/judge/Service/judge/source_code_01_ok.c";
+        String submissionData = HELLO_WORLD_SUBMISSION_CODE;
+        String outputFile = sourceCodeCreatorService.createSourceCodeFile(submissionData);
+        File expectedFile = new File(expectedFilePath);
+        File createdFile = new File(outputFile);
+
+        try {
+            assertTrue(FileUtils.contentEquals(expectedFile, createdFile));
+        } catch (IOException e) {
+            Assert.fail("Test failed: " + e.getMessage());
+        } finally {
+            createdFile.delete();
+        }
+    }*/
 }

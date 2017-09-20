@@ -39,16 +39,20 @@ public class JudgeService {
 
         Submission submission = new Submission();
         logger.info("Processing new submission.");
+
+        Problem problem = problemDao.findById(problemID);
         submission.setCode(code);
         submission.setAuthor(author);
-        submission.setProblem(problemDao.findById(problemID));
+        submission.setProblem(problem);
 
-        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(problemID, code);
+        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code, problem);
 
         try{
             Map<String,Integer> externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
             submission.setCompilationCode(externalExaminationResult.get("compilationCode"));
             submission.setRunCode(externalExaminationResult.get("runCode"));
+            submission.setTestsPositive(externalExaminationResult.get("testsPositive"));
+            submission.setTestsTotal(externalExaminationResult.get("testsTotal"));
         } catch (Exception e) {
             submission.setCompilationCode(PROCESSING_ERROR_CODE);
             submission.setRunCode(PROCESSING_ERROR_CODE);

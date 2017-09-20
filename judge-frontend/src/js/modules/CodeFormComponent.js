@@ -16,7 +16,7 @@ class CodeFormComponent extends React.Component {
     constructor(props) {
         super(props);
         console.log(props);
-        this.state = {code : this.props.signature, compilationCode : "", runCode: ""};
+        this.state = {code : this.props.signature, compilationCode : "", runCode: "", testsTotal :"", testsPositive: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -51,7 +51,9 @@ class CodeFormComponent extends React.Component {
             self.setState
             ({
                 compilationCode : response["data"].compilationCode,
-                runCode : response["data"].runCode
+                runCode : response["data"].runCode,
+                testsTotal : response["data"].testsTotal,
+                testsPositive : response["data"].testsPositive
             });
         }).catch(function (error) {
             console.log(error);
@@ -81,8 +83,10 @@ class CodeFormComponent extends React.Component {
                         </Button>
                     </form>
                     {this.props.signature};
-                    <div> Rezultat kompilacji: {this.state.compilationCode} </div>
-                    <div> Rezultat wykonania: {this.state.runCode} </div>
+                    <div> Compilation result: {this.state.compilationCode} </div>
+                    <div> Execution result: {this.state.runCode} </div>
+                    <div> Number of passed tests: {this.state.testsPositive} </div>
+                    <div> Number of tests: {this.state.testsTotal} </div>
                 </div>
             </div>
         );

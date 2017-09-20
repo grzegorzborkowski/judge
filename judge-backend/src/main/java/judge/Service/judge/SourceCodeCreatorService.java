@@ -1,8 +1,7 @@
 package judge.Service.judge;
 
-import judge.Service.ProblemService;
+import judge.Entity.Problem;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,33 +9,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static judge.Utils.RUNTIME_DIR_NAME;
+import static judge.Utils.*;
 
 @Service
 class SourceCodeCreatorService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(SourceCodeCreatorService.class);
 
-    @Autowired
-    private ProblemService problemService;
     /**
      * Generates .c source code file.
      *
-     *
-     * @param problemID
      * @param code  student's input (now: program, target: function)
      * @return path to the created source code file
      */
-    String createSourceCodeFile(Integer problemID, String code) {
-        String template = problemService.getTemplateByProblemID(problemID);
-        List<String> lines = new ArrayList<>();
-        lines.add("#include <stdio.h> \n");
-        lines.add(code);
-        lines.add(template);
+    String createSourceCodeFile(String code, Problem problem) {
+        List<String> lines = prepareSourceCode(code, problem);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         /*
             Math.random() will be replaced by user ID.
@@ -51,5 +39,28 @@ class SourceCodeCreatorService {
             logger.error("Exception happened while generating the source code file.", e);
         }
         return fileName;
+    }
+
+    private List<String> prepareSourceCode(String code, Problem problem) {
+        List<String> result,generated_lines_1, generated_lines_2, students_lines;
+        result = new ArrayList<>();
+        Path generated_file_1 = Paths.get(TEMPLATES_DIR_NAME + GENERATED_TEMPLATE_1_NAME);
+        Path generated_file_2 = Paths.get(TEMPLATES_DIR_NAME + GENERATED_TEMPLATE_2_NAME);
+
+        try {
+            generated_lines_1 = Files.readAllLines(generated_file_1);
+            generated_lines_2 = Files.readAllLines(generated_file_2);
+
+            result.addAll(generated_lines_1);
+            result.addAll(Collections.singletonList(problem.getStructures()));
+            result.addAll(Collections.singletonList(problem.getSolution()));
+            result.addAll(Collections.singletonList(code));
+            result.addAll(generated_lines_2);
+        }
+        catch (IOException e) {
+            logger.error("Exception happened while generating the source code.", e);
+        }
+        return result;
+
     }
 }

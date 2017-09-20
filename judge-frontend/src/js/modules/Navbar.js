@@ -26,6 +26,7 @@ export default class Navbar extends React.Component {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
                 </div>
                 <div class={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
@@ -34,6 +35,7 @@ export default class Navbar extends React.Component {
                         <li><NavLink to="/problems"> Problems</NavLink> </li>
                         {/*<li><NavLink to="/statistics">Statistics</NavLink></li>*/}
                         <li><NavLink to="/submissions">Submissions</NavLink></li>
+                        <li><NavLink to="/problemCreator">Problem Creator</NavLink></li>
                     </ul>
                 </div>
             </div>

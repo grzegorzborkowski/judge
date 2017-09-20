@@ -7,6 +7,7 @@ import Submissions from './modules/Submissions';
 import Submission from './modules/Submission';
 import Home from './modules/Home';
 import Problem from './modules/Problem';
+import ProblemCreator from './modules/ProblemCreator';
 import Problems from './modules/Problems';
 import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
@@ -68,6 +69,7 @@ class LoginControl extends React.Component {
                         <Route path="/submissions" component={Submissions}>
                             <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>
+                        <Route path="/problemCreator" components={ProblemCreator}></Route>
                         {/*<Route path="/statistics" component={Statistics}/>*/}
                     </Route>
                 </Router>;

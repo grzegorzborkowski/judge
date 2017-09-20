@@ -29,6 +29,11 @@ public class ProblemService {
         return problem;
     }
 
+    public String addProblem(Problem problem) {
+        this.problemDao.save(problem);
+        return "Problem added";
+    }
+
     public String getTemplateByProblemID(Integer problemID) {
         Problem problem = this.getProblemById(problemID);
         return problem.getTemplate();

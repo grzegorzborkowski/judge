@@ -7,17 +7,15 @@ import (
     "os"
     "os/exec"
     "log"
-    //"bytes"
-//    "io/ioutil"
-    //"strings"
     "encoding/json"
 
     "github.com/docker/docker/client"
     dockertypes "github.com/docker/docker/api/types"
     "github.com/docker/docker/api/types/container"
     "golang.org/x/net/context"
-    "path"
+    "time"
     "bytes"
+    "regexp"
 )
 
 type Result struct {
@@ -38,17 +36,22 @@ func upload(w http.ResponseWriter, r *http.Request) {
             fmt.Println(err)
             return
         }
+
         defer file.Close()
-        f, err := os.OpenFile("./examine/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+        baseName:= os.Args[1]
+        f, err := os.OpenFile(baseName+handler.Filename, os.O_WRONLY|os.O_CREATE, 777)
         if err != nil {
             fmt.Println(err)
             return
         }
         defer f.Close()
         io.Copy(f, file)
+        if err != nil {
+            fmt.Println(err)
+            return
+        }
 
-        //compilationCode, runCode := process("examine/" + handler.Filename)
-        compilationCode, runCode, testsPositive, testsTotal := processWithDocker("examine/" + handler.Filename, handler.Filename)
+        compilationCode, runCode, testsPositive, testsTotal := processWithDocker(baseName + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
@@ -58,9 +61,6 @@ func upload(w http.ResponseWriter, r *http.Request) {
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
-
-        s := string(resultMarshaled)
-        log.Println(s)
     } else {
         w.Write([]byte("GO server is active. Use POST to submit your solution."))
     }
@@ -74,38 +74,23 @@ func upload(w http.ResponseWriter, r *http.Request) {
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
 
 func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int) {
-    ctx := context.Background()
+
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
     cli, err := client.NewEnvClient()
     if err != nil {
         panic(err)
     }
 
-
-    ex, err := os.Executable()
-    if err != nil {
-        panic(err)
-    }
-    exPath := path.Dir(ex)
-
-    log.Printf("Ex path:\n");
-    log.Printf(exPath);
-    log.Printf("With:\n");
-    log.Printf(filenameWithDir);
-    log.Printf("Without:\n");
-    log.Printf(filenameWithoutDir);
-
-    var hostVolumeString = exPath + "/" + filenameWithDir
+    var hostVolumeString = filenameWithDir
     var hostConfigBindString = hostVolumeString  + ":/WORKING_FOLDER/" + filenameWithoutDir
-    log.Printf(hostVolumeString)
-    log.Printf(hostConfigBindString)
 
     var hostConfig = &container.HostConfig{
         Binds: []string{hostConfigBindString},
     }
 
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/ubuntu_c_runner:ls_chain",
-        //Image: "hello-world",
+        Image: "tusty53/ubuntu_c_runner:twelfth",
         Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
             hostVolumeString: struct{}{},
@@ -135,13 +120,6 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
         fmt.Println(json.State.Status)
     }
 
-    /*if json.State.Running{
-        _, errC := cli.ContainerWait(ctx, resp.ID, "")
-        if err := <-errC; err != nil {
-            panic(err)
-        }
-}*/
-
     normalOut, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
     if err != nil {
         panic(err)
@@ -168,45 +146,31 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     log.Printf(sErr)
     log.Printf("end error\n")
 
+
     var testsPositive=0
     var testsTotal=0
 
     if(sErr!=""){
-        return 0,0,0,0
+        matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sErr[8:])
+        if(matched){
+            fmt.Sscanf(sErr[8:], "%d %d", &testsPositive, &testsTotal)
+            fmt.Printf("Working")
+            return 1,1,testsPositive,testsTotal
+        }
+        fmt.Println(matched, err)
+        fmt.Println(sErr[8:])
+        return 1,0,0,0
     }
 
-    if(sOut!=""){
-        fmt.Sscanf(sOut, "%d %d", &testsPositive, &testsTotal)
-        return 1,1,testsPositive,testsTotal
-    }
-    return 1,0,0,0
+    return 0,0,0,0
 
 }
 
-
-func getDockerExecutionCommanand(filename string) []string {
-    // get current directory
-    dir, err := os.Getwd()
-    if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
-    }
-
-    var f00 = "F00='" + filename + "'"
-    var working_directory = dir + "/" + filename
-    var working_folder = ":/WORKING_FOLDER/" + filename
-    var container_name = "tusty53/c_runner"
-
-    var command = []string{"run", "-e", f00,
-        "-v", working_directory + working_folder, container_name}
-
-    return command
-}
 
 // Creates examine directory if it doesn't exist.
 // If examine directory already exists, then comes an error.
 func prepareDir() {
-    cmdMkdir := exec.Command("mkdir", "examine")
+    cmdMkdir := exec.Command("mkdir", os.Args[1])
     errMkdir := cmdMkdir.Run()
     if errMkdir != nil {
         log.Println(errMkdir)
@@ -215,6 +179,7 @@ func prepareDir() {
 
 func main() {
     prepareDir()
+    log.Println("method:")
     go http.HandleFunc("/submission", upload)
     http.ListenAndServe(":8123", nil)
 }

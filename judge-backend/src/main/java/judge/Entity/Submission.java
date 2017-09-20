@@ -17,11 +17,21 @@ public class Submission {
     private String code;
     private Integer compilationCode;
     private Integer runCode;
+    private Integer testsTotal;
+    private Integer testsPositive;
     private Problem problem;
     private String fullCode;
 
+    public Submission(Student author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive) {
+        this.author = author;
+        this.code = code;
+        this.compilationCode = compilationCode;
+        this.runCode = runCode;
+        this.testsTotal = testsTotal;
+        this.testsPositive = testsPositive;
+    }
 
-    public Submission(Student author, String code, Integer compilationCode, Integer runCode, Integer problemID) {
+    public Submission(Student author, String code, Integer compilationCode, Integer runCode) {
         this.author = author;
         this.code = code;
         this.compilationCode = compilationCode;
@@ -49,6 +59,7 @@ public class Submission {
         return author;
     }
 
+    @Column(length = 2048)
     public String getCode() {
         return code;
     }
@@ -59,6 +70,15 @@ public class Submission {
 
     public Integer getRunCode() {
         return runCode;
+    }
+
+
+    public Integer getTestsTotal() {
+        return testsTotal;
+    }
+
+    public Integer getTestsPositive() {
+        return testsPositive;
     }
 
     public void setId(Integer id) {
@@ -79,6 +99,14 @@ public class Submission {
 
     public void setRunCode(Integer runCode) {
         this.runCode = runCode;
+    }
+
+    public void setTestsTotal(Integer testsTotal) {
+        this.testsTotal = testsTotal;
+    }
+
+    public void setTestsPositive(Integer testsPositive) {
+        this.testsPositive = testsPositive;
     }
 
     @OneToOne(cascade = CascadeType.ALL)
