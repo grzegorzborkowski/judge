@@ -1,0 +1,33 @@
+version: '2'
+services:
+ db:
+  image: postgres:9.6
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: init
+    POSTGRES_DB: springbootdb
+  ports:
+    - "5432:5432"
+
+ web-back:
+  build:
+   context: judge-backend
+   dockerfile: Dockerfile
+  ports:
+   - "8080:8080"
+  depends_on:
+   - "db"
+
+ go:
+  build:
+   context: judge-external-runner/go
+   dockerfile: Dockerfile
+  ports:
+   - "8123:8123"
+
+ web-front:
+  build:
+   context: judge-frontend
+   dockerfile: Dockerfile
+  ports:
+   - "3008:3008"
