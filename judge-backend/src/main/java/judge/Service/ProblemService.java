@@ -2,6 +2,7 @@ package judge.Service;
 
 import judge.Dao.ProblemDao;
 import judge.Entity.Problem;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.List;
 @Service
 @Configurable
 public class ProblemService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ProblemService.class);
+
     @Autowired
     private
     ProblemDao problemDao;
@@ -29,13 +32,18 @@ public class ProblemService {
         return problem;
     }
 
-    public String addProblem(Problem problem) {
-        this.problemDao.save(problem);
-        return "Problem added";
-    }
-
     public String getTemplateByProblemID(Integer problemID) {
         Problem problem = this.getProblemById(problemID);
         return problem.getTemplate();
+    }
+
+    public String addProblem(Problem problem) {
+        if(this.problemDao.findById(problem.getId()) == null) {
+            this.problemDao.save(problem);
+            return "New problem has been added.";
+        } else {
+            logger.warn("Problem with the same ID already exists.");
+            return "Problem with given ID already exists. Adding failed.";
+        }
     }
 }

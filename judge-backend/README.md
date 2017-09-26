@@ -64,12 +64,12 @@ param: id = [student id]
 
 {   "code":"[code as string]",
 	"token":"[token]",
-	"facebookID":"[id]"
+	"facebookId":"[id]"
 }
 
 * /student/add
 
-{   "facebookID":"[id]",
+{   "facebookId":"[id]",
     "email":"[email]",
     "password":"[password]",
     "course":"[course name]",

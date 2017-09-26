@@ -1,12 +1,13 @@
 package judge.Dao;
 
-import judge.Entity.Student;
+import judge.Entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 
 @Repository
-public interface StudentDao extends CrudRepository<Student, BigInteger> {
-    Student findById(BigInteger id);
+public interface UserDao extends CrudRepository<User, BigInteger> {
+    User findById(BigInteger id);
+    User findByUsername(String username);
 }

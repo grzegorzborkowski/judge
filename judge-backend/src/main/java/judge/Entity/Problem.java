@@ -18,7 +18,7 @@ public class Problem
 {
 
     private Integer id;
-    private Teacher author;
+    private User author;
     private String title;
     private String description;
     private String structures;
@@ -47,7 +47,7 @@ public class Problem
 
     @ManyToOne
     @JsonBackReference
-    public Teacher getAuthor()
+    public User getAuthor()
     {
         return author;
     }
@@ -81,7 +81,7 @@ public class Problem
         this.id = id;
     }
 
-    public void setAuthor(Teacher author)
+    public void setAuthor(User author)
     {
         this.author = author;
     }

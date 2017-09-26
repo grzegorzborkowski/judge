@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.Problem;
 import judge.Service.ProblemService;
+import judge.Service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,10 +24,12 @@ import static judge.Utils.*;
 @RestController
 @RequestMapping("/problems")
 public class ProblemController {
-    private static org.apache.log4j.Logger logger = Logger.getLogger(StudentController.class);
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ProblemController.class);
 
     @Autowired
     private ProblemService problemService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<Problem> getAllProblems() {
@@ -64,14 +67,16 @@ public class ProblemController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addProblem(@RequestBody JsonNode problemJson){
+    public String addProblem(@RequestBody JsonNode problemJson) {
         logger.info("Processing POST /problems/add");
-        logger.info("New problem received.");
         Problem problem = new Problem();
-        problem.setTitle(problemJson.get("title").asText());
+        problem.setAuthor(userService.getUserById(
+                new BigInteger(problemJson.get("teacherId").asText())));
         problem.setDescription(problemJson.get("description").asText());
-        problem.setStructures(problemJson.get("structures").asText());
-        problem.setSolution(problemJson.get("solution").asText());
-        return this.problemService.addProblem(problem);
+        problem.setSignature(problemJson.get("signature").asText());
+        problem.setTitle(problemJson.get("title").asText());
+        problem.setTemplate(problemJson.get("template").asText());
+        String status = this.problemService.addProblem(problem);
+        return status;
     }
 }

@@ -3,8 +3,8 @@ package judge.Controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import judge.Component.ResultGenerator;
 import judge.Component.TokenValidator;
-import judge.Entity.Student;
-import judge.Service.StudentService;
+import judge.Entity.User;
+import judge.Service.UserService;
 import judge.Service.judge.JudgeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class JudgeController {
     private JudgeService judgeService;
     //TODO: refactor, this is ugly
     @Autowired
-    private StudentService studentService;
+    private UserService userService;
     @Autowired
     private ResultGenerator resultGenerator;
     @Autowired
@@ -36,7 +36,7 @@ class JudgeController {
         String code;
         String token;
         BigInteger facebookID;
-        Integer problemID = submission.get("problemID").asInt();
+        Integer problemID = submission.get("problemId").asInt();
         try {
             code = submission.get("code").asText();
         } catch (Exception e) {
@@ -46,7 +46,7 @@ class JudgeController {
         }
         try {
             token = submission.get("token").asText();
-            facebookID = new BigInteger(submission.get("facebookID").asText());
+            facebookID = new BigInteger(submission.get("facebookId").asText());
         } catch (Exception e) {
             logger.error("Cannot extract access token and/or facebook user ID from the submission request.", e);
             // TODO: replace failedSubmissionResult with no submission processing
@@ -56,7 +56,7 @@ class JudgeController {
         Boolean isTokenValid = this.tokenValidator.validateToken(token, facebookID.toString());
         //For testing
         //Boolean isTokenValid = true;
-        Student author = this.studentService.getStudentById(facebookID);
+        User author = this.userService.getUserById(facebookID);
         if(isTokenValid) {
             if (author != null) {
                 logger.info("Found author: " + author.getUsername());
@@ -65,7 +65,7 @@ class JudgeController {
             } else {
                 //it should never happen
                 logger.warn("Unexpected situation: submission of unregistered user. System will not process this submission.");
-                this.studentService.addStudentEmergencyMode(submission);
+                this.userService.addUserEmergencyMode(submission);
                 JsonNode result = this.resultGenerator.generateProcessingErrorSubmissionResult();
                 return result.toString();            }
         } else {
