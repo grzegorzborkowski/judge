@@ -6,8 +6,7 @@ import judge.Entity.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -36,6 +35,12 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         User user = userDao.findByUsername(username);
+        if(user!=null) {
+            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRole());
+            List<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
+            roles.add(simpleGrantedAuthority);
+            user.setAuthorities(roles);
+        }
         return user;
     }
 

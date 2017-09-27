@@ -1,21 +1,64 @@
 package judge.Entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.beans.Transient;
 import java.math.BigInteger;
 import java.util.*;
 
-//
 @Entity
 @Table(name = "user_general")
-public class User
+public class User implements UserDetails
 {
+
+    private List<SimpleGrantedAuthority> authorities;
+
+    @Transient
+    @javax.persistence.Transient
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    private boolean accountNonExpired = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
+    private boolean enabled = true;
+
+    public void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     // student specific
 
     private Set<Submission> submissions = new HashSet<>();
     private String course;
-
 
     @OneToMany(mappedBy = "author")
     @JsonManagedReference
@@ -39,9 +82,7 @@ public class User
         this.course = course;
     }
 
-
     // teacher specific
-
 
     private Set<Problem> problems = new HashSet<>();
 

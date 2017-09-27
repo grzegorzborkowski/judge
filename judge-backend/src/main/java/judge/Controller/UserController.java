@@ -2,6 +2,7 @@ package judge.Controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import judge.Entity.User;
+import judge.Service.PasswordService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordService passwordService;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<User> getAllUsers() {
@@ -35,17 +38,22 @@ public class UserController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addUser(@RequestBody JsonNode userJson) {
+
         logger.info("Processing POST /user/add");
+
         User user = new User();
+        String encryptedPassword = this.passwordService.encrypt(userJson.get("password").asText());
+
         user.setUsername(userJson.get("username").asText());
         user.setRole(userJson.get("role").asText());
         user.setEmail(userJson.get("email").asText());
-        user.setPassword("init");
+        user.setPassword(encryptedPassword);
         user.setCourse("default");
         user.setId(new BigInteger(userJson.get("facebookId").asText()));
-        logger.info("ID: " + userJson.get("facebookId").asText());
+
+        logger.info("Add: " + userJson.get("username").asText());
         String status = this.userService.addUser(user);
+
         return status;
     }
-
 }
