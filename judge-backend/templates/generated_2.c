@@ -10,6 +10,7 @@ int main()
 			passedTests++;
 	}
 
-	fprintf(stderr, "%d %d", passedTests, totalTests);
+	printf("%d ", passedTests);
+	printf("%d", totalTests);
 	return 0;
 }

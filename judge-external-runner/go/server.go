@@ -85,12 +85,27 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     var hostVolumeString = filenameWithDir
     var hostConfigBindString = hostVolumeString  + ":/WORKING_FOLDER/" + filenameWithoutDir
 
-    var hostConfig = &container.HostConfig{
-        Binds: []string{hostConfigBindString},
+    hostResources := container.Resources{
+        PidsLimit: 10,
+        MemoryReservation: 100 * 1024 * 1024,
     }
 
+    var hostConfig = &container.HostConfig{
+        Binds: []string{hostConfigBindString},
+        AutoRemove: true,
+        Resources: hostResources,
+    }
+
+    var timeoutPtr *int
+    timeoutSec := 5
+    timeoutPtr = &timeoutSec
+
+
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/ubuntu_c_runner:twelfth",
+        Image: "tusty53/ubuntu_c_runner:fifteenth",
+        NetworkDisabled: true,
+        Tty: true,
+        StopTimeout: timeoutPtr,
         Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
             hostVolumeString: struct{}{},
@@ -106,9 +121,9 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     fmt.Println(resp.ID)
 
-    var exited = false
+    exited := false
 
-    for !exited {
+    for (!exited) {
 
         json, err := cli.ContainerInspect(ctx, resp.ID)
         if err != nil {
@@ -117,6 +132,9 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
         exited = json.State.Running
 
+        if(json.State.Status == "exited"){
+            exited = true;
+        }
         fmt.Println(json.State.Status)
     }
 
@@ -151,14 +169,16 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     var testsTotal=0
 
     if(sErr!=""){
-        matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sErr[8:])
+        return 1,0,0,0
+    }
+    if(sOut!=""){
+        matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
         if(matched){
-            fmt.Sscanf(sErr[8:], "%d %d", &testsPositive, &testsTotal)
+            fmt.Sscanf(sOut, "%d %d", &testsPositive, &testsTotal)
             fmt.Printf("Working")
             return 1,1,testsPositive,testsTotal
         }
         fmt.Println(matched, err)
-        fmt.Println(sErr[8:])
         return 1,0,0,0
     }
 
