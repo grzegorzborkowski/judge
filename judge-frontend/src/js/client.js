@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import App from './modules/App';
-import Statistics from './modules/Statistics';
+import Solutions from './modules/Solutions';
 import Submissions from './modules/Submissions';
 import Submission from './modules/Submission';
 import Home from './modules/Home';
@@ -67,10 +67,10 @@ class LoginControl extends React.Component {
                         <Route path="/problem/:problemID" component={Problem} />
 
                         <Route path="/submissions" component={Submissions}>
-                            <Route path="/submissions/:userID/:submissionID" component={Submission}/>
+                        <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>
                         <Route path="/problemCreator" components={ProblemCreator}></Route>
-                        {/*<Route path="/statistics" component={Statistics}/>*/}
+                        <Route path="/solutions/:problemID" component={Solutions}/>
                     </Route>
                 </Router>;
         } else {

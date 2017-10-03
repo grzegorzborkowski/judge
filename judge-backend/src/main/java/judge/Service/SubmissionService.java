@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -26,6 +27,13 @@ public class SubmissionService {
     public List<Submission> getSubmissionsByStudentId(BigInteger id) {
         List<Submission> submissionList = new ArrayList<>();
         Iterable<Submission> submissions = submissionDao.findByAuthorId(id);
+        submissions.forEach(submissionList::add);
+        return submissionList;
+    }
+
+    public List<Submission> getSubmissionsByProblemId(Integer id) {
+        List<Submission> submissionList = new ArrayList<>();
+        Iterable<Submission> submissions = submissionDao.findByProblemId(id);
         submissions.forEach(submissionList::add);
         return submissionList;
     }

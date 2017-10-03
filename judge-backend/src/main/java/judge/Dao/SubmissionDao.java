@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SubmissionDao extends CrudRepository<Submission, Integer> {
     List<Submission> findByAuthorId(BigInteger id);
+
+    List<Submission> findByProblemId(Integer id);
 }
