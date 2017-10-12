@@ -32,10 +32,6 @@ public class ProblemService {
         return problem;
     }
 
-    public String getTemplateByProblemID(Integer problemID) {
-        Problem problem = this.getProblemById(problemID);
-        return problem.getTemplate();
-    }
 
     public String addProblem(Problem problem) {
         if(this.problemDao.findById(problem.getId()) == null) {

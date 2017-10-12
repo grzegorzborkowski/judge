@@ -73,9 +73,9 @@ public class ProblemController {
         problem.setAuthor(userService.getUserById(
                 new BigInteger(problemJson.get("teacherId").asText())));
         problem.setDescription(problemJson.get("description").asText());
-        problem.setSignature(problemJson.get("signature").asText());
         problem.setTitle(problemJson.get("title").asText());
-        problem.setTemplate(problemJson.get("template").asText());
+        problem.setStructures(problemJson.get("signatures").asText());
+        problem.setSolution(problemJson.get("solution").asText());
         String status = this.problemService.addProblem(problem);
         return status;
     }

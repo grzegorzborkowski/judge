@@ -21,10 +21,9 @@ public class Problem
     private User author;
     private String title;
     private String description;
-    private String structures;
-    private String solution;
-    private String signature;
-    private String template;
+    private String structures; // Input and Output structures - visible to students
+    private String solution; // teacher's optimal solution + test cases generator
+    private String signature; // default, read from file, used - used for student template
 
 
     public Problem()
@@ -108,11 +107,4 @@ public class Problem
         this.signature = signature;
     }
 
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
 }
