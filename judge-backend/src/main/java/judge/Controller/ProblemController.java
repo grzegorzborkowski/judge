@@ -71,7 +71,7 @@ public class ProblemController {
 
     /**
      *
-     * @param problemJson [teacherId, description, title, signatures, solution]
+     * @param problemJson [description, title, structures, solution]
      * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

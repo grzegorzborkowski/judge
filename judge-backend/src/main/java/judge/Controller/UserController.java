@@ -38,7 +38,7 @@ public class UserController {
 
     /**
      *
-     * @param userJson [username, password, rold, email, facebookId]
+     * @param userJson [username, password, role, email, id]
      * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -54,7 +54,7 @@ public class UserController {
         user.setEmail(userJson.get("email").asText());
         user.setPassword(encryptedPassword);
         user.setCourse("default");
-        user.setId(new BigInteger(userJson.get("facebookId").asText()));
+        user.setId(new BigInteger(userJson.get("id").asText()));
 
         logger.info("Add: " + userJson.get("username").asText());
         String status = this.userService.addUser(user);

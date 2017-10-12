@@ -1,4 +1,4 @@
-To run, set up PostgreSQL locally.
+To run, set up PostgresSQL locally.
 
 **First usage only:**
 * Install PostgresSQL - for Ubuntu:
@@ -63,17 +63,16 @@ param: id = [student id]
 * /judge/submit
 
 {   "code":"[code as string]",
-	"token":"[token]",
-	"facebookId":"[id]"
+	"problemID":"[problem id]"
 }
 
 * /student/add
 
-{   "facebookId":"[id]",
+{   "role":"[role]",
     "email":"[email]",
     "password":"[password]",
-    "course":"[course name]",
-    "username":"[name surname]"
+    "id":"[id]",
+    "username":"[username]"
 }
 
 If Student A with id=X exists in the database and we add Student B with id=X, then Student B overwrites Student A!

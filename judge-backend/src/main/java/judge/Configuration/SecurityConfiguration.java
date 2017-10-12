@@ -31,11 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/submission/getAllForUser").hasAnyAuthority("student", "teacher")
-                .antMatchers("/submission/getAll").hasAuthority("teacher")
-                .antMatchers("/user/add").hasAuthority("teacher")
-                .antMatchers("/problems/add").hasAnyAuthority("teacher")
-                .antMatchers("/judge/submit").hasAnyAuthority("student", "teacher")
+                .antMatchers("/submission/getAllForUser").hasAnyAuthority("student", "teacher", "admin")
+                .antMatchers("/submission/getAll").hasAnyAuthority("teacher", "admin")
+                .antMatchers("/user/add").hasAnyAuthority("teacher", "admin")
+                .antMatchers("/problems/add").hasAnyAuthority("teacher", "admin")
+                .antMatchers("/judge/submit").hasAnyAuthority("student", "teacher", "admin")
                 .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//We don't need sessions to be created.
     }

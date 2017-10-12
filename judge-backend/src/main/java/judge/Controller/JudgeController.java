@@ -2,7 +2,6 @@ package judge.Controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import judge.Component.ResultGenerator;
-import judge.Component.TokenValidator;
 import judge.Entity.User;
 import judge.Service.UserService;
 import judge.Service.judge.JudgeService;
@@ -26,12 +25,10 @@ class JudgeController {
     private UserService userService;
     @Autowired
     private ResultGenerator resultGenerator;
-    @Autowired
-    private TokenValidator tokenValidator;
 
     /**
      *
-     * @param submission [problemId, code, token, facebookId]
+     * @param submission [problemId, code]
      * @return
      */
     @RequestMapping(value = "/submit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

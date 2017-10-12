@@ -54,16 +54,6 @@ public class UserService {
         }
     }
 
-    //TODO: Remove it...
-    public String addUserEmergencyMode(JsonNode submissionJson) {
-        User student = new User();
-        student.setId(new BigInteger(submissionJson.get("facebookId").asText()));
-        student.setUsername("Gall Anonim");
-
-        String status = addUser(student);
-        return status;
-    }
-
     public UserService() {
 
     }

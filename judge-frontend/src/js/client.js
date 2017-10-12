@@ -15,6 +15,8 @@ import axios from 'axios';
 import * as constants from './modules/util.js'
 
 const cookies = new Cookies();
+cookies.set("judgeBasicToken", "Basic YWRtaW46YWRtaW4=")
+axios.defaults.headers.common['Authorization'] = cookies.get("judgeBasicToken");
 
 class LoginControl extends React.Component {
     constructor(props) {
@@ -28,7 +30,7 @@ class LoginControl extends React.Component {
         axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENT_ENDPOINT, {
             username: response["name"],
             email: response["email"],
-            facebookID: response["id"]}, {
+            id: response["id"]}, {
             headers: {
                 'Content-Type': 'application/json'
             }
