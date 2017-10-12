@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.Problem;
+import judge.Entity.User;
 import judge.Service.ProblemService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -74,12 +77,16 @@ public class ProblemController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addProblem(@RequestBody JsonNode problemJson) {
         logger.info("Processing POST /problems/add");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
+
         Problem problem = new Problem();
-        problem.setAuthor(userService.getUserById(
-                new BigInteger(problemJson.get("teacherId").asText())));
+        problem.setAuthor(user);
         problem.setDescription(problemJson.get("description").asText());
         problem.setTitle(problemJson.get("title").asText());
-        problem.setStructures(problemJson.get("signatures").asText());
+        problem.setStructures(problemJson.get("structures").asText());
         problem.setSolution(problemJson.get("solution").asText());
         String status = this.problemService.addProblem(problem);
         return status;
