@@ -38,6 +38,7 @@ class Problems extends React.Component {
                     <tr>
                         <th> ProblemID </th>
                         <th> Problem Title </th>
+                        <th> Solutions </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,6 +47,7 @@ class Problems extends React.Component {
 
                             <td>  <Link to={`/problem/${problem.id}`}>{problem.id} </Link></td>
                             <td> <Link to={`/problem/${problem.id}`}> {problem.title} </Link></td>
+                            <td> <Link to={`/solutions/${problem.id}`}> Click </Link> </td>
 
                         </tr>
                     )}

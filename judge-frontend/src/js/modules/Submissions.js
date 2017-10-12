@@ -39,6 +39,9 @@ class Submissions extends React.Component {
                     <th> Problem Title </th>
                     <th> Compilation Code </th>
                     <th> RunCode</th>
+                    <th> Number of Passed Tests</th>
+                    <th> Number of Tests</th>
+                    <th> Passed Percentage</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -49,6 +52,9 @@ class Submissions extends React.Component {
                         <td> {submission.problem.title}</td>
                         <td>{submission.compilationCode}</td>
                         <td>{submission.runCode}</td>
+                        <td>{submission.testsPositive}</td>
+                        <td>{submission.testsTotal}</td>
+                        <td>{submission.testsPositive * 100 / submission.testsTotal} %</td>
 
                     </tr>
                 )}

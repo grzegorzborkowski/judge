@@ -2,6 +2,9 @@ import React from 'react';
 import CodeFormComponent from './CodeFormComponent';
 import axios from 'axios';
 import * as constants from './util.js'
+import AceEditor from 'react-ace';
+import 'brace/mode/c_cpp';
+import 'brace/theme/dreamweaver';
 
 class Problem extends React.Component {
 
@@ -11,10 +14,10 @@ class Problem extends React.Component {
             id: this.props.routeParams.problemID,
             description: "",
             title: "",
-            signature: ""
+            signature: "",
+            structures:""
         };
     }
-
 
     componentDidMount() {
         var self = this;
@@ -24,7 +27,8 @@ class Problem extends React.Component {
                 self.setState({
                     description: data['description'],
                     title: data['title'],
-                    signature: data['signature']
+                    signature: data['signature'],
+                    structures: data['structures']
                 });
                 console.log(self.state.signature);
             })
@@ -39,6 +43,18 @@ class Problem extends React.Component {
                 <div><b>{this.state.title}</b></div>
                 <div> {this.state.description} </div>
                 <div> {this.state.signature} </div>
+                <div> {this.state.structures} </div>
+                <br/>
+                <div><AceEditor mode="c_cpp"
+                           theme="dreamweaver"
+                           value={this.state.structures}
+                           width="1000px"
+                           name="Structure editor"
+                           fontSize={18}
+                           wrapEnabled={true}
+                           /></div>
+                <br/>
+                <br/>
                 <CodeFormComponent
                     signature={this.state.signature} problem_id={this.state.id}/>
             </div>

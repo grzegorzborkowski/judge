@@ -69,8 +69,12 @@ class AgentService {
 
             int compilationCode = Integer.parseInt(bodyJson.get("CompilationCode").toString());
             int runCode = Integer.parseInt(bodyJson.get("RunCode").toString());
+            int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
+            int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             result.put("compilationCode", compilationCode);
             result.put("runCode", runCode);
+            result.put("testsTotal", testsTotal);
+            result.put("testsPositive", testsPositive);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());

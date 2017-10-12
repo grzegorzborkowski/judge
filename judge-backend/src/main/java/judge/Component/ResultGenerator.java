@@ -14,6 +14,8 @@ public class ResultGenerator {
         ObjectNode result = JsonNodeFactory.instance.objectNode();
         result.put("compilationCode", submission.getCompilationCode());
         result.put("runCode", submission.getRunCode());
+        result.put("testsPositive", submission.getTestsPositive());
+        result.put("testsTotal", submission.getTestsTotal());
         return result;
     }
 

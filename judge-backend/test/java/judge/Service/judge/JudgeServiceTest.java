@@ -28,19 +28,20 @@ public class JudgeServiceTest {
     private String submissionData = HELLO_WORLD_SUBMISSION_CODE ;
     private Map<String, Integer> expectedResult = new HashMap<>();
 
-    // TODO: rewrite this as createSourceCodeFile receives now a problemID as a parameter
-//    @Before
-//    public void init() throws IOException {
-//        when(sourceCodeCreatorService.createSourceCodeFile(sourceCodeFile)).thenReturn(sourceCodeFile);
-//        expectedResult.put("compilationCode", COMPILATION_SUCCESS_CODE);
-//        expectedResult.put("runCode", RUN_SUCCESS_CODE);
-//        when(agentService.uploadFileToExamine(anyString())).thenReturn(expectedResult);
-//        judgeService.setSourceCodeCreatorService(sourceCodeCreatorService);
-//        judgeService.setAgentService(agentService);
-//        expectedSubmission.setCode(submissionData);
-//        expectedSubmission.setCompilationCode(COMPILATION_SUCCESS_CODE);
-//        expectedSubmission.setRunCode(RUN_SUCCESS_CODE);
-//    }
+    //TODO: rewrite it to fit oauth and database changes
+/*
+    @Before
+    public void init() throws IOException {
+        when(sourceCodeCreatorService.createSourceCodeFile(sourceCodeFile)).thenReturn(sourceCodeFile);
+        expectedResult.put("compilationCode", COMPILATION_SUCCESS_CODE);
+        expectedResult.put("runCode", RUN_SUCCESS_CODE);
+        when(agentService.uploadFileToExamine(anyString())).thenReturn(expectedResult);
+        judgeService.setSourceCodeCreatorService(sourceCodeCreatorService);
+        judgeService.setAgentService(agentService);
+        expectedSubmission.setCode(submissionData);
+        expectedSubmission.setCompilationCode(COMPILATION_SUCCESS_CODE);
+        expectedSubmission.setRunCode(RUN_SUCCESS_CODE);
+    }*/
     //TODO: rewrite it to fit oauth and database changes
 //    @Test
 //    public void testCompileAndRun() {
