@@ -50,10 +50,10 @@ public class ProblemController {
         List<String> lines;
 
         try {
-            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_TEMPLATE_1_NAME));
+            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + STRUCTURES_C));
             structures = String.join("\n", lines);
 
-            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_TEMPLATE_2_NAME));
+            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_FUNCTION_C));
             solution = String.join("\n", lines);
 
         } catch (IOException e) {

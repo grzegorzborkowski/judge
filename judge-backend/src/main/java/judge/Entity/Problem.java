@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static judge.Utils.STUDENTS_TEMPLATE_1_NAME;
+import static judge.Utils.STUDENTS_SIGNATURE_C;
 import static judge.Utils.TEMPLATES_DIR_NAME;
 
 @Entity
@@ -28,7 +28,7 @@ public class Problem
 
     public Problem()
     {
-        Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_TEMPLATE_1_NAME);
+        Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
         try {
             List<String> lines = Files.readAllLines(students_file);
             signature = String.join("\n", lines);
