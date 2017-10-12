@@ -66,6 +66,11 @@ public class ProblemController {
         return result.toString();
     }
 
+    /**
+     *
+     * @param problemJson [teacherId, description, title, signatures, solution]
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addProblem(@RequestBody JsonNode problemJson) {
         logger.info("Processing POST /problems/add");

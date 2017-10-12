@@ -29,7 +29,11 @@ class JudgeController {
     @Autowired
     private TokenValidator tokenValidator;
 
-    
+    /**
+     *
+     * @param submission [problemId, code, token, facebookId]
+     * @return
+     */
     @RequestMapping(value = "/submit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody public String insertSolution(@RequestBody JsonNode submission) {
         logger.info("Processing POST /judge");

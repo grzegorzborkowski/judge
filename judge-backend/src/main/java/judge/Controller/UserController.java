@@ -36,6 +36,11 @@ public class UserController {
         return user;
     }
 
+    /**
+     *
+     * @param userJson [username, password, rold, email, facebookId]
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addUser(@RequestBody JsonNode userJson) {
 
