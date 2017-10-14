@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,6 +31,9 @@ import java.util.Map;
 class AgentService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(AgentService.class);
 
+    @Value("${connection.externalrunner.url}")
+    private String externalRunnerUrl;
+
     /**
      * Uploads source code file to the external server (external runner).
      * Handles server response (with examination results!) and creates a result map based on the response.
@@ -45,7 +49,7 @@ class AgentService {
         Map<String, Integer> result = new HashMap<>();
 
         HttpClient httpclient = HttpClientBuilder.create().build();
-        HttpPost httppost = new HttpPost("http://localhost:8123/submission");
+        HttpPost httppost = new HttpPost(externalRunnerUrl);
 
         final File file = new File(filename);
         FileBody fileBody = new FileBody(file);

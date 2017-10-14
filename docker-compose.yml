@@ -9,6 +9,13 @@ services:
   ports:
     - "5432:5432"
 
+ go:
+  build:
+   context: judge-external-runner/go
+   dockerfile: Dockerfile
+  ports:
+   - "8123:8123"
+
  web-back:
   build:
    context: judge-backend
@@ -17,13 +24,7 @@ services:
    - "8080:8080"
   depends_on:
    - "db"
-
- go:
-  build:
-   context: judge-external-runner/go
-   dockerfile: Dockerfile
-  ports:
-   - "8123:8123"
+   - "go"
 
  web-front:
   build:

@@ -10,7 +10,7 @@ Dzięki temu możemy z przeglądarki wyklikać wszystko (admin ma dostęp do wsz
 	.antMatchers("/user/add").hasAnyAuthority("teacher", "admin")
 - wystartować backend
 - wykonać:
-	 curl -H "Content-Type: application/json" -X POST -d '{"username":"admin","password":"admin","facebookId":"123","role":"admin","email":"admin@mail.com"}' http://localhost:8080/user/add
+	 curl -H "Content-Type: application/json" -X POST -d '{"username":"admin","password":"admin","role":"admin","email":"admin@mail.com"}' http://localhost:8080/user/add
 
 (W razie gdyby rzuciło exception:
 "exception":"org.springframework.dao.DataIntegrityViolationException","message":"could not execute statement; SQL [n/a]; constraint [dtype]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement","path":"/user/add"
