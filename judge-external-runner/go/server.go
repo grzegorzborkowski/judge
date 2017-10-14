@@ -186,16 +186,19 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 }
 
 
-// Creates examine directory if it doesn't exist.
-// If examine directory already exists, then comes an error.
+// Checks if a directory with a given name already exists and can be used for submission processing.
+// If there is no such a directory, it will be created.
 func prepareDir() {
     var path = os.Args[1]
     mode := int(0777)
-    if _, err := os.Stat(path); os.IsNotExist(err) {
-        os.Mkdir(path, os.FileMode(mode))
-    }
+    _, err := os.Stat(path); os.IsNotExist(err);
+
     if err != nil {
-        log.Fatal(err)
+        log.Println(err);
+        log.Println("Directory with a given name will be created.")
+        os.Mkdir(path, os.FileMode(mode));
+    } else {
+        log.Println("Directory with a given name already exists.")
     }
 }
 
