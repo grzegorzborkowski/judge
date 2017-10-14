@@ -12,53 +12,29 @@ import Problems from './modules/Problems';
 import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import * as constants from './modules/util.js'
 
 const cookies = new Cookies();
-cookies.set("judgeBasicToken", "Basic YWRtaW46YWRtaW4=")
-axios.defaults.headers.common['Authorization'] = cookies.get("judgeBasicToken");
+//cookies.set("judgeBasicToken", "Basic YWRtaW46YWRtaW4=")
+axios.defaults.headers.common['Authorization'] = cookies.get("judgeToken");
 
 class LoginControl extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {isLoggedIn: false};
-        this.addNewUser = this.addNewUser.bind(this);
-    }
-
-    addNewUser(response) {
-        var self = this;
-        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENT_ENDPOINT, {
-            username: response["name"],
-            email: response["email"],
-            id: response["id"]}, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            console.log(response["data"].status);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        if(cookies.get("judgeToken")) this.state = {isLoggedIn: true};
+        else this.state = {isLoggedIn: false};
     }
 
     render() {
         const isLoggedIn = this.state.isLoggedIn;
         console.log("Rendering. isLoggedIn :",isLoggedIn);
-        const responseFacebook = (response) => {
-            var token = response["accessToken"];
-            var facebookID = response["id"];
-            cookies.set("token",token);
-            cookies.set("facebookID", facebookID);
-            console.log(response);
-            if (!response.status) {
-                console.log("Success!");
-                this.setState({isLoggedIn: true});
-                this.addNewUser(response);
-            } else {
-                console.log("Authorization failed : " + response.status)
-            }
-        };
+
         let content = null;
+
         if (isLoggedIn) {
             content =
                 <Router history={hashHistory}>
@@ -77,18 +53,30 @@ class LoginControl extends React.Component {
                 </Router>;
         } else {
             content =
-                <div class="container">
-                    <div class="center">
-                        <h4>To use Judge app please log in:</h4>
-                        <FacebookLogin
-                            appId="667095053501525"
-                            language="en_US"
-                            autoLoad={true}
-                            callback={responseFacebook}
-                            cssClass="my-facebook-button-class"
-                            fields="id,name,email,picture"/>
-                    </div>
-                </div>;
+            <div>
+              <MuiThemeProvider>
+                <div>
+                <AppBar
+                   title="Login"
+                 />
+                 <TextField
+                   hintText="Enter your Username"
+                   floatingLabelText="Username"
+                   onChange = {(event,newValue) => this.setState({username:newValue})}
+                   />
+                 <br/>
+                   <TextField
+                     type="password"
+                     hintText="Enter your Password"
+                     floatingLabelText="Password"
+                     onChange = {(event,newValue) => this.setState({password:newValue})}
+                     />
+                   <br/>
+                   <RaisedButton label="Submit" primary={true} onClick={(event) => this.handleClick(event)}
+                 />
+               </div>
+            </MuiThemeProvider>
+          </div>
         }
 
         return (
@@ -97,6 +85,32 @@ class LoginControl extends React.Component {
             </div>
         );
     }
+
+    handleClick(event){
+        var apiBaseUrl = "http://localhost:8080/";
+        var self = this;
+        var payload={
+          "username":this.state.username,
+          "password":this.state.password
+        }
+        axios.post(apiBaseUrl+'login', payload)
+         .then(function (response) {
+          console.log(response);
+
+          if(response.status == 200){
+            var judgeToken = response.data;
+            console.log("Login successfull");
+            cookies.set("judgeToken",judgeToken);
+            window.location.reload();
+
+          }else{
+            console.log("Login failed");
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+       });
+  }
 }
 
 render(

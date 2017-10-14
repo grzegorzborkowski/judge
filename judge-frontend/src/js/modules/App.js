@@ -8,8 +8,7 @@ export default React.createClass({
 
     logout: function() {
         console.log("Logging out.");
-        cookies.remove("token");
-        cookies.remove("facebookID");
+        cookies.remove("judgeToken");
         this.setState({isLoggedIn: false});
         window.location = '/';
     },
