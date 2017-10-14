@@ -54,7 +54,6 @@ public class UserController {
         user.setEmail(userJson.get("email").asText());
         user.setPassword(encryptedPassword);
         user.setCourse("default");
-        user.setId(new BigInteger(userJson.get("id").asText()));
 
         logger.info("Add: " + userJson.get("username").asText());
         String status = this.userService.addUser(user);

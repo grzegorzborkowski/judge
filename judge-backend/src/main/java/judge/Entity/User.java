@@ -99,7 +99,6 @@ public class User implements UserDetails
         this.problems = problems;
     }
 
-
     private BigInteger id;
     private String username;
     private String role;
@@ -111,6 +110,7 @@ public class User implements UserDetails
     }
 
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public BigInteger getId()
     {
         return id;

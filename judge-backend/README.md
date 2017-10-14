@@ -71,9 +71,5 @@ param: id = [student id]
 {   "role":"[role]",
     "email":"[email]",
     "password":"[password]",
-    "id":"[id]",
     "username":"[username]"
 }
-
-If Student A with id=X exists in the database and we add Student B with id=X, then Student B overwrites Student A!
-It'll be changed.
