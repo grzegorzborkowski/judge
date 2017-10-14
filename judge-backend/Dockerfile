@@ -4,4 +4,4 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-CMD ["mvn", "spring-boot:run"]
+CMD ["mvn", "spring-boot:run", "-D connection.database.host=db", "-D connection.externalrunner.host=go"]
