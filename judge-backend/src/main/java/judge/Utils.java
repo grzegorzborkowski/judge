@@ -14,10 +14,10 @@ public final class Utils {
     public static final String RUNTIME_DIR_NAME = "generated-in-runtime/";
     public static final String TEMPLATES_DIR_NAME = "templates/";
 
-    public static final String GENERATED_TEMPLATE_1_NAME = "generated_1.c";
-    public static final String GENERATED_TEMPLATE_2_NAME = "generated_2.c";
-    public static final String TEACHERS_TEMPLATE_1_NAME = "teachers_1.c";
-    public static final String TEACHERS_TEMPLATE_2_NAME = "teachers_2.c";
-    public static final String STUDENTS_TEMPLATE_1_NAME = "students.c";
+    public static final String HEADER_C = "header.c";
+    public static final String MAIN_FUNCTION_C = "main_function.c";
+    public static final String STRUCTURES_C = "structures.c";
+    public static final String TEACHERS_FUNCTION_C = "teachers_function.c";
+    public static final String STUDENTS_SIGNATURE_C = "students_signature.c";
 
 }

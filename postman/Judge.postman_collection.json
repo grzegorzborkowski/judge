@@ -1,0 +1,203 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Judge",
+		"_postman_id": "33137305-bf84-5799-ac28-7b2c76d8f93b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Spring App",
+			"description": "",
+			"item": [
+				{
+					"name": "Get all students",
+					"request": {
+						"url": "http://localhost:8080/student/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookID\": 1,\n\t\"username\": \"ania\",\n\t\"email\": \"example_email@gmail.com\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get all submissions",
+					"request": {
+						"url": "http://localhost:8080//submission/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookID\": 1,\n\t\"username\": \"ania\",\n\t\"email\": \"example_email@gmail.com\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get student by id",
+					"request": {
+						"url": {
+							"raw": "http://localhost:8080/student/getById?id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"getById"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookID\": 1,\n\t\"username\": \"ania\",\n\t\"email\": \"example_email@gmail.com\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get submitions for user",
+					"request": {
+						"url": {
+							"raw": "http://localhost:8080//submission/getAllForUser?id=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"",
+								"submission",
+								"getAllForUser"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookID\": 1,\n\t\"username\": \"ania\",\n\t\"email\": \"example_email@gmail.com\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add student",
+					"request": {
+						"url": "http://localhost:8080/student/add",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookID\": 1,\n\t\"username\": \"ania\",\n\t\"email\": \"example_email@gmail.com\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add problem",
+					"request": {
+						"url": "http://localhost:8080/problems/add",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"teacherId\": 1,\n\t\"title\": \"Example title\",\n\t\"template\": \"// Example template\",\n\t\"signature\": \"// Example signature\",\n\t\"description\": \"Example description\"\n}"
+						},
+						"description": "In order to process your request correctly, problem must reference an existing teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Submit solution",
+					"request": {
+						"url": "http://localhost:8080/judge/submit",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"facebookId\": 1,\n\t\"problemId\": 1,\n\t\"token\": 1,\n\t\"code\": \"return 0;\"\n}"
+						},
+						"description": "In order to process your request correctly, solution must reference an existing problem and student"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Go Runner",
+			"description": "",
+			"item": []
+		}
+	]
+}

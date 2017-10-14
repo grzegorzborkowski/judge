@@ -4,16 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.Problem;
+import judge.Entity.User;
 import judge.Service.ProblemService;
+import judge.Service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,10 +27,12 @@ import static judge.Utils.*;
 @RestController
 @RequestMapping("/problems")
 public class ProblemController {
-    private static org.apache.log4j.Logger logger = Logger.getLogger(StudentController.class);
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ProblemController.class);
 
     @Autowired
     private ProblemService problemService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<Problem> getAllProblems() {
@@ -47,10 +53,10 @@ public class ProblemController {
         List<String> lines;
 
         try {
-            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_TEMPLATE_1_NAME));
+            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + STRUCTURES_C));
             structures = String.join("\n", lines);
 
-            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_TEMPLATE_2_NAME));
+            lines = Files.readAllLines(Paths.get(TEMPLATES_DIR_NAME + TEACHERS_FUNCTION_C));
             solution = String.join("\n", lines);
 
         } catch (IOException e) {
@@ -63,15 +69,26 @@ public class ProblemController {
         return result.toString();
     }
 
+    /**
+     *
+     * @param problemJson [description, title, structures, solution]
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addProblem(@RequestBody JsonNode problemJson){
+    public String addProblem(@RequestBody JsonNode problemJson) {
         logger.info("Processing POST /problems/add");
-        logger.info("New problem received.");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
+
         Problem problem = new Problem();
-        problem.setTitle(problemJson.get("title").asText());
+        problem.setAuthor(user);
         problem.setDescription(problemJson.get("description").asText());
+        problem.setTitle(problemJson.get("title").asText());
         problem.setStructures(problemJson.get("structures").asText());
         problem.setSolution(problemJson.get("solution").asText());
-        return this.problemService.addProblem(problem);
+        String status = this.problemService.addProblem(problem);
+        return status;
     }
 }

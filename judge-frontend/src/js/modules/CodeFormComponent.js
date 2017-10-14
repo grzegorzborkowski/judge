@@ -41,9 +41,7 @@ class CodeFormComponent extends React.Component {
         var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.JUDGE_ENDPOINT, {
             problemID: this.props.problem_id,
-            code: this.state.code,
-            token: token,
-            facebookID: facebookID}, {
+            code: this.state.code}, {
             headers: {
                 'Content-Type': 'application/json'
             }

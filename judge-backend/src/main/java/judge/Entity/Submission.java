@@ -13,7 +13,7 @@ public class Submission {
     //To break infinite recursion with JSON and JPA (we have bi-directional relationships now)
     //TODO: do in in a better way, delete bi-directional relationships
     @JsonIgnore
-    private Student author;
+    private User author;
     private String code;
     private Integer compilationCode;
     private Integer runCode;
@@ -22,26 +22,14 @@ public class Submission {
     private Problem problem;
     private String fullCode;
 
-    public Submission(Student author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive) {
+    public Submission(User author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Problem problem) {
         this.author = author;
         this.code = code;
         this.compilationCode = compilationCode;
         this.runCode = runCode;
         this.testsTotal = testsTotal;
         this.testsPositive = testsPositive;
-    }
-
-    public Submission(Student author, String code, Integer compilationCode, Integer runCode) {
-        this.author = author;
-        this.code = code;
-        this.compilationCode = compilationCode;
-        this.runCode = runCode;
-    }
-
-    public Submission(String code, Integer compilationCode, Integer runCode) {
-        this.code = code;
-        this.compilationCode = compilationCode;
-        this.runCode = runCode;
+        this.problem = problem;
     }
 
     public Submission() {
@@ -55,7 +43,7 @@ public class Submission {
 
     @ManyToOne
     @JsonBackReference
-    public Student getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
@@ -85,7 +73,7 @@ public class Submission {
         this.id = id;
     }
 
-    public void setAuthor(Student author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

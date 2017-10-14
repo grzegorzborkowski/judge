@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static judge.Utils.STUDENTS_TEMPLATE_1_NAME;
+import static judge.Utils.STUDENTS_SIGNATURE_C;
 import static judge.Utils.TEMPLATES_DIR_NAME;
 
 @Entity
@@ -18,18 +18,17 @@ public class Problem
 {
 
     private Integer id;
-    private Teacher author;
+    private User author;
     private String title;
     private String description;
-    private String structures;
-    private String solution;
-    private String signature;
-    private String template;
+    private String structures; // Input and Output structures - visible to students
+    private String solution; // teacher's optimal solution + test cases generator
+    private String signature; // default, read from file, used - used for student template
 
 
     public Problem()
     {
-        Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_TEMPLATE_1_NAME);
+        Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
         try {
             List<String> lines = Files.readAllLines(students_file);
             signature = String.join("\n", lines);
@@ -47,7 +46,7 @@ public class Problem
 
     @ManyToOne
     @JsonBackReference
-    public Teacher getAuthor()
+    public User getAuthor()
     {
         return author;
     }
@@ -81,7 +80,7 @@ public class Problem
         this.id = id;
     }
 
-    public void setAuthor(Teacher author)
+    public void setAuthor(User author)
     {
         this.author = author;
     }
@@ -108,11 +107,4 @@ public class Problem
         this.signature = signature;
     }
 
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
 }

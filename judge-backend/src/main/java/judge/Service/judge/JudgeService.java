@@ -3,7 +3,7 @@ package judge.Service.judge;
 import judge.Dao.ProblemDao;
 import judge.Dao.SubmissionDao;
 import judge.Entity.Problem;
-import judge.Entity.Student;
+import judge.Entity.User;
 import judge.Entity.Submission;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +30,12 @@ public class JudgeService {
     @Autowired
     ProblemDao problemDao;
     /**
-     * Takes student's input, produces a source code file, pass it to the external runner,
+     * Takes user's input, produces a source code file, pass it to the external runner,
      * produces a Submission.
-     * @param code  student's input (now: program, target: function)
+     * @param code  user's input (now: program, target: function)
      * @returns Submission object based on examination results
      */
-    public Submission compileAndRun(String code, Student author, Integer problemID) {
+    public Submission compileAndRun(String code, User author, Integer problemID) {
 
         Submission submission = new Submission();
         logger.info("Processing new submission.");

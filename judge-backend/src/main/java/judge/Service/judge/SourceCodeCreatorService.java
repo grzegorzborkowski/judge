@@ -42,10 +42,10 @@ class SourceCodeCreatorService {
     }
 
     private List<String> prepareSourceCode(String code, Problem problem) {
-        List<String> result,generated_lines_1, generated_lines_2, students_lines;
+        List<String> result,generated_lines_1, generated_lines_2;
         result = new ArrayList<>();
-        Path generated_file_1 = Paths.get(TEMPLATES_DIR_NAME + GENERATED_TEMPLATE_1_NAME);
-        Path generated_file_2 = Paths.get(TEMPLATES_DIR_NAME + GENERATED_TEMPLATE_2_NAME);
+        Path generated_file_1 = Paths.get(TEMPLATES_DIR_NAME + HEADER_C);
+        Path generated_file_2 = Paths.get(TEMPLATES_DIR_NAME + MAIN_FUNCTION_C);
 
         try {
             generated_lines_1 = Files.readAllLines(generated_file_1);
