@@ -31,7 +31,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
-    "css-loader": "^0.28.7"
+    "css-loader": "^0.28.7",
+    "react-router-role-authorization": "^1.1.4"
   },
   "scripts": {
     "dev": "webpack-dev-server --content-base src --inline --hot"

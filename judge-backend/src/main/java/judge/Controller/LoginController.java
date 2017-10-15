@@ -1,6 +1,8 @@
 package judge.Controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.User;
 import judge.Service.PasswordService;
 import judge.Service.UserService;
@@ -46,7 +48,10 @@ public class LoginController {
 
                 logger.info("Logging for user " + username + " successful");
                 response.setStatus(HttpServletResponse.SC_OK);
-                return "Basic " + token;
+                ObjectNode result = JsonNodeFactory.instance.objectNode();
+                result.put("token", "Basic " + token);
+                result.put("role", user.getRole());
+                return result.toString();
             } else {
                 logger.info("Logging for user " + username + " failed. Wrong password provided");
             }

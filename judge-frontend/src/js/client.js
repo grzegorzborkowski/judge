@@ -23,8 +23,14 @@ axios.defaults.headers.common['Authorization'] = cookies.get("judgeToken");
 class LoginControl extends React.Component {
     constructor(props) {
         super(props);
-        if(cookies.get("judgeToken")) this.state = {isLoggedIn: true};
+        if(cookies.get("judge.token")) this.state = {isLoggedIn: true};
         else this.state = {isLoggedIn: false};
+
+        this.validateForm = this.validateForm.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.sendLoginRequest = this.sendLoginRequest.bind(this);
+
     }
 
     render() {
@@ -36,7 +42,7 @@ class LoginControl extends React.Component {
         if (isLoggedIn) {
             content =
                 <Router history={hashHistory}>
-                    <Route path="/" component={App}>
+                  <Route path="/" component={App}>
                         <IndexRoute component={Home}/>
                         <Route path="/problems" components={Problems}>
                         </Route>
@@ -45,7 +51,7 @@ class LoginControl extends React.Component {
                         <Route path="/submissions" component={Submissions}>
                         <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>
-                        <Route path="/problemCreator" components={ProblemCreator}></Route>
+                        <Route authorize={['teacher', 'admin']} path="/problemCreator" components={ProblemCreator}></Route>
                         <Route path="/solutions/:problemID" component={Solutions}/>
                     </Route>
                 </Router>;
@@ -101,7 +107,6 @@ class LoginControl extends React.Component {
 
     handleSubmit = event => {
       event.preventDefault();
-      console.log(this.state.username);
       this.sendLoginRequest(this.state.username, this.state.password);
     }
 
@@ -117,20 +122,23 @@ class LoginControl extends React.Component {
               console.log(response);
 
               if(response.status == 200){
-                var judgeToken = response.data;
+                var judgeToken = response.data.token;
+                var roleArray = [response.data.role];
                 console.log("Login successfull");
-                cookies.set("judgeToken",judgeToken);
+                cookies.set("judge.token",judgeToken);
+                cookies.set("judge.role",roleArray);
                 window.location.reload();
-
               }else{
                 console.log("Login failed");
               }
             })
             .catch(function (error) {
+              alert("Bad credentials!");
               console.log(error);
-           });
+            })
       }
 }
+
 
 render(
     <LoginControl />,
