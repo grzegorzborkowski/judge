@@ -146,12 +146,8 @@ class ProblemCreator extends RoleAwareComponent {
           </div>
         );
 
-        console.log("role in ProblemCreator " + this.userRoles)
-
         return this.rolesMatched() ? problemCreatorContent : notAuthorized;
-
     }
-
 }
 
 export default ProblemCreator;
