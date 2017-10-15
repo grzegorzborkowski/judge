@@ -12,14 +12,12 @@ import Problems from './modules/Problems';
 import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import * as constants from './modules/util.js'
 
+import '../css/Login.css';
+
 const cookies = new Cookies();
-//cookies.set("judgeBasicToken", "Basic YWRtaW46YWRtaW4=")
 axios.defaults.headers.common['Authorization'] = cookies.get("judgeToken");
 
 class LoginControl extends React.Component {
@@ -53,31 +51,36 @@ class LoginControl extends React.Component {
                 </Router>;
         } else {
             content =
-            <div>
-              <MuiThemeProvider>
-                <div>
-                <AppBar
-                   title="Login"
-                 />
-                 <TextField
-                   hintText="Enter your Username"
-                   floatingLabelText="Username"
-                   onChange = {(event,newValue) => this.setState({username:newValue})}
-                   />
-                 <br/>
-                   <TextField
-                     type="password"
-                     hintText="Enter your Password"
-                     floatingLabelText="Password"
-                     onChange = {(event,newValue) => this.setState({password:newValue})}
-                     />
-                   <br/>
-                   <RaisedButton label="Submit" primary={true} onClick={(event) => this.handleClick(event)}
-                 />
-               </div>
-            </MuiThemeProvider>
-          </div>
-        }
+              <div className="Login">
+                <form onSubmit={this.handleSubmit}>
+                  <FormGroup controlId="username" bsSize="large">
+                    <ControlLabel>Username</ControlLabel>
+                    <FormControl
+                      autoFocus
+                      type="username"
+                      value={this.state.username}
+                      onChange={this.handleChange}
+                    />
+                  </FormGroup>
+                  <FormGroup controlId="password" bsSize="large">
+                    <ControlLabel>Password</ControlLabel>
+                    <FormControl
+                      value={this.state.password}
+                      onChange={this.handleChange}
+                      type="password"
+                    />
+                  </FormGroup>
+                  <Button
+                    block
+                    bsSize="large"
+                    disabled={!this.validateForm()}
+                    type="submit"
+                  >
+                    Log in
+                  </Button>
+                </form>
+              </div>
+            }
 
         return (
             <div>
@@ -86,31 +89,47 @@ class LoginControl extends React.Component {
         );
     }
 
-    handleClick(event){
-        var apiBaseUrl = "http://localhost:8080/";
-        var self = this;
-        var payload={
-          "username":this.state.username,
-          "password":this.state.password
-        }
-        axios.post(apiBaseUrl+'login', payload)
-         .then(function (response) {
-          console.log(response);
+    validateForm() {
+      return this.state.username && this.state.password;
+    }
 
-          if(response.status == 200){
-            var judgeToken = response.data;
-            console.log("Login successfull");
-            cookies.set("judgeToken",judgeToken);
-            window.location.reload();
+    handleChange = event => {
+      this.setState({
+      [event.target.id]: event.target.value
+      });
+    }
 
-          }else{
-            console.log("Login failed");
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-       });
-  }
+    handleSubmit = event => {
+      event.preventDefault();
+      console.log(this.state.username);
+      this.sendLoginRequest(this.state.username, this.state.password);
+    }
+
+    sendLoginRequest(username, password) {
+            var apiBaseUrl = constants.BACKEND_ADDRESS;
+            var self = this;
+            var payload={
+              "username":username,
+              "password":password
+            }
+            axios.post(apiBaseUrl+'login', payload)
+             .then(function (response) {
+              console.log(response);
+
+              if(response.status == 200){
+                var judgeToken = response.data;
+                console.log("Login successfull");
+                cookies.set("judgeToken",judgeToken);
+                window.location.reload();
+
+              }else{
+                console.log("Login failed");
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+           });
+      }
 }
 
 render(

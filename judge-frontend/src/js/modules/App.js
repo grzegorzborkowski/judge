@@ -22,7 +22,7 @@ export default React.createClass({
       <div>
        <Navbar />
        <div class="container" style={containerStyle}>
-       <button onClick={this.logout}>Log out with Facebook</button>
+       <button onClick={this.logout}>Log out</button>
          <div class="row">
            <div class="col-lg-12">
            {this.props.children}
