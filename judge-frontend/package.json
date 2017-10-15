@@ -17,6 +17,7 @@
     "brace": "^0.10.0",
     "history": "^1.17.0",
     "jquery": "^3.2.1",
+    "material-ui": "^0.19.4",
     "prop-types": "^15.5.10",
     "react": "^0.14.9",
     "react-ace": "^4.1.6",
@@ -29,7 +30,10 @@
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "css-loader": "^0.28.7",
+    "react-router-role-authorization": "^1.1.4"
+  },
   "scripts": {
     "dev": "webpack-dev-server --content-base src --inline --hot"
   },

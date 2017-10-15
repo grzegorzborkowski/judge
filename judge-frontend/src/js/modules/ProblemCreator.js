@@ -6,10 +6,13 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import {Link} from 'react-router';
 import { Table } from 'react-bootstrap';
+import { RoleAwareComponent } from 'react-router-role-authorization';
 import $ from 'jquery';
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 
-class ProblemCreator extends React.Component {
+class ProblemCreator extends RoleAwareComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +21,9 @@ class ProblemCreator extends React.Component {
             structures: "",
             solution: ""
         };
+
+        this.userRoles = cookies.get("judge.role");
+        this.allowedRoles = ["teacher", "admin"];
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleChangeForStructures = this.handleChangeForStructures.bind(this);
@@ -80,7 +86,7 @@ class ProblemCreator extends React.Component {
 
     //TODO: change structures's textarea to CodeForm
     render() {
-        return (
+          const problemCreatorContent = (
             <div>
                 <h2>My problem adder</h2>
                 <form onSubmit={this.handleSubmit}>
@@ -132,9 +138,16 @@ class ProblemCreator extends React.Component {
                     <input type="submit" value="Submit" />
                 </form>
             </div>
-        )
-    }
+        );
 
+        const notAuthorized = (
+          <div>
+            Access denied.
+          </div>
+        );
+
+        return this.rolesMatched() ? problemCreatorContent : notAuthorized;
+    }
 }
 
 export default ProblemCreator;
