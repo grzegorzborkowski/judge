@@ -38,7 +38,7 @@ export default class Navbar extends React.Component {
                         <li><NavLink to="/" onlyActiveOnIndex>Home</NavLink></li>
                         <li><NavLink to="/problems"> Problems</NavLink> </li>
                         {/*<li><NavLink to="/statistics">Statistics</NavLink></li>*/}
-                        <li><NavLink to="/submissions">Submissions</NavLink></li>
+                        <li><NavLink to="/submissions">My Submissions</NavLink></li>
                         {(isTeacher || isAdmin) ?
                           (<li><NavLink to="/problemCreator">Problem Creator</NavLink></li>) : (null)
                         }
