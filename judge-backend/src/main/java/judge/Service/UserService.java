@@ -1,6 +1,5 @@
 package judge.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import judge.Dao.UserDao;
 import judge.Entity.User;
 import org.apache.log4j.Logger;
@@ -22,15 +21,15 @@ public class UserService {
     private UserDao userDao;
 
     public List<User> getAllUsers() {
-        List<User> studentList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
         Iterable<User> users = userDao.findAll();
-        users.forEach(studentList::add);
-        return studentList;
+        users.forEach(userList::add);
+        return userList;
     }
 
     public User getUserById(BigInteger id) {
-        User student = userDao.findById(id);
-        return student;
+        User user = userDao.findById(id);
+        return user;
     }
 
     public User getUserByUsername(String username) {
@@ -44,13 +43,14 @@ public class UserService {
         return user;
     }
 
-    public String addUser(User student) {
-        if(this.userDao.findById(student.getId()) == null) {
-            this.userDao.save(student);
-            return "New student has been added.";
+    public String addUser(User user) {
+        if(this.userDao.findByUsername(user.getUsername()) == null) {
+            this.userDao.save(user);
+            logger.info("User " + user.getUsername() + " has been added.");
+            return "User " + user.getUsername() + " has been added.";
         } else {
-            logger.warn("User with the same ID already exists.");
-            return "User with given ID already exists. Adding failed.";
+            logger.warn("User " + user.getUsername() + " already exists. Adding failed.");
+            return "User " + user.getUsername() + " already exists. Adding failed.";
         }
     }
 
