@@ -22,6 +22,7 @@ type Result struct {
     RunCode int
     TestsPositive int
     TestsTotal int
+    TimeTaken float64
 }
 
 func upload(w http.ResponseWriter, r *http.Request) {
@@ -50,13 +51,14 @@ func upload(w http.ResponseWriter, r *http.Request) {
             return
         }
 
-        compilationCode, runCode, testsPositive, testsTotal := processWithDocker(baseName + handler.Filename, handler.Filename)
+        compilationCode, runCode, testsPositive, testsTotal, timeTaken := processWithDocker(baseName + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
             RunCode: runCode,
             TestsPositive:testsPositive,
             TestsTotal:testsTotal,
+            TimeTaken:timeTaken,
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
@@ -72,7 +74,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 // TODO: distinguish it from possible execution / time limit / memory limit error
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
 
-func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int) {
+func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int, float64) {
 
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
     defer cancel()
@@ -166,22 +168,23 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     var testsPositive=0
     var testsTotal=0
+    var timeTaken=0.0
 
     if(sErr!=""){
-        return 1,0,0,0
+        return 1,0,0,0,0.0
     }
     if(sOut!=""){
         matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
         if(matched){
-            fmt.Sscanf(sOut, "%d %d", &testsPositive, &testsTotal)
+            fmt.Sscanf(sOut, "%d %d %f", &testsPositive, &testsTotal, &timeTaken)
             fmt.Printf("Working")
-            return 1,1,testsPositive,testsTotal
+            return 1, 1, testsPositive, testsTotal, timeTaken
         }
         fmt.Println(matched, err)
-        return 1,0,0,0
+        return 1,0,0,0, 0.0
     }
 
-    return 0,0,0,0
+    return 0,0,0,0, 0.0
 
 }
 

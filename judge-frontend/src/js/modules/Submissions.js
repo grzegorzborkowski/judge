@@ -42,6 +42,7 @@ class Submissions extends React.Component {
                     <th> Number of Passed Tests</th>
                     <th> Number of Tests</th>
                     <th> Passed Percentage</th>
+                    <th> Time Taken</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,7 @@ class Submissions extends React.Component {
                         <td>{submission.testsPositive}</td>
                         <td>{submission.testsTotal}</td>
                         <td>{submission.testsPositive * 100 / submission.testsTotal} %</td>
+                        <td>{submission.timeTaken}</td>
 
                     </tr>
                 )}

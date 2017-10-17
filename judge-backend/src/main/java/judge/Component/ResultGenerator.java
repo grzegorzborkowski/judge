@@ -16,6 +16,7 @@ public class ResultGenerator {
         result.put("runCode", submission.getRunCode());
         result.put("testsPositive", submission.getTestsPositive());
         result.put("testsTotal", submission.getTestsTotal());
+        result.put("timeTaken", submission.getTimeTaken());
         return result;
     }
 
