@@ -14,7 +14,7 @@ int main()
 	}
 
     t = clock() - t;
-    double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
+    float time_taken = ((float)t)/CLOCKS_PER_SEC; // in seconds
 
 	printf("%d ", passedTests);
 	printf("%d ", totalTests);

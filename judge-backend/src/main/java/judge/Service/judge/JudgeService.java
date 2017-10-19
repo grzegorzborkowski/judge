@@ -50,11 +50,7 @@ public class JudgeService {
 
         try{
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
-            submission.setCompilationCode(externalExaminationResult.getCompilationCode());
-            submission.setRunCode(externalExaminationResult.getRunCode());
-            submission.setTestsPositive(externalExaminationResult.getTestsPositive());
-            submission.setTestsTotal(externalExaminationResult.getTestsTotal());
-            submission.setTimeTaken(externalExaminationResult.getTimeTaken());
+            submission.fillWithResult(externalExaminationResult);
         } catch (Exception e) {
             submission.setCompilationCode(PROCESSING_ERROR_CODE);
             submission.setRunCode(PROCESSING_ERROR_CODE);

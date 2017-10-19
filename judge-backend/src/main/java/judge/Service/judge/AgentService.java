@@ -47,10 +47,11 @@ class AgentService {
      */
     @Async
     JudgeResult uploadFileToExamine(String filename) throws IOException {
-        JudgeResult result = new JudgeResult();
+
 
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(externalRunnerUrl);
+        JudgeResult result = null;
 
         final File file = new File(filename);
         FileBody fileBody = new FileBody(file);
@@ -77,11 +78,8 @@ class AgentService {
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
-            result.setCompilationCode(compilationCode);
-            result.setRunCode(runCode);
-            result.setTestsTotal(testsTotal);
-            result.setTestsPositive(testsPositive);
-            result.setTimeTaken(timeTaken);
+
+            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());
