@@ -2,6 +2,7 @@ package judge.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import judge.Component.JudgeResult;
 
 import javax.persistence.*;
 
@@ -123,5 +124,13 @@ public class Submission {
 
     public void setFullCode(String fullCode) {
         this.fullCode = fullCode;
+    }
+
+    public void fillWithResult(JudgeResult result) {
+        this.setCompilationCode(result.getCompilationCode());
+        this.setRunCode(result.getRunCode());
+        this.setTestsPositive(result.getTestsPositive());
+        this.setTestsTotal(result.getTestsTotal());
+        this.setTimeTaken(result.getTimeTaken());
     }
 }
