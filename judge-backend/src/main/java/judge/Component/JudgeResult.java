@@ -1,11 +1,19 @@
 package judge.Component;
 
-public class JudgeResult {
+public final class JudgeResult {
     private Integer compilationCode;
     private Integer runCode;
     private Integer testsPositive;
     private Integer testsTotal;
     private Float timeTaken;
+
+    public JudgeResult(Integer compilationCode, Integer runCode, Integer testsPositive, Integer testsTotal, Float timeTaken) {
+        this.compilationCode = compilationCode;
+        this.runCode = runCode;
+        this.testsPositive = testsPositive;
+        this.testsTotal = testsTotal;
+        this.timeTaken = timeTaken;
+    }
 
     public Integer getCompilationCode() {
         return compilationCode;
