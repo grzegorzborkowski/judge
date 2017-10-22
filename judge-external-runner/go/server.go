@@ -76,7 +76,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
 func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int, float64) {
 
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
     defer cancel()
     cli, err := client.NewEnvClient()
     if err != nil {
@@ -93,15 +93,15 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     var hostConfig = &container.HostConfig{
         Binds: []string{hostConfigBindString},
-        AutoRemove: true,
+        AutoRemove: false,
         Resources: hostResources,
     }
 
     var timeoutPtr *int
-    timeoutSec := 5
+    timeoutSec := 1
     timeoutPtr = &timeoutSec
 
-    refString := "tusty53/ubuntu_c_runner:seventeenth"
+    refString := "tusty53/ubuntu_c_runner:fifteenth"
 
     var pullOpts = dockertypes.ImagePullOptions{}
 
@@ -133,16 +133,22 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
         json, err := cli.ContainerInspect(ctx, resp.ID)
         if err != nil {
-            panic(err)
+            switch err {
+            case context.DeadlineExceeded:
+                fmt.Println(err.Error())
+                return 0,1,0,0, 0.0
+            default:
+                panic(err)
+            }
         }
 
-        exited = json.State.Running
+        exited = !json.State.Running
 
         if json.State.Status == "exited" {
             exited = true
         }
-        fmt.Println(json.State.Status)
     }
+
 
     normalOut, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
     if err != nil {
@@ -169,6 +175,8 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     log.Printf("start error\n")
     log.Printf(sErr)
     log.Printf("end error\n")
+
+    cli.ContainerRemove(ctx, resp.ID, dockertypes.ContainerRemoveOptions{RemoveVolumes: true, RemoveLinks: true})
 
 
     var testsPositive=0
