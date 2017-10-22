@@ -101,15 +101,20 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     timeoutSec := 5
     timeoutPtr = &timeoutSec
 
+    refString := "tusty53/ubuntu_c_runner:seventeenth"
+
+    var pullOpts = dockertypes.ImagePullOptions{}
+
+    _, err = cli.ImagePull(ctx, refString, pullOpts)
 
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/ubuntu_c_runner:fifteenth",
+        Image: refString,
         NetworkDisabled: true,
         Tty: true,
         StopTimeout: timeoutPtr,
         Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
-            hostVolumeString: struct{}{},
+            hostVolumeString: {},
         },
     }, hostConfig, nil, "")
     if err != nil {
@@ -124,7 +129,7 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     exited := false
 
-    for (!exited) {
+    for !exited {
 
         json, err := cli.ContainerInspect(ctx, resp.ID)
         if err != nil {
@@ -133,8 +138,8 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
         exited = json.State.Running
 
-        if(json.State.Status == "exited"){
-            exited = true;
+        if json.State.Status == "exited" {
+            exited = true
         }
         fmt.Println(json.State.Status)
     }
@@ -170,12 +175,12 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     var testsTotal=0
     var timeTaken=0.0
 
-    if(sErr!=""){
+    if sErr!="" {
         return 1,0,0,0,0.0
     }
-    if(sOut!=""){
+    if sOut!="" {
         matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
-        if(matched){
+        if matched {
             fmt.Sscanf(sOut, "%d %d %f", &testsPositive, &testsTotal, &timeTaken)
             fmt.Printf("Working")
             return 1, 1, testsPositive, testsTotal, timeTaken
@@ -194,12 +199,12 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 func prepareDir() {
     var path = os.Args[1]
     mode := int(0777)
-    _, err := os.Stat(path); os.IsNotExist(err);
+    _, err := os.Stat(path); os.IsNotExist(err)
 
     if err != nil {
-        log.Println(err);
+        log.Println(err)
         log.Println("Directory with a given name will be created.")
-        os.Mkdir(path, os.FileMode(mode));
+        os.Mkdir(path, os.FileMode(mode))
     } else {
         log.Println("Directory with a given name already exists.")
     }
