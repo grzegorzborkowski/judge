@@ -14,7 +14,7 @@ class Submissions extends React.Component {
 
   componentWillMount() {
     var self = this;
-    axios.get(constants.BACKEND_ADDRESS + constants.SUBMISSION_ENDPOINT)
+    axios.get(constants.BACKEND_ADDRESS + constants.SUBMISSIONS_FOR_USER_ENDPOINT)
         .then(function (response) {
             let data = response['data'];
             self.setState({

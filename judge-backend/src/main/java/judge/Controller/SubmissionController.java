@@ -1,9 +1,13 @@
 package judge.Controller;
 
 import judge.Entity.Submission;
+import judge.Entity.User;
 import judge.Service.SubmissionService;
+import judge.Service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -19,6 +23,8 @@ public class SubmissionController {
 
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<Submission> getAllSubmissions() {
@@ -29,9 +35,15 @@ public class SubmissionController {
     }
 
     @RequestMapping(value = "/getAllForUser", method = RequestMethod.GET)
-    public Collection<Submission> getSubmissionsByStudentId(@RequestParam BigInteger id) {
+    public Collection<Submission> getSubmissionsOfAuthenticatedUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
+        BigInteger userId = user.getId();
+
         logger.info("Processing GET /submission/getAllForUser");
-        return this.submissionService.getSubmissionsByStudentId(id);
+        return this.submissionService.getSubmissionsByStudentId(userId);
     }
 
     @RequestMapping(value = "/getAllForProblem", method = RequestMethod.GET)
