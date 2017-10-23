@@ -41,6 +41,7 @@ class Solutions extends React.Component {
                             <th> Number of Passed Tests</th>
                             <th> Number of Tests</th>
                             <th> Passed Percentage</th>
+                            <th> Time Taken</th>
                             <th> Code</th>
                         </tr>
                         </thead>
@@ -53,6 +54,7 @@ class Solutions extends React.Component {
                                 <td>{solution.testsPositive}</td>
                                 <td>{solution.testsTotal}</td>
                                 <td>{solution.testsPositive * 100 / solution.testsTotal} %</td>
+                                <td>{Solution.timeTaken}</td>
                                 <td><a onClick={() => { alert(solution.code) }}>Click</a></td>
                             </tr>
                         )}

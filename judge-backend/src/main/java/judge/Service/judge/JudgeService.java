@@ -1,5 +1,6 @@
 package judge.Service.judge;
 
+import judge.Component.JudgeResult;
 import judge.Dao.ProblemDao;
 import judge.Dao.SubmissionDao;
 import judge.Entity.Problem;
@@ -48,11 +49,8 @@ public class JudgeService {
         String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code, problem);
 
         try{
-            Map<String,Integer> externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
-            submission.setCompilationCode(externalExaminationResult.get("compilationCode"));
-            submission.setRunCode(externalExaminationResult.get("runCode"));
-            submission.setTestsPositive(externalExaminationResult.get("testsPositive"));
-            submission.setTestsTotal(externalExaminationResult.get("testsTotal"));
+            JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
+            submission.fillWithResult(externalExaminationResult);
         } catch (Exception e) {
             submission.setCompilationCode(PROCESSING_ERROR_CODE);
             submission.setRunCode(PROCESSING_ERROR_CODE);

@@ -2,6 +2,7 @@ package judge.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import judge.Component.JudgeResult;
 
 import javax.persistence.*;
 
@@ -19,16 +20,18 @@ public class Submission {
     private Integer runCode;
     private Integer testsTotal;
     private Integer testsPositive;
+    private Float timeTaken;
     private Problem problem;
     private String fullCode;
 
-    public Submission(User author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Problem problem) {
+    public Submission(User author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Float timeTaken, Problem problem) {
         this.author = author;
         this.code = code;
         this.compilationCode = compilationCode;
         this.runCode = runCode;
         this.testsTotal = testsTotal;
         this.testsPositive = testsPositive;
+        this.timeTaken = timeTaken;
         this.problem = problem;
     }
 
@@ -69,6 +72,10 @@ public class Submission {
         return testsPositive;
     }
 
+    public Float getTimeTaken() {
+        return timeTaken;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -97,6 +104,10 @@ public class Submission {
         this.testsPositive = testsPositive;
     }
 
+    public void setTimeTaken(Float timeTaken) {
+        this.timeTaken = timeTaken;
+    }
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ProblemID")
     public Problem getProblem() {
@@ -113,5 +124,13 @@ public class Submission {
 
     public void setFullCode(String fullCode) {
         this.fullCode = fullCode;
+    }
+
+    public void fillWithResult(JudgeResult result) {
+        this.setCompilationCode(result.getCompilationCode());
+        this.setRunCode(result.getRunCode());
+        this.setTestsPositive(result.getTestsPositive());
+        this.setTestsTotal(result.getTestsTotal());
+        this.setTimeTaken(result.getTimeTaken());
     }
 }

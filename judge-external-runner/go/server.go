@@ -22,6 +22,7 @@ type Result struct {
     RunCode int
     TestsPositive int
     TestsTotal int
+    TimeTaken float64
 }
 
 func upload(w http.ResponseWriter, r *http.Request) {
@@ -50,13 +51,14 @@ func upload(w http.ResponseWriter, r *http.Request) {
             return
         }
 
-        compilationCode, runCode, testsPositive, testsTotal := processWithDocker(baseName + handler.Filename, handler.Filename)
+        compilationCode, runCode, testsPositive, testsTotal, timeTaken := processWithDocker(baseName + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
             RunCode: runCode,
             TestsPositive:testsPositive,
             TestsTotal:testsTotal,
+            TimeTaken:timeTaken,
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
@@ -72,9 +74,9 @@ func upload(w http.ResponseWriter, r *http.Request) {
 // TODO: distinguish it from possible execution / time limit / memory limit error
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
 
-func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int) {
+func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int, float64) {
 
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
     defer cancel()
     cli, err := client.NewEnvClient()
     if err != nil {
@@ -91,23 +93,28 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     var hostConfig = &container.HostConfig{
         Binds: []string{hostConfigBindString},
-        AutoRemove: true,
+        AutoRemove: false,
         Resources: hostResources,
     }
 
     var timeoutPtr *int
-    timeoutSec := 5
+    timeoutSec := 1
     timeoutPtr = &timeoutSec
 
+    refString := "tusty53/ubuntu_c_runner:fifteenth"
+
+    var pullOpts = dockertypes.ImagePullOptions{}
+
+    _, err = cli.ImagePull(ctx, refString, pullOpts)
 
     resp, err := cli.ContainerCreate(ctx, &container.Config{
-        Image: "tusty53/ubuntu_c_runner:fifteenth",
+        Image: refString,
         NetworkDisabled: true,
         Tty: true,
         StopTimeout: timeoutPtr,
         Env: []string{"F00=" + filenameWithoutDir},
         Volumes: map[string]struct{}{
-            hostVolumeString: struct{}{},
+            hostVolumeString: {},
         },
     }, hostConfig, nil, "")
     if err != nil {
@@ -122,20 +129,26 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 
     exited := false
 
-    for (!exited) {
+    for !exited {
 
         json, err := cli.ContainerInspect(ctx, resp.ID)
         if err != nil {
-            panic(err)
+            switch err {
+            case context.DeadlineExceeded:
+                fmt.Println(err.Error())
+                return 0,1,0,0, 0.0
+            default:
+                panic(err)
+            }
         }
 
-        exited = json.State.Running
+        exited = !json.State.Running
 
-        if(json.State.Status == "exited"){
-            exited = true;
+        if json.State.Status == "exited" {
+            exited = true
         }
-        fmt.Println(json.State.Status)
     }
+
 
     normalOut, err := cli.ContainerLogs(ctx, resp.ID, dockertypes.ContainerLogsOptions{ShowStdout: true, ShowStderr: false})
     if err != nil {
@@ -163,25 +176,28 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     log.Printf(sErr)
     log.Printf("end error\n")
 
+    cli.ContainerRemove(ctx, resp.ID, dockertypes.ContainerRemoveOptions{RemoveVolumes: true, RemoveLinks: true})
+
 
     var testsPositive=0
     var testsTotal=0
+    var timeTaken=0.0
 
-    if(sErr!=""){
-        return 1,0,0,0
+    if sErr!="" {
+        return 1,0,0,0,0.0
     }
-    if(sOut!=""){
+    if sOut!="" {
         matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
-        if(matched){
-            fmt.Sscanf(sOut, "%d %d", &testsPositive, &testsTotal)
+        if matched {
+            fmt.Sscanf(sOut, "%d %d %f", &testsPositive, &testsTotal, &timeTaken)
             fmt.Printf("Working")
-            return 1,1,testsPositive,testsTotal
+            return 1, 1, testsPositive, testsTotal, timeTaken
         }
         fmt.Println(matched, err)
-        return 1,0,0,0
+        return 1,0,0,0, 0.0
     }
 
-    return 0,0,0,0
+    return 0,0,0,0, 0.0
 
 }
 
@@ -191,12 +207,12 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
 func prepareDir() {
     var path = os.Args[1]
     mode := int(0777)
-    _, err := os.Stat(path); os.IsNotExist(err);
+    _, err := os.Stat(path); os.IsNotExist(err)
 
     if err != nil {
-        log.Println(err);
+        log.Println(err)
         log.Println("Directory with a given name will be created.")
-        os.Mkdir(path, os.FileMode(mode));
+        os.Mkdir(path, os.FileMode(mode))
     } else {
         log.Println("Directory with a given name already exists.")
     }

@@ -1,5 +1,6 @@
 package judge.Service.judge;
 
+import judge.Component.JudgeResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -45,11 +46,12 @@ class AgentService {
      * TODO: Change communication model - enable reading results from response body. Now they are in headers.
      */
     @Async
-    Map<String, Integer> uploadFileToExamine(String filename) throws IOException {
-        Map<String, Integer> result = new HashMap<>();
+    JudgeResult uploadFileToExamine(String filename) throws IOException {
+
 
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(externalRunnerUrl);
+        JudgeResult result = null;
 
         final File file = new File(filename);
         FileBody fileBody = new FileBody(file);
@@ -75,10 +77,9 @@ class AgentService {
             int runCode = Integer.parseInt(bodyJson.get("RunCode").toString());
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
-            result.put("compilationCode", compilationCode);
-            result.put("runCode", runCode);
-            result.put("testsTotal", testsTotal);
-            result.put("testsPositive", testsPositive);
+            float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
+
+            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());
