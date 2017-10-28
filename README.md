@@ -1,27 +1,5 @@
 # judge
 
-### READ BEFORE YOU START COMPLAINING
-
-Front-end dodaje teraz do każdego requestu nagłówek 'Authorization' zawierający basic token dla użytkownika admin.
-Dzięki temu możemy z przeglądarki wyklikać wszystko (admin ma dostęp do wszystkich chronionych endpointów).
-
-Żeby to zadziałało lokalnie, należy: *
-- wykomentować w pliku SecurityConfiguration.java linijkę:
-	.antMatchers("/user/add").hasAnyAuthority("teacher", "admin")
-- wystartować backend
-- wykonać:
-	 curl -H "Content-Type: application/json" -X POST -d '{"username":"admin","password":"admin","role":"admin","email":"admin@mail.com"}' http://localhost:8080/user/add
-
-(W razie gdyby rzuciło exception:
-"exception":"org.springframework.dao.DataIntegrityViolationException","message":"could not execute statement; SQL [n/a]; constraint [dtype]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement","path":"/user/add"
-należy ręcznie usunąć z tabeli user_general kolumnę dtype i wykonać curl jeszcze raz)
-- odkomentować linijkę w SecurityConfiguration
-- zrestartować backend
-
-* ręczne dodanie admina do bazy nie zadziała z powodu kodowania hasła na poziomie backendu
-
-Oczywiście jest to tymczasowe i zostanie zmienione jak dopracujemy logowanie.
-
 ### Security part
 
 ### 1. Dodawanie nowego uzytkownika
