@@ -42,4 +42,9 @@ public class ProblemService {
             return "Problem with given ID already exists. Adding failed.";
         }
     }
+
+    public String saveProblem(Problem problem) {
+        this.problemDao.save(problem);
+        return "Problem has been edited.";
+    }
 }
