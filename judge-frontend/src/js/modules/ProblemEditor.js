@@ -4,10 +4,7 @@ import * as constants from './util.js'
 import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
-import {Link} from 'react-router';
-import { Table } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
-import $ from 'jquery';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
