@@ -7,3 +7,4 @@ export const PROBLEM_ENDPOINT = "problems/getAll";
 export const PROBLEM_CREATOR_ENDPOINT = "problems/add";
 export const PROBLEM_ID_ENDPOINT = "problems/getByID?id=";
 export const PROBLEM_TEMPLATE_ENDPOINT = "problems/getTemplate";
+export const PROBLEM_EDITOR_ENDPOINT = "problems/edit";

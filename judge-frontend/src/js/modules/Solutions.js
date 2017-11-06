@@ -54,7 +54,7 @@ class Solutions extends React.Component {
                                 <td>{solution.testsPositive}</td>
                                 <td>{solution.testsTotal}</td>
                                 <td>{solution.testsPositive * 100 / solution.testsTotal} %</td>
-                                <td>{Solution.timeTaken}</td>
+                                <td>{solution.timeTaken}</td>
                                 <td><a onClick={() => { alert(solution.code) }}>Click</a></td>
                             </tr>
                         )}

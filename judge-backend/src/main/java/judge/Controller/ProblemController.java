@@ -88,14 +88,14 @@ public class ProblemController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String editProblem(@RequestParam Integer id, @RequestBody JsonNode problemJson) {
+    public String editProblem(@RequestBody JsonNode problemJson) {
         logger.info("Processing POST /problems/edit");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
 
-        Problem problem = this.problemService.getProblemById(id);
+        Problem problem = this.problemService.getProblemById(Integer.parseInt(problemJson.get("id").asText()));
         problem.setAuthor(user);
         problem.setDescription(problemJson.get("description").asText());
         problem.setTitle(problemJson.get("title").asText());
