@@ -63,7 +63,7 @@ class SubmissionComparator implements Comparator<Submission> {
 
     public int percentage(Submission o)
     {
-        if(o.getTestsTotal()!=0)
+        if(o.getTestsTotal() != null && o.getTestsTotal()!=0)
             return o.getTestsPositive() * 100 / o.getTestsTotal();
         return 0;
     }
