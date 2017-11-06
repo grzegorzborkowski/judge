@@ -101,7 +101,7 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     timeoutSec := 1
     timeoutPtr = &timeoutSec
 
-    refString := "tusty53/ubuntu_c_runner:fifteenth"
+    refString := "tusty53/ubuntu_c_runner:cpp"
 
     var pullOpts = dockertypes.ImagePullOptions{}
 
