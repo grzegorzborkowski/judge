@@ -8,6 +8,7 @@ import Submission from './Submission';
 import Home from './Home';
 import Problem from './Problem';
 import ProblemCreator from './ProblemCreator';
+import ProblemEditor from './ProblemEditor';
 import Problems from './Problems';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -48,6 +49,7 @@ class LoginControl extends React.Component {
                         <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/problemCreator" components={ProblemCreator}></Route>
+                        <Route authorize={['teacher', 'admin']} path="/problemEditor/:problemID" components={ProblemEditor}></Route>
                         <Route path="/solutions/:problemID" component={Solutions}/>
                     </Route>
                 </Router>;

@@ -39,6 +39,7 @@ class Problems extends React.Component {
                         <th> ProblemID </th>
                         <th> Problem Title </th>
                         <th> Solutions </th>
+                        <th> Editor </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -47,8 +48,8 @@ class Problems extends React.Component {
 
                             <td>  <Link to={`/problem/${problem.id}`}>{problem.id} </Link></td>
                             <td> <Link to={`/problem/${problem.id}`}> {problem.title} </Link></td>
-                            <td> <Link to={`/solutions/${problem.id}`}> Click </Link> </td>
-
+                            <td> <Link to={`/solutions/${problem.id}`}> View </Link> </td>
+                            <td> <Link to={`/problemEditor/${problem.id}`}> Edit </Link> </td>
                         </tr>
                     )}
                     </tbody>

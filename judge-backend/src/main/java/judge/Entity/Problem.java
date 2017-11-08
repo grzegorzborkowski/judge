@@ -37,6 +37,28 @@ public class Problem
         }
     }
 
+    public Problem(Integer id, User author, String title, String description, String structures, String solution) {
+        if(id!=null)
+            this.id = id;
+        this.author = author;
+        this.title = title;
+        this.description = description;
+        this.structures = structures;
+        this.solution = solution;
+
+        Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
+        try {
+            List<String> lines = Files.readAllLines(students_file);
+            signature = String.join("\n", lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Problem(User author, String title, String description, String structures, String solution) {
+        this(null, author, title, description, structures, solution);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()

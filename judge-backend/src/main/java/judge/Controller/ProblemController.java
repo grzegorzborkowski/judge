@@ -82,13 +82,26 @@ public class ProblemController {
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
 
-        Problem problem = new Problem();
+        Problem problem = new Problem(user, problemJson.get("description").asText(), problemJson.get("title").asText(), problemJson.get("structures").asText(), problemJson.get("solution").asText());
+        String status = this.problemService.addProblem(problem);
+        return status;
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String editProblem(@RequestBody JsonNode problemJson) {
+        logger.info("Processing POST /problems/edit");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
+
+        Problem problem = this.problemService.getProblemById(Integer.parseInt(problemJson.get("id").asText()));
         problem.setAuthor(user);
         problem.setDescription(problemJson.get("description").asText());
         problem.setTitle(problemJson.get("title").asText());
         problem.setStructures(problemJson.get("structures").asText());
         problem.setSolution(problemJson.get("solution").asText());
-        String status = this.problemService.addProblem(problem);
+        String status = this.problemService.saveProblem(problem);
         return status;
     }
 }
