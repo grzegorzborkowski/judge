@@ -13,7 +13,7 @@ typedef struct TestData
 	int numberOfTests;
 } TestData;
 
-int compare(Output a, Output b);
+bool compare(Output a, Output b);
 TestData generateTestInput();
 Output teachersFunction(Input input);
 Output studentsFunction(Input input);
@@ -29,9 +29,9 @@ struct Output
 
 };
 
-int compare(Output a, Output b)
+boolean compare(Output a, Output b)
 {
-	return 0;
+	return true;
 }
 
 //------- teacher's part 2 ---------
@@ -40,7 +40,7 @@ TestData generateTestInput()
 {
 	TestData testData;
 	testData.numberOfTests = 0;
-	testData.testInput = NULL;
+	testData.testInput = new Input[testData.numberOfTests];
 	return testData;
 }
 
