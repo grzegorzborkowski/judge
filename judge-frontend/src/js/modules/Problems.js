@@ -36,20 +36,20 @@ class Problems extends React.Component {
                 <Table bordered condensed hover>
                     <thead>
                     <tr>
-                        <th> ProblemID </th>
-                        <th> Problem Title </th>
-                        <th> Solutions </th>
-                        <th> Editor </th>
+                        <th>Problem ID</th>
+                        <th>Problem title</th>
+                        <th>Solutions</th>
+                        <th>Editor</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.problems.map(problem =>
                         <tr key={problem.id}>
 
-                            <td>  <Link to={`/problem/${problem.id}`}>{problem.id} </Link></td>
-                            <td> <Link to={`/problem/${problem.id}`}> {problem.title} </Link></td>
-                            <td> <Link to={`/solutions/${problem.id}`}> View </Link> </td>
-                            <td> <Link to={`/problemEditor/${problem.id}`}> Edit </Link> </td>
+                            <td><Link to={`/problem/${problem.id}`}>{problem.id}</Link></td>
+                            <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
+                            <td><Link to={`/solutions/${problem.id}`}>View</Link></td>
+                            <td><Link to={`/problemEditor/${problem.id}`}>Edit</Link></td>
                         </tr>
                     )}
                     </tbody>

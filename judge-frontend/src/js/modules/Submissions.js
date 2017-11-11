@@ -34,25 +34,25 @@ class Submissions extends React.Component {
             <Table bordered condensed hover>
                 <thead>
                 <tr>
-                    <th> Submission ID </th>
-                    <th> ProblemID </th>
-                    <th> Problem Title </th>
-                    <th> Compilation Code </th>
-                    <th> RunCode</th>
-                    <th> Number of Passed Tests</th>
-                    <th> Number of Tests</th>
-                    <th> Passed Percentage</th>
-                    <th> Time Taken</th>
+                    <th>Submission ID</th>
+                    <th>Problem ID</th>
+                    <th>Problem title</th>
+                    <th>Compilation result</th>
+                    <th>Execution result</th>
+                    <th>Number of passed tests</th>
+                    <th>Number of executed tests</th>
+                    <th>Passed percentage</th>
+                    <th>Time taken [s]</th>
                 </tr>
                 </thead>
                 <tbody>
                 {this.state.data.map(submission =>
                     <tr key={submission.id}>
-                        <td>{submission.id} </td>
-                        <td> {submission.problem.id}</td>
-                        <td> {submission.problem.title}</td>
-                        <td>{submission.compilationCode}</td>
-                        <td>{submission.runCode}</td>
+                        <td>{submission.id}</td>
+                        <td>{submission.problem.id}</td>
+                        <td>{submission.problem.title}</td>
+                        <td>{constants.getCompilationStatus(submission.compilationCode)}</td>
+                        <td>{constants.getRunStatus(submission.runCode)}</td>
                         <td>{submission.testsPositive}</td>
                         <td>{submission.testsTotal}</td>
                         <td>{submission.testsPositive * 100 / submission.testsTotal} %</td>

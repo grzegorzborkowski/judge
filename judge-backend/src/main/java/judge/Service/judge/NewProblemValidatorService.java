@@ -11,8 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static judge.Utils.STUDENTS_SIGNATURE_C;
-import static judge.Utils.TEMPLATES_DIR_NAME;
+import static judge.Utils.*;
 
 @Service
 @Configurable
@@ -35,8 +34,8 @@ public class NewProblemValidatorService {
             Path studentsSignature = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
             String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
-            if(externalExaminationResult.getCompilationCode()==1
-                    && externalExaminationResult.getRunCode()==1) return true;
+            if(externalExaminationResult.getCompilationCode()==COMPILATION_SUCCESS_CODE
+                    && externalExaminationResult.getRunCode()==RUN_SUCCESS_CODE) return true;
         } catch (Exception e) {
             logger.error(e.toString());
         }
