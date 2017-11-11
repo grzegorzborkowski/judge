@@ -2,6 +2,10 @@ int main()
 {
 	TestData testData = generateTestInput();
 	int totalTests = testData.numberOfTests;
+	Input inputArr[totalTests];
+	for(int i=0; i<totalTests; i++) {
+	    inputArr[i] = testData.testInput[i];
+	}
 	int passedTests = 0;
 	int i;
 	clock_t t;
@@ -9,7 +13,7 @@ int main()
 
 	for(i=0;i<totalTests;i++)
 	{
-		if(compare(teachersFunction(testData.testInput[i]), studentsFunction(testData.testInput[i])))
+		if(compare(teachersFunction(inputArr[i]), studentsFunction(inputArr[i])))
 			passedTests++;
 	}
 

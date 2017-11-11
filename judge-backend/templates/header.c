@@ -12,7 +12,7 @@ typedef struct TestData
 	int numberOfTests;
 } TestData;
 
-int compare(Output a, Output b);
+bool compare(Output a, Output b);
 TestData generateTestInput();
 Output teachersFunction(Input input);
 Output studentsFunction(Input input);

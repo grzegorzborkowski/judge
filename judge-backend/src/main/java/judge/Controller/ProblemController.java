@@ -82,7 +82,7 @@ public class ProblemController {
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
 
-        Problem problem = new Problem(user, problemJson.get("description").asText(), problemJson.get("title").asText(), problemJson.get("structures").asText(), problemJson.get("solution").asText());
+        Problem problem = new Problem(user, problemJson.get("title").asText(), problemJson.get("description").asText(), problemJson.get("structures").asText(), problemJson.get("solution").asText());
         String status = this.problemService.addProblem(problem);
         return status;
     }
