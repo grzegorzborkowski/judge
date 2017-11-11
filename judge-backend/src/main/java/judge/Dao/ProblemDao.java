@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProblemDao extends CrudRepository<Problem, Integer> {
     Problem findById(Integer id);
+    Problem findByTitle(String title);
 }

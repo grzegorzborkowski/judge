@@ -49,7 +49,6 @@ class ProblemEditor extends RoleAwareComponent {
     }
 
     handleSubmit(event) {
-        alert('A problem has been edited: ' + this.state.title);
         event.preventDefault();
         this.submitProblem();
     }
@@ -65,6 +64,9 @@ class ProblemEditor extends RoleAwareComponent {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(function (response) {
+          console.log(response.data);
+          alert(response.data);
         });
     }
 

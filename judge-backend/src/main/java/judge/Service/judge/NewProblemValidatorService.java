@@ -1,0 +1,45 @@
+package judge.Service.judge;
+
+import judge.Component.JudgeResult;
+import judge.Entity.Problem;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static judge.Utils.STUDENTS_SIGNATURE_C;
+import static judge.Utils.TEMPLATES_DIR_NAME;
+
+@Service
+@Configurable
+public class NewProblemValidatorService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(NewProblemValidatorService.class);
+
+    @Autowired
+    AgentService agentService;
+    @Autowired
+    SourceCodeCreatorService sourceCodeCreatorService;
+
+    /*
+      Validates if a new problem is syntactically correct.
+      Generates source code file based on the teacher's input and a signature of student's function.
+      It uploads the new file to examine and verifies if compilation and rune codes are OK.
+      All the defined tests are expected to fail while this execution.
+     */
+    public boolean validateNewProblem(Problem problem) {
+        try {
+            Path studentsSignature = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
+            String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
+            JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
+            if(externalExaminationResult.getCompilationCode()==1
+                    && externalExaminationResult.getRunCode()==1) return true;
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+        return false;
+    }
+}

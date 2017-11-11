@@ -51,7 +51,6 @@ class ProblemCreator extends RoleAwareComponent {
     }
 
     handleSubmit(event) {
-        alert('A problem has been submitted: ' + this.state.title);
         event.preventDefault();
         this.submitProblem();
     }
@@ -66,6 +65,9 @@ class ProblemCreator extends RoleAwareComponent {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(function (response) {
+          console.log(response.data);
+          alert(response.data);
         });
     }
 

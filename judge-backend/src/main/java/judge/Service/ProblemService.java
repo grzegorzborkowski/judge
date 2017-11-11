@@ -2,6 +2,7 @@ package judge.Service;
 
 import judge.Dao.ProblemDao;
 import judge.Entity.Problem;
+import judge.Service.judge.NewProblemValidatorService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -17,8 +18,9 @@ public class ProblemService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(ProblemService.class);
 
     @Autowired
-    private
-    ProblemDao problemDao;
+    private ProblemDao problemDao;
+    @Autowired
+    private NewProblemValidatorService problemValidatorService;
 
     public Collection<Problem> getAllProblems() {
         List<Problem> problemList = new ArrayList<>();
@@ -34,17 +36,25 @@ public class ProblemService {
 
 
     public String addProblem(Problem problem) {
-        if(this.problemDao.findById(problem.getId()) == null) {
-            this.problemDao.save(problem);
-            return "New problem has been added.";
+        if(this.problemDao.findByTitle(problem.getTitle()) == null) {
+            if(this.problemValidatorService.validateNewProblem(problem)) {
+                this.problemDao.save(problem);
+                return "New problem has been added.";
+            } else {
+                return "Problem invalid! Please double check your input and try again.";
+            }
         } else {
-            logger.warn("Problem with the same ID already exists.");
-            return "Problem with given ID already exists. Adding failed.";
+            logger.warn("Problem with the same title already exists.");
+            return "Problem with given title already exists. Adding failed.";
         }
     }
 
     public String saveProblem(Problem problem) {
-        this.problemDao.save(problem);
-        return "Problem has been edited.";
+        if(this.problemValidatorService.validateNewProblem(problem)) {
+            this.problemDao.save(problem);
+            return "Problem has been edited.";
+        } else {
+            return "Problem invalid! Please double check your input and try again.";
+        }
     }
 }
