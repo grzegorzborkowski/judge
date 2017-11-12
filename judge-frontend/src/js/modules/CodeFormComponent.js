@@ -48,8 +48,8 @@ class CodeFormComponent extends React.Component {
         }).then(response => {
             self.setState
             ({
-                compilationCode : response["data"].compilationCode,
-                runCode : response["data"].runCode,
+                compilationCode : constants.getCompilationStatus(response["data"].compilationCode),
+                runCode : constants.getRunStatus(response["data"].runCode),
                 testsTotal : response["data"].testsTotal,
                 testsPositive : response["data"].testsPositive,
                 timeTaken : response["data"].timeTaken
@@ -85,7 +85,7 @@ class CodeFormComponent extends React.Component {
                     <div> Compilation result: {this.state.compilationCode} </div>
                     <div> Execution result: {this.state.runCode} </div>
                     <div> Number of passed tests: {this.state.testsPositive} </div>
-                    <div> Number of tests: {this.state.testsTotal} </div>
+                    <div> Number of executed tests: {this.state.testsTotal} </div>
                     <div> Time taken: {this.state.timeTaken} </div>
                 </div>
             </div>

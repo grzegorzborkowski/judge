@@ -25,6 +25,16 @@ type Result struct {
     TimeTaken float64
 }
 
+const COMPILATION_SUCCESS_CODE = 0
+const COMPILATION_FAILURE_CODE = 1
+const RUN_SUCCESS_CODE = 0
+const RUN_FAILURE_CODE = 1
+const TIMEOUT_CODE = 2
+const PROCESSING_ERROR_CODE = -1
+const TIMEOUT_VALUE_SECONDS = 10
+const NO_TESTS = 0
+const ZERO_TIME = 0.0
+
 func upload(w http.ResponseWriter, r *http.Request) {
     log.Println("method:", r.Method)
     if r.Method == "POST" {
@@ -56,9 +66,9 @@ func upload(w http.ResponseWriter, r *http.Request) {
         result := Result{
             CompilationCode: compilationCode,
             RunCode: runCode,
-            TestsPositive:testsPositive,
-            TestsTotal:testsTotal,
-            TimeTaken:timeTaken,
+            TestsPositive: testsPositive,
+            TestsTotal: testsTotal,
+            TimeTaken: timeTaken,
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
@@ -136,7 +146,7 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
             switch err {
             case context.DeadlineExceeded:
                 fmt.Println(err.Error())
-                return 0,1,0,0, 0.0
+                return COMPILATION_SUCCESS_CODE, TIMEOUT_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
             default:
                 panic(err)
             }
@@ -184,21 +194,20 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     var timeTaken=0.0
 
     if sErr!="" {
-        return 1,0,0,0,0.0
+        return COMPILATION_SUCCESS_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
     }
     if sOut!="" {
         matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
         if matched {
             fmt.Sscanf(sOut, "%d %d %f", &testsPositive, &testsTotal, &timeTaken)
             fmt.Printf("Working")
-            return 1, 1, testsPositive, testsTotal, timeTaken
+            return COMPILATION_SUCCESS_CODE, RUN_SUCCESS_CODE, testsPositive, testsTotal, timeTaken
         }
         fmt.Println(matched, err)
-        return 1,0,0,0, 0.0
+        return COMPILATION_FAILURE_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
     }
 
-    return 0,0,0,0, 0.0
-
+    return COMPILATION_FAILURE_CODE,RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
 }
 
 

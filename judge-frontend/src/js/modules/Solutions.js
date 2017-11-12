@@ -35,22 +35,22 @@ class Solutions extends React.Component {
                     <Table bordered condensed hover>
                         <thead>
                         <tr>
-                            <th> Solution ID </th>
-                            <th> Compilation Code </th>
-                            <th> RunCode</th>
-                            <th> Number of Passed Tests</th>
-                            <th> Number of Tests</th>
-                            <th> Passed Percentage</th>
-                            <th> Time Taken</th>
-                            <th> Code</th>
+                            <th>Solution ID</th>
+                            <th>Compilation result</th>
+                            <th>Execution result</th>
+                            <th>Number of passed tests</th>
+                            <th>Number of executed tests</th>
+                            <th>Passed percentage</th>
+                            <th>Time taken [s]</th>
+                            <th>Code</th>
                         </tr>
                         </thead>
                         <tbody>
                         {this.state.data.map(solution =>
                             <tr key={solution.id}>
                                 <td>{solution.id} </td>
-                                <td>{solution.compilationCode}</td>
-                                <td>{solution.runCode}</td>
+                                <td>{constants.getCompilationStatus(solution.compilationCode)}</td>
+                                <td>{constants.getRunStatus(solution.runCode)}</td>
                                 <td>{solution.testsPositive}</td>
                                 <td>{solution.testsTotal}</td>
                                 <td>{solution.testsPositive * 100 / solution.testsTotal} %</td>
