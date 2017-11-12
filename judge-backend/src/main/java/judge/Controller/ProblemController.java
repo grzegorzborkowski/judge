@@ -3,8 +3,10 @@ package judge.Controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import judge.Entity.Category;
 import judge.Entity.Problem;
 import judge.Entity.User;
+import judge.Service.CategoryService;
 import judge.Service.ProblemService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
@@ -32,6 +34,8 @@ public class ProblemController {
     private ProblemService problemService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<Problem> getAllProblems() {
@@ -43,6 +47,12 @@ public class ProblemController {
     public Problem getById(@RequestParam Integer id) {
         logger.info("Processing GET /problems/getByID");
         return this.problemService.getProblemById(id);
+    }
+
+    @RequestMapping(value = "/getByCategory", method = RequestMethod.GET)
+    public List<Problem> getByCategory(@RequestParam String name) {
+        logger.info("Processing GET /problems/getByCategory");
+        return this.problemService.getProblemsByCategory(name);
     }
 
     @RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
@@ -81,7 +91,9 @@ public class ProblemController {
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
 
-        Problem problem = new Problem(user, problemJson.get("title").asText(), problemJson.get("description").asText(), problemJson.get("structures").asText(), problemJson.get("solution").asText());
+        Category category = categoryService.findByName(problemJson.get("category").asText());
+
+        Problem problem = new Problem(user, category, problemJson.get("title").asText(), problemJson.get("description").asText(), problemJson.get("structures").asText(), problemJson.get("solution").asText());
         String status = this.problemService.addProblem(problem);
         return status;
     }

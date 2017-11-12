@@ -81,7 +81,6 @@ class CodeFormComponent extends React.Component {
                             className="codeFormButton"> Submit
                         </Button>
                     </form>
-                    {this.props.signature};
                     <div> Compilation result: {this.state.compilationCode} </div>
                     <div> Execution result: {this.state.runCode} </div>
                     <div> Number of passed tests: {this.state.testsPositive} </div>

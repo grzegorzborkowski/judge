@@ -16,6 +16,7 @@ class ProblemCreator extends RoleAwareComponent {
     constructor(props) {
         super(props);
         this.state = {
+            category: "",
             description: "",
             title: "",
             structures: "",
@@ -57,6 +58,7 @@ class ProblemCreator extends RoleAwareComponent {
 
     submitProblem(){
         axios.post(constants.BACKEND_ADDRESS + constants.PROBLEM_CREATOR_ENDPOINT, {
+            category: this.state.category,
             title: this.state.title,
             description: this.state.description,
             structures: this.state.structures,
@@ -92,6 +94,15 @@ class ProblemCreator extends RoleAwareComponent {
             <div>
                 <h2>My problem adder</h2>
                 <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Category:
+                        <br/>
+                        <textarea
+                            name="category"
+                            value={this.state.category}
+                            onChange={this.handleInputChange} />
+                    </label>
+                    <br />
                     <label>
                         Title:
                         <br/>

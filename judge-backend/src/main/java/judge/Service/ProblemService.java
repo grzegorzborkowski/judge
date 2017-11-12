@@ -21,11 +21,13 @@ public class ProblemService {
     private ProblemDao problemDao;
     @Autowired
     private NewProblemValidatorService problemValidatorService;
+    @Autowired
+    private CategoryService categoryService;
 
     public Collection<Problem> getAllProblems() {
         List<Problem> problemList = new ArrayList<>();
-        Iterable<Problem> students = problemDao.findAll();
-        students.forEach(problemList::add);
+        Iterable<Problem> problems = problemDao.findAll();
+        problems.forEach(problemList::add);
         return problemList;
     }
 
@@ -34,6 +36,10 @@ public class ProblemService {
         return problem;
     }
 
+    public List<Problem> getProblemsByCategory(String name) {
+        List<Problem> problems = this.problemDao.findByCategoryName(name);
+        return problems;
+    }
 
     public String addProblem(Problem problem) {
         if(this.problemDao.findByTitle(problem.getTitle()) == null) {

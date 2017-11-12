@@ -3,63 +3,41 @@ import axios from 'axios';
 import * as constants from './util.js'
 import {Link} from 'react-router';
 import { Table } from 'react-bootstrap';
+import Category from './Category.js';
 
 class Problems extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            problems: []
+            categories: []
         };
     }
 
     componentWillMount() {
-        console.log("przed zaladowaniem sie rendera");
         var self = this;
-        axios.get(constants.BACKEND_ADDRESS + constants.PROBLEM_ENDPOINT)
+        axios.get(constants.BACKEND_ADDRESS + constants.CATEGORY_ENDPOINT)
             .then(function (response) {
-                let problems = response['data'];
+                let categories = response['data'];
                 self.setState({
-                    problems
+                    categories
                 });
             })
             .catch(function (error) {
                 console.log(error);
-            })
+            });
     }
 
     render() {
         return (
             <div>
                 <h2>Problems</h2>
-                {this.props.children}
-
-                <Table bordered condensed hover>
-                    <thead>
-                    <tr>
-                        <th>Problem ID</th>
-                        <th>Problem title</th>
-                        <th>Solutions</th>
-                        <th>Editor</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.problems.map(problem =>
-                        <tr key={problem.id}>
-
-                            <td><Link to={`/problem/${problem.id}`}>{problem.id}</Link></td>
-                            <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
-                            <td><Link to={`/solutions/${problem.id}`}>View</Link></td>
-                            <td><Link to={`/problemEditor/${problem.id}`}>Edit</Link></td>
-                        </tr>
+                    {this.state.categories.map(category =>
+                        <Category categoryName={category.name} />
                     )}
-                    </tbody>
-                </Table>
-
-
             </div>
         )
     }
-
 }
+
 
 export default Problems;
