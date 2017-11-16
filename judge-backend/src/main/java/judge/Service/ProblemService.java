@@ -2,12 +2,15 @@ package judge.Service;
 
 import judge.Dao.ProblemDao;
 import judge.Entity.Problem;
+import judge.Entity.Submission;
 import judge.Service.judge.NewProblemValidatorService;
 import org.apache.log4j.Logger;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +26,8 @@ public class ProblemService {
     private NewProblemValidatorService problemValidatorService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private SubmissionService submissionService;
 
     public Collection<Problem> getAllProblems() {
         List<Problem> problemList = new ArrayList<>();
@@ -61,6 +66,17 @@ public class ProblemService {
             return "Problem has been edited.";
         } else {
             return "Problem invalid! Please double check your input and try again.";
+        }
+    }
+
+    @Transactional
+    public String removeProblem(Integer id) {
+        if(this.problemDao.findById(id) != null) {
+            this.submissionService.removeSubmissionsForProblem(id);
+            this.problemDao.removeById(id);
+            return "Problem and all its corresponding submissions have been removed";
+        } else {
+            return "Problem with the given id doesn't exist";
         }
     }
 }

@@ -10,12 +10,15 @@ import judge.Service.CategoryService;
 import judge.Service.ProblemService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -76,6 +79,12 @@ public class ProblemController {
         result.put("structures", structures);
         result.put("solution", solution);
         return result.toString();
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    public String removeProblemById(@RequestParam Integer id) {
+        logger.info("Processing POST /problems/remove");
+        return problemService.removeProblem(id);
     }
 
     /**

@@ -10,6 +10,7 @@ export const PROBLEM_TEMPLATE_ENDPOINT = "problems/getTemplate";
 export const PROBLEM_EDITOR_ENDPOINT = "problems/edit";
 export const CATEGORY_ENDPOINT = "categories/getAll";
 export const PROBLEMS_BY_CATEGORY_ENDPOINT = "problems/getByCategory?name=";
+export const PROBLEM_REMOVE_ENDPOINT = "problems/remove?id="
 
 export const COMPILATION_SUCCESS_CODE = 0;
 export const COMPILATION_FAILURE_CODE = 1;

@@ -11,4 +11,5 @@ public interface ProblemDao extends CrudRepository<Problem, Integer> {
     Problem findById(Integer id);
     Problem findByTitle(String title);
     List<Problem> findByCategoryName(String name);
+    void removeById(Integer id);
 }

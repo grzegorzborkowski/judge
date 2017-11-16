@@ -36,6 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/submission/getAll").hasAnyAuthority("teacher", "admin")
                 .antMatchers("/user/add").hasAnyAuthority("teacher", "admin")
                 .antMatchers("/problems/add").hasAnyAuthority("teacher", "admin")
+                .antMatchers("/problems/remove?id=").hasAnyAuthority("teacher", "admin")
                 .antMatchers("/judge/submit").hasAnyAuthority("student", "teacher", "admin")
                 .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//We don't need sessions to be created.

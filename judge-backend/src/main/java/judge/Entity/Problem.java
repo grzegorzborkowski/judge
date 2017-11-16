@@ -26,7 +26,6 @@ public class Problem
     private String solution; // teacher's optimal solution + test cases generator
     private String signature; // default, read from file, used - used for student template
 
-
     public Problem()
     {
         Path students_file = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
@@ -131,7 +130,7 @@ public class Problem
         this.signature = signature;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     public Category getCategory() {
         return category;
     }

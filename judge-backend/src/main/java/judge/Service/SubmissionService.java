@@ -37,4 +37,13 @@ public class SubmissionService {
         submissions.forEach(submissionList::add);
         return submissionList;
     }
+
+    public Submission getSubmissionById(Integer id) {
+        Submission submission = submissionDao.findById(id);
+        return submission;
+    }
+
+    public void removeSubmissionsForProblem(Integer problemId) {
+        submissionDao.removeAllByProblemId(problemId);
+    }
 }

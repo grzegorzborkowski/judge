@@ -108,7 +108,7 @@ public class Submission {
         this.timeTaken = timeTaken;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "ProblemID")
     public Problem getProblem() {
         return problem;
