@@ -52,6 +52,7 @@ class Problem extends React.Component {
                            name="Structure editor"
                            fontSize={18}
                            wrapEnabled={true}
+                           readOnly={true}
                            /></div>
                 <br/>
                 <br/>

@@ -14,6 +14,7 @@ class ProblemEditor extends RoleAwareComponent {
         super(props);
         this.state = {
             id: this.props.routeParams.problemID,
+            category: "",
             description: "",
             title: "",
             structures: "",
@@ -55,6 +56,7 @@ class ProblemEditor extends RoleAwareComponent {
 
     submitProblem(){
         axios.post(constants.BACKEND_ADDRESS + constants.PROBLEM_EDITOR_ENDPOINT, {
+            category: this.state.category,
             title: this.state.title,
             description: this.state.description,
             structures: this.state.structures,
@@ -76,6 +78,7 @@ class ProblemEditor extends RoleAwareComponent {
             .then(function (response) {
                 let data = response['data'];
                 self.setState({
+                    category: data['category']['name'],
                     description: data['description'],
                     title: data['title'],
                     solution: data['solution'],
@@ -93,6 +96,15 @@ class ProblemEditor extends RoleAwareComponent {
             <div>
                 <h2>My problem editor</h2>
                 <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Category:
+                        <br/>
+                        <textarea
+                            name="category"
+                            value={this.state.category}
+                            onChange={this.handleInputChange} />
+                    </label>
+                    <br />
                     <label>
                         Title:
                         <br/>

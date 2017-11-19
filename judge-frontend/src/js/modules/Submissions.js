@@ -43,6 +43,7 @@ class Submissions extends React.Component {
                     <th>Number of executed tests</th>
                     <th>Passed percentage</th>
                     <th>Time taken [s]</th>
+                    <th>Code</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,7 +58,7 @@ class Submissions extends React.Component {
                         <td>{submission.testsTotal}</td>
                         <td>{submission.testsPositive * 100 / submission.testsTotal} %</td>
                         <td>{submission.timeTaken}</td>
-
+                        <td><a onClick={() => { alert(submission.code) }}>Click</a></td>
                     </tr>
                 )}
                 </tbody>

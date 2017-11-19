@@ -34,10 +34,6 @@ class CodeFormComponent extends React.Component {
     handleSubmit(event) {
         var cookies = new Cookies();
         var token = cookies.get("token");
-        var facebookID = cookies.get("facebookID");
-        //TODO: delete logging token and ID (left only for debug purpose)
-        console.log("Your token: ", token);
-        console.log("Your facebookID: ", facebookID);
         var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.JUDGE_ENDPOINT, {
             problemID: this.props.problem_id,
@@ -81,7 +77,6 @@ class CodeFormComponent extends React.Component {
                             className="codeFormButton"> Submit
                         </Button>
                     </form>
-                    {this.props.signature};
                     <div> Compilation result: {this.state.compilationCode} </div>
                     <div> Execution result: {this.state.runCode} </div>
                     <div> Number of passed tests: {this.state.testsPositive} </div>

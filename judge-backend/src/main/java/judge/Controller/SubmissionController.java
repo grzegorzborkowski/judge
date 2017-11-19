@@ -53,6 +53,13 @@ public class SubmissionController {
         submissionList.sort(new SubmissionComparator());
         return submissionList;
     }
+
+    @RequestMapping(value = "/getByID", method = RequestMethod.GET)
+    public Submission getSubmissionById(@RequestParam Integer id) {
+        logger.info(("Processing GET /submission/getByID"));
+        Submission submission = this.submissionService.getSubmissionById(id);
+        return submission;
+    }
 }
 
 class SubmissionComparator implements Comparator<Submission> {

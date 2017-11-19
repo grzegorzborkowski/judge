@@ -19,12 +19,12 @@ public class Problem
 
     private Integer id;
     private User author;
+    private Category category;
     private String title;
     private String description;
     private String structures; // Input and Output structures - visible to students
     private String solution; // teacher's optimal solution + test cases generator
     private String signature; // default, read from file, used - used for student template
-
 
     public Problem()
     {
@@ -37,10 +37,11 @@ public class Problem
         }
     }
 
-    public Problem(Integer id, User author, String title, String description, String structures, String solution) {
+    public Problem(Integer id, User author, Category category, String title, String description, String structures, String solution) {
         if(id!=null)
             this.id = id;
         this.author = author;
+        this.category = category;
         this.title = title;
         this.description = description;
         this.structures = structures;
@@ -55,8 +56,8 @@ public class Problem
         }
     }
 
-    public Problem(User author, String title, String description, String structures, String solution) {
-        this(null, author, title, description, structures, solution);
+    public Problem(User author, Category category, String title, String description, String structures, String solution) {
+        this(null, author, category, title, description, structures, solution);
     }
 
     @Id
@@ -129,4 +130,12 @@ public class Problem
         this.signature = signature;
     }
 
+    @ManyToOne
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
