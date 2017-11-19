@@ -60,4 +60,38 @@ public class UserController {
 
         return status;
     }
+
+    /**
+     *
+     * @param usernamesJson [usernames, password, course]
+     */
+    @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addMultipleStudents(@RequestBody JsonNode usernamesJson) {
+
+        logger.info("Processing POST /user/addMultipleStudents");
+
+        int studentsCounter = 0;
+
+        String usernamesAll = usernamesJson.get("usernames").asText();
+        String[] usernames = usernamesAll.split(",");
+        String password = usernamesJson.get("password").asText();
+        String course = usernamesJson.get("course").asText();
+
+        for(String username : usernames) {
+            studentsCounter++;
+
+            User user = new User();
+            String encryptedPassword = this.passwordService.encrypt(password);
+
+            user.setUsername(username);
+            user.setRole("student");
+            user.setPassword(encryptedPassword);
+            user.setCourse(course);
+
+            logger.info("Add user: " + username);
+            this.userService.addUser(user);
+        }
+
+        return "Added " + studentsCounter + "new student(s)";
+    }
 }

@@ -45,6 +45,9 @@ export default class Navbar extends React.Component {
                         {(isTeacher || isAdmin) ?
                           (<li><NavLink to="/categoryManagement">Category Management</NavLink></li>) : (null)
                         }
+                        {(isTeacher || isAdmin) ?
+                          (<li><NavLink to="/addUsers">Add Users</NavLink></li>) : (null)
+                        }
                     </ul>
                 </div>
             </div>

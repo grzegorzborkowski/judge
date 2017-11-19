@@ -11,6 +11,8 @@ import ProblemCreator from './ProblemCreator';
 import ProblemEditor from './ProblemEditor';
 import Problems from './Problems';
 import CategoryManagement from './CategoryManagement';
+import AddUsers from './AddUsers';
+import AddStudents from './AddStudents';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
@@ -53,6 +55,10 @@ class LoginControl extends React.Component {
                         <Route authorize={['teacher', 'admin']} path="/problemEditor/:problemID" components={ProblemEditor}>
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/categoryManagement" components={CategoryManagement}>
+                        </Route>
+                        <Route authorize={['teacher', 'admin']} path="/addUsers" components={AddUsers}>
+                        </Route>
+                        <Route authorize={['teacher', 'admin']} path="/addUsers/students" components={AddStudents}>
                         </Route>
 
                         <Route path="/solutions/:problemID" component={Solutions}/>
