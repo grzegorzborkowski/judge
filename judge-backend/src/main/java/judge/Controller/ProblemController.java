@@ -10,15 +10,12 @@ import judge.Service.CategoryService;
 import judge.Service.ProblemService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +52,7 @@ public class ProblemController {
     @RequestMapping(value = "/getByCategory", method = RequestMethod.GET)
     public List<Problem> getByCategory(@RequestParam String name) {
         logger.info("Processing GET /problems/getByCategory");
-        return this.problemService.getProblemsByCategory(name);
+        return this.problemService.getProblemsByCategoryName(name);
     }
 
     @RequestMapping(value = "/getTemplate", method = RequestMethod.GET)

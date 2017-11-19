@@ -41,18 +41,26 @@ public class ProblemService {
         return problem;
     }
 
-    public List<Problem> getProblemsByCategory(String name) {
+    public List<Problem> getProblemsByCategoryName(String name) {
         List<Problem> problems = this.problemDao.findByCategoryName(name);
+        return problems;
+    }
+
+    public List<Problem> getProblemsByCategoryId(Integer id) {
+        List<Problem> problems = this.problemDao.findByCategoryId(id);
         return problems;
     }
 
     public String addProblem(Problem problem) {
         if(this.problemDao.findByTitle(problem.getTitle()) == null) {
+            if(problem.getCategory() == null) {
+                return "Please specify a valid category";
+            }
             if(this.problemValidatorService.validateNewProblem(problem)) {
                 this.problemDao.save(problem);
                 return "New problem has been added.";
             } else {
-                return "Problem invalid! Please double check your input and try again.";
+                return "Validation of the problem has failed. Please check its correctness.";
             }
         } else {
             logger.warn("Problem with the same title already exists.");

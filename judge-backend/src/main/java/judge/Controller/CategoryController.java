@@ -1,15 +1,12 @@
 package judge.Controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import judge.Entity.Category;
-import judge.Entity.Problem;
 import judge.Service.CategoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -22,9 +19,25 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addCategory(@RequestBody JsonNode categoryJson) {
+        logger.info("Processing POST /categories/add");
+
+        String categoryName = categoryJson.get("name").asText();
+        Category category = new Category(categoryName);
+        String status = this.categoryService.addCategory(category);
+        return status;
+    }
+
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public Collection<Category> getAllCategories() {
         logger.info("Processing getAllCategories request");
         return this.categoryService.getAllCategories();
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    public String removeCategoryById(@RequestParam Integer id) {
+        logger.info("Processing POST /categories/remove");
+        return categoryService.removeCategory(id);
     }
 }
