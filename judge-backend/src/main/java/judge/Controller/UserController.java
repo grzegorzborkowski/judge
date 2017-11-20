@@ -39,7 +39,6 @@ public class UserController {
     /**
      *
      * @param userJson [username, password, role, email, id]
-     * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addUser(@RequestBody JsonNode userJson) {
@@ -63,19 +62,19 @@ public class UserController {
 
     /**
      *
-     * @param usernamesJson [usernames, password, course]
+     * @param studentsJson [usernames, password, course]
      */
     @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addMultipleStudents(@RequestBody JsonNode usernamesJson) {
+    public String addMultipleStudents(@RequestBody JsonNode studentsJson) {
 
         logger.info("Processing POST /user/addMultipleStudents");
 
         int studentsCounter = 0;
 
-        String usernamesAll = usernamesJson.get("usernames").asText();
+        String usernamesAll = studentsJson.get("usernames").asText();
         String[] usernames = usernamesAll.split(",");
-        String password = usernamesJson.get("password").asText();
-        String course = usernamesJson.get("course").asText();
+        String password = studentsJson.get("password").asText();
+        String course = studentsJson.get("course").asText();
 
         for(String username : usernames) {
             studentsCounter++;
@@ -92,6 +91,32 @@ public class UserController {
             this.userService.addUser(user);
         }
 
-        return "Added " + studentsCounter + "new student(s)";
+        return "Added " + studentsCounter + " new student(s)";
+    }
+
+    /**
+     *
+     * @param teacherJson [username, password]
+     */
+    @RequestMapping(value = "/addTeacher", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addTeacher(@RequestBody JsonNode teacherJson) {
+
+        logger.info("Processing POST /user/addTeacher");
+
+        String username = teacherJson.get("username").asText();
+        String password = teacherJson.get("password").asText();
+
+
+        User user = new User();
+        String encryptedPassword = this.passwordService.encrypt(password);
+
+        user.setUsername(username);
+        user.setRole("teacher");
+        user.setPassword(encryptedPassword);
+
+        logger.info("Add user: " + username);
+        String status = this.userService.addUser(user);
+
+        return status;
     }
 }

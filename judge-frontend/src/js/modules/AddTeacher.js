@@ -11,13 +11,12 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-class AddStudents extends RoleAwareComponent {
+class AddTeacher extends RoleAwareComponent {
   constructor(props) {
       super(props);
       this.state = {
-        usernames: "",
-        password: "",
-        course: ""
+        username: "",
+        password: ""
       };
 
       this.userRoles = cookies.get("judge.role");
@@ -26,7 +25,7 @@ class AddStudents extends RoleAwareComponent {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.validateInput = this.validateInput.bind(this);
-      this.submitUsers = this.submitUsers.bind(this);
+      this.submitTeacher = this.submitTeacher.bind(this);
     }
 
       handleInputChange(event) {
@@ -42,24 +41,23 @@ class AddStudents extends RoleAwareComponent {
       handleSubmit(event) {
           event.preventDefault();
           if(this.validateInput()){
-            this.submitUsers();
+            this.submitTeacher();
             window.location.reload();
           }
       }
 
       validateInput(){
-        if(this.state.usernames.length<1 || this.state.password.length<1 || this.state.course.length<1) {
+        if(this.state.username.length<1 || this.state.password.length<1) {
           alert("Fill in the missing gaps")
           return false
         }
         return true
       }
 
-      submitUsers(){
-        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT, {
-            usernames: this.state.usernames,
-            password: this.state.password,
-            course: this.state.course
+      submitTeacher(){
+        axios.post(constants.BACKEND_ADDRESS + constants.ADD_TEACHER_ENDPOINT, {
+            username: this.state.username,
+            password: this.state.password
         }, {
             headers: {
                 'Content-Type': 'application/json'
@@ -77,14 +75,14 @@ class AddStudents extends RoleAwareComponent {
       render() {
         return (
           <div>
-              <h2>Add new students</h2>
+              <h2>Add new teacher</h2>
               <form onSubmit={this.handleSubmit}>
                   <label>
-                      Course name:
+                      Username:
                       <br/>
                       <textarea
-                          name="course"
-                          value={this.state.course}
+                          name="username"
+                          value={this.state.username}
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
@@ -97,15 +95,6 @@ class AddStudents extends RoleAwareComponent {
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
-                  <label>
-                      Comma separated usernames:
-                      <br/>
-                      <textarea
-                          name="usernames"
-                          value={this.state.usernames}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
                   <br />
                   <Button type="submit">Add</Button>
               </form>
@@ -114,4 +103,4 @@ class AddStudents extends RoleAwareComponent {
       }
 }
 
-export default AddStudents;
+export default AddTeacher;

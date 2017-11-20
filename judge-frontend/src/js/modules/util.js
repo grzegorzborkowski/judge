@@ -1,7 +1,8 @@
 export const BACKEND_ADDRESS = "http://localhost:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
 export const ADD_USER_ENDPOINT = "user/add";
-export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents"
+export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents";
+export const ADD_TEACHER_ENDPOINT = "user/addTeacher";
 export const SUBMISSIONS_FOR_USER_ENDPOINT = "submission/getAllForUser";
 export const SOLUTION_ENDPOINT = "submission/getAllForProblem?id=";
 export const PROBLEM_ENDPOINT = "problems/getAll";

@@ -25,6 +25,9 @@ class AddUsers extends RoleAwareComponent {
         <div>
           <br />
           <Button><Link to={`/addUsers/students`}>Add students</Link></Button>
+          <br />
+          <br />
+          <Button><Link to={`/addUsers/teacher`}>Add teacher</Link></Button>
         </div>
       );
     }
