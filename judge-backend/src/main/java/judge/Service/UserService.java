@@ -5,6 +5,7 @@ import judge.Entity.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,17 @@ public class UserService {
         } else {
             logger.warn("User " + user.getUsername() + " already exists. Adding failed.");
             return "User " + user.getUsername() + " already exists. Adding failed.";
+        }
+    }
+
+    public String changePassword(String username, String password) {
+        User user = this.userDao.findByUsername(username);
+        if(user != null) {
+            user.setPassword(password);
+            userDao.save(user);
+            return "Password has been successfully updated";
+        } else {
+            return "Operation failed. System can't identify the current user";
         }
     }
 

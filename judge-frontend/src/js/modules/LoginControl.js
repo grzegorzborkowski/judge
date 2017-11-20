@@ -14,6 +14,7 @@ import CategoryManagement from './CategoryManagement';
 import AddUsers from './AddUsers';
 import AddStudents from './AddStudents';
 import AddTeacher from './AddTeacher';
+import AccountManagement from './AccountManagement';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
@@ -45,6 +46,8 @@ class LoginControl extends React.Component {
                 <Router history={hashHistory}>
                   <Route path="/" component={App}>
                         <IndexRoute component={Home}/>
+                        <Route path="/accountManagement" component={AccountManagement}>
+                        </Route>
                         <Route path="/problems" components={Problems}>
                         </Route>
                         <Route path="/problem/:problemID" component={Problem} />
@@ -139,6 +142,7 @@ class LoginControl extends React.Component {
                 console.log("Login successfull");
                 cookies.set("judge.token",judgeToken);
                 cookies.set("judge.role",roleArray);
+                cookies.set("judge.username",username);
                 window.location.reload();
               }else{
                 console.log("Login failed");
