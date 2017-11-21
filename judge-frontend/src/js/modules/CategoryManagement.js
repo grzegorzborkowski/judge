@@ -5,6 +5,7 @@ import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import { Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
 
@@ -89,7 +90,9 @@ class CategoryManagement extends RoleAwareComponent {
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
-                  <input type="submit" value="Add" />
+                  <Button
+                      type="submit">Add
+                  </Button>
               </form>
            </div>
 

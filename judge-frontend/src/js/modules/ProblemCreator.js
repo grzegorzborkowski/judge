@@ -6,6 +6,7 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import {Link} from 'react-router';
 import { Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import $ from 'jquery';
 import Cookies from 'universal-cookie';
@@ -148,7 +149,9 @@ class ProblemCreator extends RoleAwareComponent {
                     </label>
                     <br/>
                     <br/>
-                    <input type="submit" value="Submit" />
+                    <Button
+                        type="submit">Submit
+                    </Button>
                 </form>
             </div>
         );

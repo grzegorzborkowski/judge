@@ -54,6 +54,17 @@ public class UserService {
         }
     }
 
+    public String changePassword(String username, String password) {
+        User user = this.userDao.findByUsername(username);
+        if(user != null) {
+            user.setPassword(password);
+            userDao.save(user);
+            return "Password has been successfully updated";
+        } else {
+            return "Operation failed. System can't identify the current user";
+        }
+    }
+
     public UserService() {
 
     }

@@ -1,6 +1,8 @@
 export const BACKEND_ADDRESS = "http://localhost:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
-export const ADD_STUDENT_ENDPOINT = "student/add";
+export const ADD_USER_ENDPOINT = "user/add";
+export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents";
+export const ADD_TEACHER_ENDPOINT = "user/addTeacher";
 export const SUBMISSIONS_FOR_USER_ENDPOINT = "submission/getAllForUser";
 export const SOLUTION_ENDPOINT = "submission/getAllForProblem?id=";
 export const PROBLEM_ENDPOINT = "problems/getAll";
@@ -13,6 +15,7 @@ export const CATEGORY_ADD_ENDPOINT = "categories/add";
 export const CATEGORY_REMOVE_ENDPOINT = "categories/remove?id=";
 export const PROBLEMS_BY_CATEGORY_ENDPOINT = "problems/getByCategory?name=";
 export const PROBLEM_REMOVE_ENDPOINT = "problems/remove?id=";
+export const PASSWORD_CHANGE_ENDPOINT = "user/changePassword";
 
 export const COMPILATION_SUCCESS_CODE = 0;
 export const COMPILATION_FAILURE_CODE = 1;
