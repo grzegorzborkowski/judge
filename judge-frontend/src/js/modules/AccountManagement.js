@@ -74,7 +74,8 @@ class AccountManagement extends React.Component {
     return (
         <div>
           <br />
-          You are logged in as {cookies.get("judge.username")}
+          You are logged in as <b>{cookies.get("judge.username")}</b>.
+          <br />
           <br />
 
           <form onSubmit={this.handleSubmit}>
@@ -95,7 +96,6 @@ class AccountManagement extends React.Component {
                       value={this.state.password2}
                       onChange={this.handleInputChange} />
               </label>
-              <br />
               <br />
               <Button type="submit">Confirm</Button>
           </form>

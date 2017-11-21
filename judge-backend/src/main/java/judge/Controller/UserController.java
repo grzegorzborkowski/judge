@@ -83,7 +83,7 @@ public class UserController {
         String course = studentsJson.get("course").asText();
 
         for(String username : usernames) {
-            studentsCounter++;
+            studentsCounter += 1;
 
             User user = new User();
             String encryptedPassword = this.passwordService.encrypt(password);

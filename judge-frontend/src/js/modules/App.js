@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
+import { Button } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -23,7 +24,6 @@ export default React.createClass({
       <div>
        <Navbar />
        <div class="container" style={containerStyle}>
-       <button onClick={this.logout}>Log out</button>
          <div class="row">
            <div class="col-lg-12">
            {this.props.children}
