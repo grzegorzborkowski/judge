@@ -112,12 +112,15 @@ public class ProblemController {
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
 
+        Category category = categoryService.findByName(problemJson.get("category").asText());
+
         Problem problem = this.problemService.getProblemById(Integer.parseInt(problemJson.get("id").asText()));
         problem.setAuthor(user);
         problem.setDescription(problemJson.get("description").asText());
         problem.setTitle(problemJson.get("title").asText());
         problem.setStructures(problemJson.get("structures").asText());
         problem.setSolution(problemJson.get("solution").asText());
+        problem.setCategory(category);
         String status = this.problemService.saveProblem(problem);
         return status;
     }
