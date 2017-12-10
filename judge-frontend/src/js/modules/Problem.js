@@ -42,8 +42,6 @@ class Problem extends React.Component {
             <div>
                 <div><b>{this.state.title}</b></div>
                 <div> {this.state.description} </div>
-                <div> {this.state.signature} </div>
-                <div> {this.state.structures} </div>
                 <br/>
                 <div><AceEditor mode="c_cpp"
                            theme="dreamweaver"

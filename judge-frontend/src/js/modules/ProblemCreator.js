@@ -92,13 +92,14 @@ class ProblemCreator extends RoleAwareComponent {
     //TODO: change structures's textarea to CodeForm
     render() {
           const problemCreatorContent = (
-            <div>
+            <div className="ProblemInputForm">
                 <h2>My problem adder</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Category:
                         <br/>
                         <textarea
+                            rows="2"
                             name="category"
                             value={this.state.category}
                             onChange={this.handleInputChange} />
@@ -108,6 +109,7 @@ class ProblemCreator extends RoleAwareComponent {
                         Title:
                         <br/>
                         <textarea
+                            rows="2"
                             name="title"
                             value={this.state.title}
                             onChange={this.handleInputChange} />
@@ -117,6 +119,7 @@ class ProblemCreator extends RoleAwareComponent {
                         Description:
                         <br/>
                         <textarea
+                            rows="5"
                             name="description"
                             value={this.state.description}
                             onChange={this.handleInputChange} />
@@ -129,6 +132,7 @@ class ProblemCreator extends RoleAwareComponent {
                                    theme="dreamweaver"
                                    value={this.state.structures}
                                    width="600px"
+                                   height="400px"
                                    fontSize={18}
                                    wrapEnabled={true}
                                    name="structures"
@@ -142,6 +146,7 @@ class ProblemCreator extends RoleAwareComponent {
                          theme="dreamweaver"
                          value={this.state.solution}
                          width="600px"
+                         height="800px"
                          fontSize={18}
                          wrapEnabled={true}
                          name="solution"

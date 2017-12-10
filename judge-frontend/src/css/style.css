@@ -7,4 +7,12 @@
     margin: 0 auto;
     max-width: 320px;
   }
+
+  .ProblemInputForm textarea {
+    width: 600px
+  }
+
+  .CategoryInputForm textarea {
+    width: 500px;
+  }
 }
