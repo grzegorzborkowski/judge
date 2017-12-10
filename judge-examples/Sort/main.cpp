@@ -3,13 +3,6 @@
 #include <cstdlib> 
 #include <ctime> 
 
-<<<<<<< HEAD
-=======
-#define NO_TESTS 20
-#define SIZE_OF_ARRAY 100
-
->>>>>>> origin/example_problems
-
 typedef struct Input Input;
 
 typedef struct Output Output;
