@@ -60,6 +60,7 @@ class AgentService {
         reqEntity.addPart("file", fileBody);
         HttpEntity entity = reqEntity.build();
         httppost.setEntity(entity);
+	System.out.println(externalRunnerUrl);
 
         System.out.println("executing request " + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
