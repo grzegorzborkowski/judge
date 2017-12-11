@@ -25,18 +25,16 @@ Output studentsFunction(Input input);
 struct Input
 {
     int array[SIZE_OF_ARRAY];
-    int size;
 };
 
 struct Output
 {
     int array[SIZE_OF_ARRAY];
-    int size;
 };
 
 bool compare(Output a, Output b)
 {
-	for(int i=0;i<a.size;i++)
+	for(int i=0;i<SIZE_OF_ARRAY;i++)
 	{
 	    if (a.array[i] != b.array[i])
 	        return false;
@@ -52,11 +50,8 @@ TestData generateTestInput()
 	srand((unsigned)time(0)); 
 	for(int j=0;j<NO_TESTS;j++)
 	{
-		testData.testInput[j].size = SIZE_OF_ARRAY;
-
-	    for(int i=0; i<testData.testInput[j].size; i++) 
-	        testData.testInput[j].array[i] = (rand()%(SIZE_OF_ARRAY*10))+1;  
-        
+	    for(int i=0; i<SIZE_OF_ARRAY; i++) 
+	        testData.testInput[j].array[i] = (rand()%(SIZE_OF_ARRAY*10))+1;     
 	}
 	return testData;
 }
@@ -104,18 +99,16 @@ void quickSort(int arr[], int low, int high)
 Output teachersFunction(Input input)
 {
 	Output output;
-	output.size = input.size;
-	cp_arr(input.array, output.array, input.size);
-    quickSort(output.array, 0, output.size-1);
+	cp_arr(input.array, output.array, SIZE_OF_ARRAY);
+    quickSort(output.array, 0, SIZE_OF_ARRAY - 1);
     return output;
 }
 
 Output studentsFunction(Input input)
 {
 	Output output;
-	output.size = input.size;
-	cp_arr(input.array, output.array, input.size);
-    quickSort(output.array, 0, output.size-1);
+	cp_arr(input.array, output.array, SIZE_OF_ARRAY);
+    quickSort(output.array, 0, SIZE_OF_ARRAY - 1);
     return output;
 }
 
