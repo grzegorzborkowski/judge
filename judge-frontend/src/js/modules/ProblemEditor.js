@@ -6,6 +6,8 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
+import Autocomplete from 'react-autocomplete';
+
 
 const cookies = new Cookies();
 
@@ -18,7 +20,8 @@ class ProblemEditor extends RoleAwareComponent {
             description: "",
             title: "",
             structures: "",
-            solution: ""
+            solution: "",
+            categories:[],
         };
 
         this.userRoles = cookies.get("judge.role");
@@ -88,6 +91,16 @@ class ProblemEditor extends RoleAwareComponent {
             .catch(function (error) {
                 console.log(error);
             })
+        axios.get(constants.BACKEND_ADDRESS + constants.CATEGORY_ENDPOINT)
+            .then(function (response) {
+                let categories = response['data'];
+                self.setState({
+                    categories
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     //TODO: change structures's textarea to CodeForm
@@ -99,10 +112,22 @@ class ProblemEditor extends RoleAwareComponent {
                     <label>
                         Category:
                         <br/>
-                        <textarea
-                            name="category"
+                        <Autocomplete
+                            items={this.state.categories}
+                            shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
+                            getItemValue={item => item.name}
+                            renderItem={(item, highlighted) =>
+                                <div
+                                    key={item.id}
+                                    style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
+                                >
+                                    {item.name}
+                                </div>
+                            }
                             value={this.state.category}
-                            onChange={this.handleInputChange} />
+                            onChange={e => this.setState({ category: e.target.value })}
+                            onSelect={value => this.setState({ category:value })}
+                        />
                     </label>
                     <br />
                     <label>
