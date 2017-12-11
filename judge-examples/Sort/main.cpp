@@ -67,39 +67,56 @@ void cp_arr(int arr1[], int arr2[], int n)
 		arr2[i] = arr1[i];
 }
 
-void swap(int *xp, int *yp)
+void swap(int* a, int* b)
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
- 
-void bubbleSort(int arr[], int n)
+
+int partition (int arr[], int low, int high)
 {
-   int i, j;
-   for (i = 0; i < n-1; i++)      
+    int pivot = arr[high];
+    int i = (low - 1);
  
-       for (j = 0; j < n-i-1; j++) 
-           if (arr[j] > arr[j+1])
-              swap(&arr[j], &arr[j+1]);
+    for (int j = low; j <= high- 1; j++)
+    {
+        if (arr[j] <= pivot)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
 }
 
 Output teachersFunction(Input input)
 {
 	Output output;
 	output.size = input.size;
-	bubbleSort(input.array, input.size);
 	cp_arr(input.array, output.array, input.size);
-	return output;
+    quickSort(output.array, 0, output.size-1);
+    return output;
 }
 
 Output studentsFunction(Input input)
 {
 	Output output;
 	output.size = input.size;
-	bubbleSort(input.array, input.size);
 	cp_arr(input.array, output.array, input.size);
-	return output;
+    quickSort(output.array, 0, output.size-1);
+    return output;
 }
 
 int main()
