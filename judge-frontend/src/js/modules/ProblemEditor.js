@@ -112,6 +112,7 @@ class ProblemEditor extends RoleAwareComponent {
                     <label>
                         Category:
                         <br/>
+<<<<<<< HEAD
                         <Autocomplete
                             items={this.state.categories}
                             shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
@@ -125,6 +126,11 @@ class ProblemEditor extends RoleAwareComponent {
                                 </div>
                             }
 
+=======
+                        <textarea
+                            name="category"
+                            rows="2"
+>>>>>>> f0be20396766406bcbc655d7e44c362688e4ccc6
                             value={this.state.category}
                             onChange={e => this.setState({ category: e.target.value })}
                             onSelect={value => this.setState({ category:value })}
