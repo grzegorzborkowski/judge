@@ -124,6 +124,7 @@ class ProblemEditor extends RoleAwareComponent {
                                     {item.name}
                                 </div>
                             }
+
                             value={this.state.category}
                             onChange={e => this.setState({ category: e.target.value })}
                             onSelect={value => this.setState({ category:value })}
@@ -135,6 +136,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <br/>
                         <textarea
                             name="title"
+                            rows="2"
                             value={this.state.title}
                             onChange={this.handleInputChange} />
                     </label>
@@ -144,6 +146,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <br/>
                         <textarea
                             name="description"
+                            rows="5"
                             value={this.state.description}
                             onChange={this.handleInputChange} />
                     </label>
@@ -155,6 +158,7 @@ class ProblemEditor extends RoleAwareComponent {
                                    theme="dreamweaver"
                                    value={this.state.structures}
                                    width="600px"
+                                   height="400px"
                                    fontSize={18}
                                    wrapEnabled={true}
                                    name="structures"
@@ -168,6 +172,7 @@ class ProblemEditor extends RoleAwareComponent {
                          theme="dreamweaver"
                          value={this.state.solution}
                          width="600px"
+                         height="800px"
                          fontSize={18}
                          wrapEnabled={true}
                          name="solution"

@@ -3,7 +3,11 @@ import React from 'react';
 export default React.createClass({
   render() {
     return (
-        <div>{this.props.children}</div>
+        <div>
+          <h2>
+            Welcome to Project Judge website.
+          </h2>
+        </div>
     )
   }
 })
