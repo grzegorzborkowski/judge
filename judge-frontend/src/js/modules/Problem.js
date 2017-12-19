@@ -43,7 +43,6 @@ class Problem extends React.Component {
       var structures = self.state.structures;
       var lines = structures.split('\n').length;
       var height = lines*constants.ACE_EDITOR_FONT_SIZE;
-      console.log(lines);
       return height.toString() + "px";
     }
 

@@ -16,7 +16,8 @@ class CodeFormComponent extends React.Component {
     constructor(props) {
         super(props);
         console.log(props);
-        this.state = {code : this.props.signature, compilationCode : "", runCode: "", testsTotal :"", testsPositive: "", timeTaken: ""};
+        this.state = {code : this.props.signature, compilationStatus : "", runStatus: "", testsTotal :"",
+          testsPositive: "", timeTaken: "", resultIcon: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -44,11 +45,14 @@ class CodeFormComponent extends React.Component {
         }).then(response => {
             self.setState
             ({
-                compilationCode : constants.getCompilationStatus(response["data"].compilationCode),
-                runCode : constants.getRunStatus(response["data"].runCode),
+                compilationStatus : constants.getCompilationStatus(response["data"].compilationCode),
+                runStatus : constants.getRunStatus(response["data"].runCode),
+                runCode : response["data"].runCode,
                 testsTotal : response["data"].testsTotal,
                 testsPositive : response["data"].testsPositive,
-                timeTaken : response["data"].timeTaken
+                timeTaken : response["data"].timeTaken,
+                resultIcon : constants.getResultIcon(response["data"].runCode,
+                  response["data"].testsPositive, response["data"].testsTotal)
             });
         }).catch(function (error) {
             console.log(error);
@@ -79,11 +83,11 @@ class CodeFormComponent extends React.Component {
                         </Button>
                     </form>
                     <br/>
-                    <div> Compilation result: <b>{this.state.compilationCode} </b></div>
-                    <div> Execution result: <b>{this.state.runCode} </b></div>
-                    <div> Number of passed tests: <b>{this.state.testsPositive} </b></div>
-                    <div> Number of executed tests: <b>{this.state.testsTotal} </b></div>
-                    <div> Time taken [s]: <b>{this.state.timeTaken} </b></div>
+                    <div> Compilation: <b>{this.state.compilationStatus} </b></div>
+                    <div> Execution: <b>{this.state.runStatus} </b></div>
+                    <div> Tests passed: <b>{this.state.testsPositive}/{this.state.testsTotal} </b></div>
+                    <div> Runtime [s]: <b>{this.state.timeTaken} </b></div>
+                    <div> Result: {this.state.resultIcon} </div>
                 </div>
             </div>
         );
