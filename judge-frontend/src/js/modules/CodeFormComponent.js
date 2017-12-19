@@ -68,20 +68,22 @@ class CodeFormComponent extends React.Component {
                                    theme="dreamweaver"
                                    value={this.state.code}
                                    width="1000px"
-                                   fontSize={18}
+                                   fontSize={constants.ACE_EDITOR_FONT_SIZE}
                                    wrapEnabled={true}
                                    onChange={this.handleChange}/>
+                        <br/>
                         <Button
                             type="submit"
                             bsStyle="primary"
                             className="codeFormButton"> Submit
                         </Button>
                     </form>
-                    <div> Compilation result: {this.state.compilationCode} </div>
-                    <div> Execution result: {this.state.runCode} </div>
-                    <div> Number of passed tests: {this.state.testsPositive} </div>
-                    <div> Number of executed tests: {this.state.testsTotal} </div>
-                    <div> Time taken: {this.state.timeTaken} </div>
+                    <br/>
+                    <div> Compilation result: <b>{this.state.compilationCode} </b></div>
+                    <div> Execution result: <b>{this.state.runCode} </b></div>
+                    <div> Number of passed tests: <b>{this.state.testsPositive} </b></div>
+                    <div> Number of executed tests: <b>{this.state.testsTotal} </b></div>
+                    <div> Time taken [s]: <b>{this.state.timeTaken} </b></div>
                 </div>
             </div>
         );

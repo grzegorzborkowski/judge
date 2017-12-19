@@ -48,7 +48,7 @@ class Navbar extends React.Component {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand">Project Judge</a>
+                    <a class="nav navbar-brand"><NavLink to="/">Project Judge</NavLink></a>
                 </div>
                 <div class={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">

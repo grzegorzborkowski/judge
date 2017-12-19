@@ -31,8 +31,11 @@ export function getCompilationStatus(code) {
 }
 
 export function getRunStatus(code) {
-    if(code==RUN_SUCCESS_CODE) return "OK";
-    if(code==RUN_FAILURE_CODE) return "Failed";
+    if(code==RUN_SUCCESS_CODE) return "Within the time limit";
+    if(code==RUN_FAILURE_CODE) return "Error while executing";
     if(code==TIMEOUT_CODE) return "Time limit exceeded";
     return "Unknown";
 }
+
+/* Styles */
+export const ACE_EDITOR_FONT_SIZE = 15;

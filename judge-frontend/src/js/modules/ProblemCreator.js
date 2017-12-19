@@ -110,7 +110,6 @@ class ProblemCreator extends RoleAwareComponent {
                     <label>
                         Category:
                         <br/>
-<<<<<<< HEAD
                         <Autocomplete
                             items={this.state.categories}
                             shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
@@ -123,11 +122,6 @@ class ProblemCreator extends RoleAwareComponent {
                                     {item.name}
                                 </div>
                             }
-=======
-                        <textarea
-                            rows="2"
-                            name="category"
->>>>>>> Style modifications
                             value={this.state.category}
                             onChange={e => this.setState({ category: e.target.value })}
                             onSelect={value => this.setState({ category:value })}
@@ -162,7 +156,7 @@ class ProblemCreator extends RoleAwareComponent {
                                    value={this.state.structures}
                                    width="600px"
                                    height="400px"
-                                   fontSize={18}
+                                   fontSize={constants.ACE_EDITOR_FONT_SIZE}
                                    wrapEnabled={true}
                                    name="structures"
                                    onChange={this.handleChangeForStructures}/>
@@ -176,7 +170,7 @@ class ProblemCreator extends RoleAwareComponent {
                          value={this.state.solution}
                          width="600px"
                          height="800px"
-                         fontSize={18}
+                         fontSize={constants.ACE_EDITOR_FONT_SIZE}
                          wrapEnabled={true}
                          name="solution"
                          onChange={this.handleChangeForSolution}/>

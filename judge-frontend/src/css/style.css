@@ -15,4 +15,13 @@
   .CategoryInputForm textarea {
     width: 500px;
   }
+
+  .Problem {
+    font-size: medium;
+    margin-bottom: 20px;
+  }
+
+  .ProblemInputForm {
+    margin-bottom: 20px;
+  }
 }
