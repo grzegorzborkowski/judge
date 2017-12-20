@@ -104,7 +104,7 @@ class ProblemCreator extends RoleAwareComponent {
     //TODO: change structures's textarea to CodeForm
     render() {
           const problemCreatorContent = (
-            <div>
+            <div className="ProblemInputForm">
                 <h2>My problem adder</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>
@@ -132,6 +132,7 @@ class ProblemCreator extends RoleAwareComponent {
                         Title:
                         <br/>
                         <textarea
+                            rows="2"
                             name="title"
                             value={this.state.title}
                             onChange={this.handleInputChange} />
@@ -141,6 +142,7 @@ class ProblemCreator extends RoleAwareComponent {
                         Description:
                         <br/>
                         <textarea
+                            rows="5"
                             name="description"
                             value={this.state.description}
                             onChange={this.handleInputChange} />
@@ -153,7 +155,8 @@ class ProblemCreator extends RoleAwareComponent {
                                    theme="dreamweaver"
                                    value={this.state.structures}
                                    width="600px"
-                                   fontSize={18}
+                                   height="400px"
+                                   fontSize={constants.ACE_EDITOR_FONT_SIZE}
                                    wrapEnabled={true}
                                    name="structures"
                                    onChange={this.handleChangeForStructures}/>
@@ -166,7 +169,8 @@ class ProblemCreator extends RoleAwareComponent {
                          theme="dreamweaver"
                          value={this.state.solution}
                          width="600px"
-                         fontSize={18}
+                         height="800px"
+                         fontSize={constants.ACE_EDITOR_FONT_SIZE}
                          wrapEnabled={true}
                          name="solution"
                          onChange={this.handleChangeForSolution}/>

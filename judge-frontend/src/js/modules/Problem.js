@@ -17,6 +17,7 @@ class Problem extends React.Component {
             signature: "",
             structures:""
         };
+        this.countStructuresHeight = this.countStructuresHeight.bind(this);
     }
 
     componentDidMount() {
@@ -37,24 +38,32 @@ class Problem extends React.Component {
             })
     }
 
-    render() {
+    countStructuresHeight() {
+      var self = this;
+      var structures = self.state.structures;
+      var lines = structures.split('\n').length;
+      var height = lines*constants.ACE_EDITOR_FONT_SIZE;
+      return height.toString() + "px";
+    }
+
+    render()
+    {
         return (
-            <div>
+            <div className="Problem">
                 <div><b>{this.state.title}</b></div>
                 <div> {this.state.description} </div>
-                <div> {this.state.signature} </div>
-                <div> {this.state.structures} </div>
                 <br/>
                 <div><AceEditor mode="c_cpp"
                            theme="dreamweaver"
                            value={this.state.structures}
                            width="1000px"
+                           maxLines={50}
+                           height={this.countStructuresHeight()}
                            name="Structure editor"
-                           fontSize={18}
+                           fontSize={constants.ACE_EDITOR_FONT_SIZE}
                            wrapEnabled={true}
                            readOnly={true}
                            /></div>
-                <br/>
                 <br/>
                 <CodeFormComponent
                     signature={this.state.signature} problem_id={this.state.id}/>

@@ -7,4 +7,21 @@
     margin: 0 auto;
     max-width: 320px;
   }
+
+  .ProblemInputForm textarea {
+    width: 600px
+  }
+
+  .CategoryInputForm textarea {
+    width: 500px;
+  }
+
+  .Problem {
+    font-size: medium;
+    margin-bottom: 20px;
+  }
+
+  .ProblemInputForm {
+    margin-bottom: 20px;
+  }
 }

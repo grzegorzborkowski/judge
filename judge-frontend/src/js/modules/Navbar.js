@@ -13,11 +13,13 @@ class Navbar extends React.Component {
             isLoggedIn: ""
         };
         this.logout = this.logout.bind(this);
+        this.toggleCollapse = this.toggleCollapse.bind(this);
     }
 
     toggleCollapse() {
-        const collapsed = !this.state.collapsed;
-        this.setState({collapsed: collapsed});
+      var self = this;
+        let newCollapsed = !this.state.collapsed;
+        self.setState({collapsed: newCollapsed});
     }
 
     logout() {
@@ -30,7 +32,7 @@ class Navbar extends React.Component {
     }
 
     render() {
-        const { collapsed } = this.state.collapsed;
+        const collapsed = this.state.collapsed;
         const navClass = collapsed ? "collapse" : "";
         const cookies = new Cookies();
         const isTeacher = (cookies.get("judge.role")) ? (cookies.get("judge.role").indexOf("teacher") > -1) : false;
@@ -46,6 +48,7 @@ class Navbar extends React.Component {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="nav navbar-brand"><NavLink to="/">Project Judge</NavLink></a>
                 </div>
                 <div class={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
@@ -63,7 +66,12 @@ class Navbar extends React.Component {
                         {(isTeacher || isAdmin) ?
                           (<li><NavLink to="/addUsers">Add Users</NavLink></li>) : (null)
                         }
-                        <li><Button bsStyle="link" onClick={this.logout}>Log out</Button></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      <li onClick={this.logout}>
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        <Button bsStyle="link" onClick={this.logout}>Log out</Button>
+                      </li>
                     </ul>
                 </div>
             </div>

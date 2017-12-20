@@ -37,13 +37,12 @@ class Submissions extends React.Component {
                     <th>Submission ID</th>
                     <th>Problem ID</th>
                     <th>Problem title</th>
-                    <th>Compilation result</th>
-                    <th>Execution result</th>
-                    <th>Number of passed tests</th>
-                    <th>Number of executed tests</th>
-                    <th>Passed percentage</th>
-                    <th>Time taken [s]</th>
+                    <th>Compilation</th>
+                    <th>Execution</th>
+                    <th>Tests passed</th>
+                    <th>Runtime [s]</th>
                     <th>Code</th>
+                    <th>Result</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,11 +53,11 @@ class Submissions extends React.Component {
                         <td>{submission.problem.title}</td>
                         <td>{constants.getCompilationStatus(submission.compilationCode)}</td>
                         <td>{constants.getRunStatus(submission.runCode)}</td>
-                        <td>{submission.testsPositive}</td>
-                        <td>{submission.testsTotal}</td>
-                        <td>{submission.testsPositive * 100 / submission.testsTotal} %</td>
-                        <td>{submission.timeTaken}</td>
+                        <td>{submission.testsPositive}/{submission.testsTotal}</td>
+                        <td>{submission.timeTaken} </td>
                         <td><a onClick={() => { alert(submission.code) }}>Click</a></td>
+                        <td>{constants.getResultIcon(submission.runCode,
+                          submission.testsPositive, submission.testsTotal)}</td>
                     </tr>
                 )}
                 </tbody>

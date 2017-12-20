@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const BACKEND_ADDRESS = "http://localhost:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
 export const ADD_USER_ENDPOINT = "user/add";
@@ -31,8 +33,22 @@ export function getCompilationStatus(code) {
 }
 
 export function getRunStatus(code) {
-    if(code==RUN_SUCCESS_CODE) return "OK";
-    if(code==RUN_FAILURE_CODE) return "Failed";
+    if(code==RUN_SUCCESS_CODE) return "Within the time limit";
+    if(code==RUN_FAILURE_CODE) return "Error while executing";
     if(code==TIMEOUT_CODE) return "Time limit exceeded";
     return "Unknown";
 }
+
+export function getResultIcon(runCode, testsPositive, testsTotal) {
+  if (runCode==TIMEOUT_CODE)
+    return (<span class="glyphicon glyphicon-time"></span>)
+  else if (runCode==RUN_FAILURE_CODE || testsPositive!=testsTotal)
+    return (<span class="glyphicon glyphicon-remove"></span>)
+  else if (testsPositive==testsTotal && testsTotal>0)
+    return (<span class="glyphicon glyphicon-ok"></span>)
+  else
+    return (<span class="glyphicon glyphicon-question-sign"></span>)
+}
+
+/* Styles */
+export const ACE_EDITOR_FONT_SIZE = 15;

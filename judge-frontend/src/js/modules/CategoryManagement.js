@@ -78,7 +78,7 @@ class CategoryManagement extends RoleAwareComponent {
       render() {
         return (
         <div>
-          <div>
+          <div className="CategoryInputForm">
               <h2>Category creator</h2>
               <form onSubmit={this.handleSubmit}>
                   <label>
