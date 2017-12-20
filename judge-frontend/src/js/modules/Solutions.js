@@ -9,13 +9,14 @@ class Solutions extends React.Component {
         super(props);
         this.state = {
             id: this.props.routeParams.problemID,
+
             data: []
         };
     }
 
     componentWillMount() {
         var self = this;
-        axios.get(constants.BACKEND_ADDRESS + constants.SOLUTION_ENDPOINT + self.state.id)
+        axios.get(constants.BACKEND_ADDRESS + constants.SUBMISSIONS_FOR_PROBLEM_FOR_USER_ENDPOINT + self.state.id )
             .then(function (response) {
                 let data = response['data'];
                 self.setState({
@@ -28,40 +29,43 @@ class Solutions extends React.Component {
     }
 
     render() {
+        var options = { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric', year: 'numeric'};
+
         return (
             <div>
-                <h2>Submissions</h2>
-                <div>
-                    <Table bordered condensed hover>
-                        <thead>
-                        <tr>
-                            <th>Solution ID</th>
-                            <th>Compilation result</th>
-                            <th>Execution result</th>
-                            <th>Number of passed tests</th>
-                            <th>Number of executed tests</th>
-                            <th>Passed percentage</th>
-                            <th>Time taken [s]</th>
-                            <th>Code</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.data.map(solution =>
-                            <tr key={solution.id}>
-                                <td>{solution.id} </td>
-                                <td>{constants.getCompilationStatus(solution.compilationCode)}</td>
-                                <td>{constants.getRunStatus(solution.runCode)}</td>
-                                <td>{solution.testsPositive}</td>
-                                <td>{solution.testsTotal}</td>
-                                <td>{solution.testsPositive * 100 / solution.testsTotal} %</td>
-                                <td>{solution.timeTaken}</td>
-                                <td><a onClick={() => { alert(solution.code) }}>Click</a></td>
-                            </tr>
-                        )}
-                        </tbody>
+              <h2>Submissions</h2>
+              <div>
+                  <Table bordered condensed hover>
+                      <thead>
+                      <tr>
+                          <th>Submission ID</th>
+                          <th>Compilation</th>
+                          <th>Execution</th>
+                          <th>Tests passed</th>
+                          <th>Runtime [s]</th>
+                          <th>Code</th>
+                          <th>Date</th>
+                          <th>Result</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {this.state.data.map(submission =>
+                          <tr key={submission.id}>
+                              <td>{submission.id}</td>
+                              <td>{constants.getCompilationStatus(submission.compilationCode)}</td>
+                              <td>{constants.getRunStatus(submission.runCode)}</td>
+                              <td>{submission.testsPositive}/{submission.testsTotal}</td>
+                              <td>{submission.timeTaken} </td>
+                              <td><a onClick={() => { alert(submission.code) }}>Click</a></td>
+                              <td>{new Date(submission.date).toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options)} </td>
+                              <td>{constants.getResultIcon(submission.runCode,
+                                submission.testsPositive, submission.testsTotal)}</td>
+                          </tr>
+                      )}
+                      </tbody>
 
-                    </Table>
-                </div>
+                  </Table>
+                 </div>
                 {this.props.children}
             </div>
         )

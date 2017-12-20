@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import static judge.Utils.PROCESSING_ERROR_CODE;
@@ -41,7 +44,12 @@ public class JudgeService {
         Submission submission = new Submission();
         logger.info("Processing new submission.");
 
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+
         Problem problem = problemDao.findById(problemID);
+
+        submission.setDate(date);
         submission.setCode(code);
         submission.setAuthor(author);
         submission.setProblem(problem);

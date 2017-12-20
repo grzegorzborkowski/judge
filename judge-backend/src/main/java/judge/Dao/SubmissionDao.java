@@ -16,4 +16,6 @@ public interface SubmissionDao extends CrudRepository<Submission, Integer> {
     Submission findById(Integer id);
 
     void removeAllByProblemId(Integer id);
+
+    List<Submission> findByProblemIdAndAuthorId(Integer problemId, BigInteger authorId);
 }

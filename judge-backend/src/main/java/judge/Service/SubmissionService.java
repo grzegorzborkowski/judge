@@ -43,6 +43,11 @@ public class SubmissionService {
         return submission;
     }
 
+    public List<Submission> getSubmissionByProblemIdAndUserId(Integer problemId, BigInteger userId) {
+        List<Submission> submissions = submissionDao.findByProblemIdAndAuthorId(problemId, userId);
+        return submissions;
+    }
+
     public void removeSubmissionsForProblem(Integer problemId) {
         submissionDao.removeAllByProblemId(problemId);
     }

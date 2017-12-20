@@ -27,6 +27,8 @@ class Submissions extends React.Component {
   }
 
   render() {
+    var options = { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric', year: 'numeric'};
+
     return (
       <div>
         <h2>Submissions</h2>
@@ -42,6 +44,7 @@ class Submissions extends React.Component {
                     <th>Tests passed</th>
                     <th>Runtime [s]</th>
                     <th>Code</th>
+                    <th>Date</th>
                     <th>Result</th>
                 </tr>
                 </thead>
@@ -56,6 +59,7 @@ class Submissions extends React.Component {
                         <td>{submission.testsPositive}/{submission.testsTotal}</td>
                         <td>{submission.timeTaken} </td>
                         <td><a onClick={() => { alert(submission.code) }}>Click</a></td>
+                        <td>{new Date(submission.date).toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options)} </td>
                         <td>{constants.getResultIcon(submission.runCode,
                           submission.testsPositive, submission.testsTotal)}</td>
                     </tr>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import judge.Component.JudgeResult;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "submission")
@@ -15,6 +16,7 @@ public class Submission {
     //TODO: do in in a better way, delete bi-directional relationships
     @JsonIgnore
     private User author;
+    private Date date;
     private String code;
     private Integer compilationCode;
     private Integer runCode;
@@ -24,9 +26,10 @@ public class Submission {
     private Problem problem;
     private String fullCode;
 
-    public Submission(User author, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Float timeTaken, Problem problem) {
+    public Submission(User author, Date date, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Float timeTaken, Problem problem) {
         this.author = author;
         this.code = code;
+        this.date = date;
         this.compilationCode = compilationCode;
         this.runCode = runCode;
         this.testsTotal = testsTotal;
@@ -48,6 +51,10 @@ public class Submission {
     @JsonBackReference
     public User getAuthor() {
         return author;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     @Column(length = 2048)
@@ -82,6 +89,10 @@ public class Submission {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public void setCode(String code) {
