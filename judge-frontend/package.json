@@ -28,11 +28,13 @@
     "react-facebook-login-component": "^0.7.0",
     "react-router": "^2.5.1",
     "universal-cookie": "^2.0.8",
-    "webpack": "^1.12.9",
+    "url-loader": "^0.6.2",
+    "webpack": "^2.0.0",
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
+    "file-loader": "^1.1.6",
     "react-router-role-authorization": "^1.1.4"
   },
   "scripts": {

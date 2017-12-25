@@ -21,7 +21,11 @@ module.exports = {
             test: /\.css$/i,
             exclude: /(node_modules|bower_components)/,
             loader: 'css-loader?-minimize',
-        },
+      },
+      {
+          test: /\.(png|jpg)$/,
+          loader: 'url-loader?limit=25000'
+      },
     ]
   },
   output: {
