@@ -104,6 +104,8 @@ public class User implements UserDetails
     private String role;
     private String password;
     private String email;
+    private String firstName;
+    private String lastName;
 
     public User()
     {
@@ -139,6 +141,14 @@ public class User implements UserDetails
         return email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setId(BigInteger id)
     {
         this.id = id;
@@ -157,5 +167,13 @@ public class User implements UserDetails
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
