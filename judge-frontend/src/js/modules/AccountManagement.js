@@ -13,13 +13,32 @@ class AccountManagement extends React.Component {
       super(props);
       this.state = {
         password1: "",
-        password2: ""
+        password2: "",
+        first_name: "",
+        last_name: "",
+        username: "",
       };
 
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.validateInput = this.validateInput.bind(this);
       this.submitChanges = this.submitChanges.bind(this);
+    }
+
+    componentDidMount() {
+        var self = this;
+        axios.post(constants.BACKEND_ADDRESS + constants.ACCOUNT_ENDPOINT)
+            .then(function (response) {
+                let data = response['data'];
+                self.setState({
+                    username: data['username'],
+                    first_name: data['firstName'],
+                    last_name: data['lastName'],
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
 
       handleInputChange(event) {
@@ -74,10 +93,15 @@ class AccountManagement extends React.Component {
     return (
         <div>
           <br />
-          You are logged in as <b>{cookies.get("judge.username")}</b>.
-          <br />
-          <br />
-
+            <h3>Your details:</h3>
+            Username: <b>{cookies.get("judge.username")}</b>
+            <br/>
+            First name: <b>{this.state.first_name}</b>
+            <br/>
+            Last name: <b>{this.state.last_name}</b>
+            <br />
+            <br />
+            <h3>Set new password:</h3>
           <form onSubmit={this.handleSubmit}>
               <label>
                   New password:
