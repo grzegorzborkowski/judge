@@ -26,14 +26,14 @@ public class SubmissionService {
 
     public List<Submission> getSubmissionsByStudentId(BigInteger id) {
         List<Submission> submissionList = new ArrayList<>();
-        Iterable<Submission> submissions = submissionDao.findByAuthorId(id);
+        Iterable<Submission> submissions = submissionDao.findByAuthorIdOrderByIdDesc(id);
         submissions.forEach(submissionList::add);
         return submissionList;
     }
 
     public List<Submission> getSubmissionsByProblemId(Integer id) {
         List<Submission> submissionList = new ArrayList<>();
-        Iterable<Submission> submissions = submissionDao.findByProblemId(id);
+        Iterable<Submission> submissions = submissionDao.findByProblemIdOrderByIdDesc(id);
         submissions.forEach(submissionList::add);
         return submissionList;
     }
@@ -41,6 +41,11 @@ public class SubmissionService {
     public Submission getSubmissionById(Integer id) {
         Submission submission = submissionDao.findById(id);
         return submission;
+    }
+
+    public List<Submission> getSubmissionByProblemIdAndUserId(Integer problemId, BigInteger userId) {
+        List<Submission> submissions = submissionDao.findByProblemIdAndAuthorIdOrderByIdDesc(problemId, userId);
+        return submissions;
     }
 
     public void removeSubmissionsForProblem(Integer problemId) {

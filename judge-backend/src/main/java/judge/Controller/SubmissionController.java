@@ -46,6 +46,7 @@ public class SubmissionController {
         return this.submissionService.getSubmissionsByStudentId(userId);
     }
 
+    // now unused
     @RequestMapping(value = "/getAllForProblem", method = RequestMethod.GET)
     public Collection<Submission> getSubmissionsByProblemId(@RequestParam Integer id) {
         logger.info("Processing GET /submission/getAllForProblem");
@@ -59,6 +60,20 @@ public class SubmissionController {
         logger.info(("Processing GET /submission/getByID"));
         Submission submission = this.submissionService.getSubmissionById(id);
         return submission;
+    }
+
+    @RequestMapping(value = "/getForProblemForUser", method = RequestMethod.GET)
+    public Collection<Submission> getSubmissionsOfAuthenticatedUserForProblem(@RequestParam Integer problemId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUserByUsername(username);
+        BigInteger userId = user.getId();
+
+        logger.info("Processing GET /submission/getForProblemForUser");
+        List<Submission> submissionList = this.submissionService.getSubmissionByProblemIdAndUserId(problemId, userId);
+        submissionList.sort(new SubmissionComparator());
+        return submissionList;
     }
 }
 

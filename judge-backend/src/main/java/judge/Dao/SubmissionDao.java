@@ -9,11 +9,13 @@ import java.util.List;
 
 @Repository
 public interface SubmissionDao extends CrudRepository<Submission, Integer> {
-    List<Submission> findByAuthorId(BigInteger id);
+    List<Submission> findByAuthorIdOrderByIdDesc(BigInteger id);
 
-    List<Submission> findByProblemId(Integer id);
+    List<Submission> findByProblemIdOrderByIdDesc(Integer id);
 
     Submission findById(Integer id);
 
     void removeAllByProblemId(Integer id);
+
+    List<Submission> findByProblemIdAndAuthorIdOrderByIdDesc(Integer problemId, BigInteger authorId);
 }
