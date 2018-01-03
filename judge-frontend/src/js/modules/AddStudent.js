@@ -8,11 +8,13 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-class AddStudents extends RoleAwareComponent {
+class AddStudent extends RoleAwareComponent {
   constructor(props) {
       super(props);
       this.state = {
-        usernames: "",
+        username: "",
+        firstName: "",
+        lastName: "",
         password: "",
         course: ""
       };
@@ -45,7 +47,9 @@ class AddStudents extends RoleAwareComponent {
       }
 
       validateInput(){
-        if(this.state.usernames.length<1 || this.state.password.length<1 || this.state.course.length<1) {
+        if(this.state.username.length<1 || this.state.firstName.length<1 ||
+          this.state.lastName.length<1 || this.state.password.length<1 ||
+          this.state.course.length<1) {
           alert("Fill in the missing gaps")
           return false
         }
@@ -53,8 +57,10 @@ class AddStudents extends RoleAwareComponent {
       }
 
       submitUsers(){
-        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT, {
-            usernames: this.state.usernames,
+        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENT_ENDPOINT, {
+            username: this.state.username,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             password: this.state.password,
             course: this.state.course
         }, {
@@ -64,7 +70,10 @@ class AddStudents extends RoleAwareComponent {
         }).then(function (response) {
           console.log(response.data);
           alert(response.data);
-        });
+        }).catch(function (error) {
+          console.log(error.response);
+          alert(error.response.data);
+        })
       }
 
       componentWillMount() {
@@ -74,7 +83,7 @@ class AddStudents extends RoleAwareComponent {
       render() {
         return (
           <div>
-              <h2>Add new students</h2>
+              <h2>Add new student</h2>
               <form onSubmit={this.handleSubmit}>
                   <label>
                       Course name:
@@ -86,7 +95,7 @@ class AddStudents extends RoleAwareComponent {
                   </label>
                   <br />
                   <label>
-                      Default password:
+                      Initial password:
                       <br/>
                       <textarea
                           name="password"
@@ -95,11 +104,29 @@ class AddStudents extends RoleAwareComponent {
                   </label>
                   <br />
                   <label>
-                      Comma separated usernames:
+                      Username:
                       <br/>
                       <textarea
-                          name="usernames"
-                          value={this.state.usernames}
+                          name="username"
+                          value={this.state.username}
+                          onChange={this.handleInputChange} />
+                  </label>
+                  <br />
+                  <label>
+                      First name:
+                      <br/>
+                      <textarea
+                          name="firstName"
+                          value={this.state.firstName}
+                          onChange={this.handleInputChange} />
+                  </label>
+                  <br />
+                  <label>
+                      Last name:
+                      <br/>
+                      <textarea
+                          name="lastName"
+                          value={this.state.lastName}
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
@@ -111,4 +138,4 @@ class AddStudents extends RoleAwareComponent {
       }
 }
 
-export default AddStudents;
+export default AddStudent;

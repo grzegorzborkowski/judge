@@ -1,9 +1,6 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import AceEditor from 'react-ace';
-import 'brace/mode/c_cpp';
-import 'brace/theme/dreamweaver';
 import { Table } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
@@ -16,6 +13,8 @@ class AddTeacher extends RoleAwareComponent {
       super(props);
       this.state = {
         username: "",
+        firstName: "",
+        lastName: "",
         password: ""
       };
 
@@ -47,7 +46,8 @@ class AddTeacher extends RoleAwareComponent {
       }
 
       validateInput(){
-        if(this.state.username.length<1 || this.state.password.length<1) {
+        if(this.state.username.length<1 || this.state.firstName.length<1 ||
+          this.state.lastName.length<1 || this.state.password.length<1) {
           alert("Fill in the missing gaps")
           return false
         }
@@ -57,7 +57,9 @@ class AddTeacher extends RoleAwareComponent {
       submitTeacher(){
         axios.post(constants.BACKEND_ADDRESS + constants.ADD_TEACHER_ENDPOINT, {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName
         }, {
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +67,10 @@ class AddTeacher extends RoleAwareComponent {
         }).then(function (response) {
           console.log(response.data);
           alert(response.data);
-        });
+        }).catch(function (error) {
+          console.log(error.response);
+          alert(error.response.data);
+        })
       }
 
       componentWillMount() {
@@ -95,6 +100,23 @@ class AddTeacher extends RoleAwareComponent {
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
+                  <label>
+                      First name:
+                      <br/>
+                      <textarea
+                          name="firstName"
+                          value={this.state.firstName}
+                          onChange={this.handleInputChange} />
+                  </label>
+                  <br />
+                  <label>
+                      Last name:
+                      <br/>
+                      <textarea
+                          name="lastName"
+                          value={this.state.lastName}
+                          onChange={this.handleInputChange} />
+                  </label>
                   <br />
                   <Button type="submit">Add</Button>
               </form>

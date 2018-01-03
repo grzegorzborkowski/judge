@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.User;
+import judge.Service.responses.AddUserStatus;
 import judge.Service.PasswordService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -43,35 +46,44 @@ public class UserController {
     }
 
     /**
-     *
-     * @param userJson [username, password, role, email, id]
+     * @param studentsJson [username, firstName, lastName, password, course]
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addUser(@RequestBody JsonNode userJson) {
+    @RequestMapping(value = "/addOneStudent", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addOneStudent(@RequestBody JsonNode studentsJson,
+                             HttpServletResponse response) {
 
-        logger.info("Processing POST /user/add");
+        logger.info("Processing POST /user/addOneStudent");
+
+        String username = studentsJson.get("username").asText();
+        String firstName = studentsJson.get("firstName").asText();
+        String lastName = studentsJson.get("lastName").asText();
+        String password = studentsJson.get("password").asText();
+        String course = studentsJson.get("course").asText();
 
         User user = new User();
-        String encryptedPassword = this.passwordService.encrypt(userJson.get("password").asText());
+        String encryptedPassword = this.passwordService.encrypt(password);
 
-        user.setUsername(userJson.get("username").asText());
-        user.setRole(userJson.get("role").asText());
-        user.setEmail(userJson.get("email").asText());
+        user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setRole("student");
         user.setPassword(encryptedPassword);
-        user.setCourse("default");
+        user.setCourse(course);
 
-        logger.info("Add: " + userJson.get("username").asText());
-        String status = this.userService.addUser(user);
+        logger.info("Add user: " + username);
 
-        return status;
+
+        AddUserStatus result = this.userService.addUser(user);
+
+        return handleAddUserResponse(result, username, response);
     }
 
     /**
-     *
      * @param studentsJson [usernames, password, course]
      */
     @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addMultipleStudents(@RequestBody JsonNode studentsJson) {
+    public String addMultipleStudents(@RequestBody JsonNode studentsJson,
+                                      HttpServletResponse response) {
 
         logger.info("Processing POST /user/addMultipleStudents");
 
@@ -82,7 +94,9 @@ public class UserController {
         String password = studentsJson.get("password").asText();
         String course = studentsJson.get("course").asText();
 
-        for(String username : usernames) {
+        List<String> existingUsernames = new ArrayList<>();
+
+        for (String username : usernames) {
             studentsCounter += 1;
 
             User user = new User();
@@ -94,40 +108,71 @@ public class UserController {
             user.setCourse(course);
 
             logger.info("Add user: " + username);
-            this.userService.addUser(user);
+            AddUserStatus addUserStatus = this.userService.addUser(user);
+
+            if (addUserStatus == AddUserStatus.USER_ALREADY_EXISTS) {
+                logger.warn("User with username: " + username + " already exists");
+                existingUsernames.add(username);
+            }
+        }
+        if (existingUsernames.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            return "Added " + studentsCounter + " new student(s)";
+        } else {
+
         }
 
         return "Added " + studentsCounter + " new student(s)";
     }
 
     /**
-     *
      * @param teacherJson [username, password]
      */
     @RequestMapping(value = "/addTeacher", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addTeacher(@RequestBody JsonNode teacherJson) {
+    public String addTeacher(@RequestBody JsonNode teacherJson,
+                             HttpServletResponse response) {
 
         logger.info("Processing POST /user/addTeacher");
 
         String username = teacherJson.get("username").asText();
+        String firstName = teacherJson.get("firstName").asText();
+        String lastName = teacherJson.get("lastName").asText();
         String password = teacherJson.get("password").asText();
 
         User user = new User();
         String encryptedPassword = this.passwordService.encrypt(password);
 
         user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setRole("teacher");
         user.setPassword(encryptedPassword);
 
-        logger.info("Add user: " + username);
-        String status = this.userService.addUser(user);
+        logger.info("Add teacher: " + username);
+        AddUserStatus result = this.userService.addUser(user);
 
-        return status;
+        return handleAddUserResponse(result, username, response);
+
+    }
+
+    private String handleAddUserResponse(AddUserStatus result,
+                                         String username,
+                                         HttpServletResponse response) {
+        switch (result) {
+            case OK:
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                return "A new user has been added";
+            case USER_ALREADY_EXISTS:
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return "User " + username + " already exists";
+            default:
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return "Unexpected AddUserStatus code";
+        }
     }
 
 
     /**
-     *
      * @param userJson [password]
      */
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

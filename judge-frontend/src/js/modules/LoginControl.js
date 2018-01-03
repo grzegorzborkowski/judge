@@ -13,6 +13,7 @@ import Problems from './Problems';
 import CategoryManagement from './CategoryManagement';
 import AddUsers from './AddUsers';
 import AddStudents from './AddStudents';
+import AddStudent from './AddStudent';
 import AddTeacher from './AddTeacher';
 import AccountManagement from './AccountManagement';
 import Cookies from 'universal-cookie';
@@ -63,6 +64,8 @@ class LoginControl extends React.Component {
                         <Route authorize={['teacher', 'admin']} path="/addUsers" components={AddUsers}>
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/addUsers/students" components={AddStudents}>
+                        </Route>
+                        <Route authorize={['teacher', 'admin']} path="/addUsers/student" components={AddStudent}>
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/addUsers/teacher" components={AddTeacher}>
                         </Route>

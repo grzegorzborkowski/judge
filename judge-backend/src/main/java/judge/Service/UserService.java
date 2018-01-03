@@ -2,6 +2,7 @@ package judge.Service;
 
 import judge.Dao.UserDao;
 import judge.Entity.User;
+import judge.Service.responses.AddUserStatus;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -43,14 +44,14 @@ public class UserService {
         return user;
     }
 
-    public String addUser(User user) {
+    public AddUserStatus addUser(User user) {
         if(this.userDao.findByUsername(user.getUsername()) == null) {
             this.userDao.save(user);
             logger.info("User " + user.getUsername() + " has been added.");
-            return "User " + user.getUsername() + " has been added.";
+            return AddUserStatus.OK;
         } else {
             logger.warn("User " + user.getUsername() + " already exists. Adding failed.");
-            return "User " + user.getUsername() + " already exists. Adding failed.";
+            return AddUserStatus.USER_ALREADY_EXISTS;
         }
     }
 
