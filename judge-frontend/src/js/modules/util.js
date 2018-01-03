@@ -2,6 +2,7 @@ import React from 'react'
 
 export const BACKEND_ADDRESS = "http://localhost:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
+export const ACCOUNT_ENDPOINT = "user/getInfo";
 export const ADD_USER_ENDPOINT = "user/add";
 export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents";
 export const ADD_TEACHER_ENDPOINT = "user/addTeacher";

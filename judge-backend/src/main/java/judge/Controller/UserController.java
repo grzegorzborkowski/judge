@@ -154,4 +154,16 @@ public class UserController {
         return result.toString();
     }
 
+    @RequestMapping(value = "/getInfo", method = RequestMethod.POST)
+    public User getInfo(HttpServletResponse response) {
+
+        logger.info("Processing POST /user/getInfo");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        logger.warn(username);
+
+        return this.userService.getUserByUsername(username);
+    }
+
 }
