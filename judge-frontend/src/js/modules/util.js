@@ -8,6 +8,7 @@ export const ADD_TEACHER_ENDPOINT = "user/addTeacher";
 export const SUBMISSIONS_FOR_USER_ENDPOINT = "submission/getAllForUser";
 // now unused
 export const SOLUTION_ENDPOINT = "submission/getAllForProblem?id=";
+export const SUBMISSION_PER_ID_ENDPOINT = "submission/getByID?id=";
 export const SUBMISSIONS_FOR_PROBLEM_FOR_USER_ENDPOINT = "submission/getForProblemForUser?problemId="
 export const PROBLEM_ENDPOINT = "problems/getAll";
 export const PROBLEM_CREATOR_ENDPOINT = "problems/add";
