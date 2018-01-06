@@ -4,6 +4,7 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import App from './App';
 import Solutions from './Solutions';
 import Submissions from './Submissions';
+import AllSubmissions from './AllSubmissions';
 import Submission from './Submission';
 import Home from './Home';
 import Problem from './Problem';
@@ -74,6 +75,8 @@ class LoginControl extends React.Component {
                         <Route authorize={['teacher', 'admin']} path="/addUsers/changePassword" components={ChangePassword}>
                         </Route>
                         <Route path="/solutions/:problemID" component={Solutions}/>
+                        <Route authorize={['teacher', 'admin']} path="allSubmissions" components={AllSubmissions}>
+                        </Route>
                     </Route>
                 </Router>;
         } else {

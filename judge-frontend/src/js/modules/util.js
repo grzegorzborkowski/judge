@@ -8,6 +8,7 @@ export const ADD_STUDENT_ENDPOINT = "user/addOneStudent";
 export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents";
 export const ADD_TEACHER_ENDPOINT = "user/addTeacher";
 export const SUBMISSIONS_FOR_USER_ENDPOINT = "submission/getAllForUser";
+export const ALL_SUBMISSIONS = "submission/getAll";
 // now unused
 export const SOLUTION_ENDPOINT = "submission/getAllForProblem?id=";
 export const SUBMISSION_PER_ID_ENDPOINT = "submission/getByID?id=";

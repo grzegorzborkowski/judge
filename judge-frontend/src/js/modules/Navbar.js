@@ -57,6 +57,11 @@ class Navbar extends React.Component {
                         <li><NavLink to="/problems"> Problems</NavLink> </li>
                         {/*<li><NavLink to="/statistics">Statistics</NavLink></li>*/}
                         <li><NavLink to="/submissions">My Submissions</NavLink></li>
+
+                        {(isTeacher || isAdmin) ?
+                            (<li><NavLink to="/allSubmissions"> All Submissions </NavLink> </li>) : (null)
+                        }
+
                         {(isTeacher || isAdmin) ?
                           (<li><NavLink to="/problemCreator">Problem Creator</NavLink></li>) : (null)
                         }
@@ -66,6 +71,7 @@ class Navbar extends React.Component {
                         {(isTeacher || isAdmin) ?
                           (<li><NavLink to="/addUsers">Add Users</NavLink></li>) : (null)
                         }
+
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                       <li onClick={this.logout}>
