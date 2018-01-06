@@ -24,20 +24,22 @@ class AddStudents extends RoleAwareComponent {
     }
 
       handleInputChange(event) {
-        this.state.formData.append("file", document.getElementById("file").files[0]);
-        console.log("koncze handleInputChange");
+         event.preventDefault();
+         this.state.formData.append("file", document.getElementById("file").files[0]);
       }
 
       handleSubmit(event) {
           event.preventDefault();
-          this.submitUsers();
-          window.location.reload();
+          if(this.state.formData.has("file")) {
+            this.submitUsers();
+            window.location.reload();
+          } else {
+            alert("You must provide a csv file");
+          }
       }
 
       submitUsers(){
-        if(!this.state.formData.comple) {
-          console.log("wait for file to be loaded");
-        }
+        event.preventDefault();
         axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT,
             this.state.formData
         , {

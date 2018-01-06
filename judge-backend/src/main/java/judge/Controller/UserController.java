@@ -164,6 +164,9 @@ public class UserController {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 return "Redundant usernames. Some of the users already exist in database. " +
                         "Students with unique usernames have been added";
+            case ERROR:
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return "Exception occurred. Check file's format";
             default:
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return "Unexpected status code code";

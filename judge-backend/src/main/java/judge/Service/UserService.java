@@ -95,6 +95,7 @@ public class UserService {
                 }
             }
         } catch (Exception e) {
+            status = AddUserStatus.ERROR;
             logger.warn(e);
         }
 
