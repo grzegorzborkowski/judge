@@ -25,11 +25,11 @@ class AddStudents extends RoleAwareComponent {
 
       handleInputChange(event) {
          event.preventDefault();
+         this.state.formData = new FormData();
          this.state.formData.append("file", document.getElementById("file").files[0]);
       }
 
       handleSubmit(event) {
-          event.preventDefault();
           if(this.state.formData.has("file")) {
             this.submitUsers();
             window.location.reload();
@@ -39,7 +39,6 @@ class AddStudents extends RoleAwareComponent {
       }
 
       submitUsers(){
-        event.preventDefault();
         axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT,
             this.state.formData
         , {
