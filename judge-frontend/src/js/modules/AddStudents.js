@@ -1,9 +1,6 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import AceEditor from 'react-ace';
-import 'brace/mode/c_cpp';
-import 'brace/theme/dreamweaver';
 import { Table } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
@@ -15,9 +12,7 @@ class AddStudents extends RoleAwareComponent {
   constructor(props) {
       super(props);
       this.state = {
-        usernames: "",
-        password: "",
-        course: ""
+        formData: new FormData()
       };
 
       this.userRoles = cookies.get("judge.role");
@@ -25,48 +20,37 @@ class AddStudents extends RoleAwareComponent {
 
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.validateInput = this.validateInput.bind(this);
       this.submitUsers = this.submitUsers.bind(this);
     }
 
       handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
+         event.preventDefault();
+         this.state.formData = new FormData();
+         this.state.formData.append("file", document.getElementById("file").files[0]);
       }
 
       handleSubmit(event) {
-          event.preventDefault();
-          if(this.validateInput()){
+          if(this.state.formData.get("file") != null && this.state.formData.get("file") != 'undefined') {
             this.submitUsers();
             window.location.reload();
+          } else {
+            alert("You must provide a csv file");
           }
       }
 
-      validateInput(){
-        if(this.state.usernames.length<1 || this.state.password.length<1 || this.state.course.length<1) {
-          alert("Fill in the missing gaps")
-          return false
-        }
-        return true
-      }
-
       submitUsers(){
-        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT, {
-            usernames: this.state.usernames,
-            password: this.state.password,
-            course: this.state.course
-        }, {
+        axios.post(constants.BACKEND_ADDRESS + constants.ADD_STUDENTS_ENDPOINT,
+            this.state.formData
+        , {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         }).then(function (response) {
           console.log(response.data);
           alert(response.data);
+        }).catch(function (error) {
+          alert(error.response.data);
+          console.log(error.response);
         });
       }
 
@@ -79,35 +63,11 @@ class AddStudents extends RoleAwareComponent {
           <div>
               <h2>Add new students</h2>
               <form onSubmit={this.handleSubmit}>
-                  <label>
-                      Course name:
-                      <br/>
-                      <textarea
-                          name="course"
-                          value={this.state.course}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
-                  <label>
-                      Default password:
-                      <br/>
-                      <textarea
-                          name="password"
-                          value={this.state.password}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
-                  <label>
-                      Comma separated usernames:
-                      <br/>
-                      <textarea
-                          name="usernames"
-                          value={this.state.usernames}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
-                  <br />
-                  <Button type="submit">Add</Button>
+                <h3>Select CSV file</h3>
+                <br />
+                <input id="file" type="file" value={this.state.file} onChange={this.handleInputChange} />
+                <br />
+                <button type="submit">Upload</button>
               </form>
            </div>
         );

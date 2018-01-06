@@ -11,7 +11,8 @@ public final class Utils {
 
     public static final int TIMEOUT_VALUE_SECONDS = 10;
 
-    public static final String RUNTIME_DIR_NAME = "generated-in-runtime/";
+    public static final String RUNTIME_CODE_DIR_NAME = "generated-in-runtime/code/";
+    public static final String RUNTIME_USERS_DIR_NAME = "generated-in-runtime/users/";
     public static final String TEMPLATES_DIR_NAME = "templates/";
 
     public static final String HEADER_C = "header.c";
@@ -21,3 +22,4 @@ public final class Utils {
     public static final String STUDENTS_SIGNATURE_C = "students_signature.c";
 
 }
+

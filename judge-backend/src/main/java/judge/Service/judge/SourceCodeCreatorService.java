@@ -30,7 +30,7 @@ class SourceCodeCreatorService {
             Math.random() will be replaced by user ID.
             It is used to avoid overwriting generated source files during parallel tests.
          */
-        String fileName = RUNTIME_DIR_NAME + "source_code" + timestamp + Math.random()  + ".c";
+        String fileName = RUNTIME_CODE_DIR_NAME + "source_code" + timestamp + Math.random()  + ".c";
         System.out.println(fileName);
         Path file = Paths.get(fileName);
         try {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import judge.Entity.User;
+import judge.Service.responses.AddUserStatus;
 import judge.Service.PasswordService;
 import judge.Service.UserService;
 import org.apache.log4j.Logger;
@@ -12,11 +13,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Base64;
-import java.util.Collection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static judge.Utils.RUNTIME_USERS_DIR_NAME;
 
 @CrossOrigin
 @RestController
@@ -43,91 +51,130 @@ public class UserController {
     }
 
     /**
-     *
-     * @param userJson [username, password, role, email, id]
+     * @param studentsJson [username, firstName, lastName, password, course]
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addUser(@RequestBody JsonNode userJson) {
+    @RequestMapping(value = "/addOneStudent", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addOneStudent(@RequestBody JsonNode studentsJson,
+                             HttpServletResponse response) {
 
-        logger.info("Processing POST /user/add");
+        logger.info("Processing POST /user/addOneStudent");
 
-        User user = new User();
-        String encryptedPassword = this.passwordService.encrypt(userJson.get("password").asText());
-
-        user.setUsername(userJson.get("username").asText());
-        user.setRole(userJson.get("role").asText());
-        user.setEmail(userJson.get("email").asText());
-        user.setPassword(encryptedPassword);
-        user.setCourse("default");
-
-        logger.info("Add: " + userJson.get("username").asText());
-        String status = this.userService.addUser(user);
-
-        return status;
-    }
-
-    /**
-     *
-     * @param studentsJson [usernames, password, course]
-     */
-    @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addMultipleStudents(@RequestBody JsonNode studentsJson) {
-
-        logger.info("Processing POST /user/addMultipleStudents");
-
-        int studentsCounter = 0;
-
-        String usernamesAll = studentsJson.get("usernames").asText();
-        String[] usernames = usernamesAll.split(",");
+        String username = studentsJson.get("username").asText();
+        String firstName = studentsJson.get("firstName").asText();
+        String lastName = studentsJson.get("lastName").asText();
         String password = studentsJson.get("password").asText();
         String course = studentsJson.get("course").asText();
 
-        for(String username : usernames) {
-            studentsCounter += 1;
+        User user = new User();
+        String encryptedPassword = this.passwordService.encrypt(password);
 
-            User user = new User();
-            String encryptedPassword = this.passwordService.encrypt(password);
+        user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setRole("student");
+        user.setPassword(encryptedPassword);
+        user.setCourse(course);
 
-            user.setUsername(username);
-            user.setRole("student");
-            user.setPassword(encryptedPassword);
-            user.setCourse(course);
+        logger.info("Add user: " + username);
 
-            logger.info("Add user: " + username);
-            this.userService.addUser(user);
+
+        AddUserStatus result = this.userService.addUser(user);
+
+        return handleAddUserResponse(result, username, response);
+    }
+
+
+    @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST,
+            consumes = {"multipart/form-data"})
+    public String addMultipleStudents(@RequestBody MultipartFile file,
+                                      HttpServletResponse response) {
+
+        logger.info("Processing POST /user/addMultipleStudents");
+
+        String timestamp = new SimpleDateFormat("yyyyMMdd-HHmm").format(Calendar.getInstance().getTime());
+        String filename =  RUNTIME_USERS_DIR_NAME + "students-" + timestamp + ".csv";
+        System.out.println(filename);
+        Path localFilePath = Paths.get(filename);
+
+        try {
+            Files.write(localFilePath, file.getBytes());
+        } catch (IOException e) {
+            logger.warn("Error while storing file with students' details.");
+            logger.warn(e);
         }
 
-        return "Added " + studentsCounter + " new student(s)";
+        AddUserStatus result = userService.addStudentsFromFile(filename);
+
+        return handleAddMultipleStudentsResponse(result, response);
     }
 
     /**
-     *
      * @param teacherJson [username, password]
      */
     @RequestMapping(value = "/addTeacher", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addTeacher(@RequestBody JsonNode teacherJson) {
+    public String addTeacher(@RequestBody JsonNode teacherJson,
+                             HttpServletResponse response) {
 
         logger.info("Processing POST /user/addTeacher");
 
         String username = teacherJson.get("username").asText();
+        String firstName = teacherJson.get("firstName").asText();
+        String lastName = teacherJson.get("lastName").asText();
         String password = teacherJson.get("password").asText();
 
         User user = new User();
         String encryptedPassword = this.passwordService.encrypt(password);
 
         user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setRole("teacher");
         user.setPassword(encryptedPassword);
 
-        logger.info("Add user: " + username);
-        String status = this.userService.addUser(user);
+        logger.info("Add teacher: " + username);
+        AddUserStatus result = this.userService.addUser(user);
 
-        return status;
+        return handleAddUserResponse(result, username, response);
+
+    }
+
+    private String handleAddUserResponse(AddUserStatus result,
+                                         String username,
+                                         HttpServletResponse response) {
+        switch (result) {
+            case OK:
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                return "A new user has been added";
+            case USER_ALREADY_EXISTS:
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return "User " + username + " already exists";
+            default:
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return "Unexpected AddUserStatus code";
+        }
+    }
+
+    private String handleAddMultipleStudentsResponse(AddUserStatus result,
+                                         HttpServletResponse response) {
+        switch (result) {
+            case OK:
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                return "Students have been added";
+            case USER_ALREADY_EXISTS:
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return "Redundant usernames. Some of the users already exist in database. " +
+                        "Students with unique usernames have been added";
+            case FILE_PARSING_EXCEPTION:
+                response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+                return "Exception occurred while processing the file. Check file's format";
+            default:
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return "Unexpected status code code";
+        }
     }
 
 
     /**
-     *
      * @param userJson [password]
      */
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
