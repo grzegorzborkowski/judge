@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +96,7 @@ public class UserService {
                 }
             }
         } catch (Exception e) {
-            status = AddUserStatus.ERROR;
+            status = AddUserStatus.FILE_PARSING_EXCEPTION;
             logger.warn(e);
         }
 

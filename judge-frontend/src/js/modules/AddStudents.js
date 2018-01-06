@@ -30,7 +30,7 @@ class AddStudents extends RoleAwareComponent {
       }
 
       handleSubmit(event) {
-          if(this.state.formData.has("file")) {
+          if(this.state.formData.get("file") != null && this.state.formData.get("file") != 'undefined') {
             this.submitUsers();
             window.location.reload();
           } else {
