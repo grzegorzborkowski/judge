@@ -22,6 +22,7 @@ export const CATEGORY_REMOVE_ENDPOINT = "categories/remove?id=";
 export const PROBLEMS_BY_CATEGORY_ENDPOINT = "problems/getByCategory?name=";
 export const PROBLEM_REMOVE_ENDPOINT = "problems/remove?id=";
 export const PASSWORD_CHANGE_ENDPOINT = "user/changePassword";
+export const CHANGE_OTHER_USER_PASSWORD_ENDPOINT = "user/otherUserPassword";
 
 export const COMPILATION_SUCCESS_CODE = 0;
 export const COMPILATION_FAILURE_CODE = 1;

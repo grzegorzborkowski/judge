@@ -201,6 +201,27 @@ public class UserController {
         return result.toString();
     }
 
+    @RequestMapping(value = "/otherUserPassword",
+                    method = RequestMethod.POST,
+                    consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String changeOtherUserPassword(@RequestBody JsonNode jsonNode, HttpServletResponse response) {
+        logger.info("Processing POST /user/otherUserPassword");
+
+        String username = jsonNode.get("username").asText();
+        if (!this.userService.userWithGivenUsernameExists(username)) {
+            logger.info("No such user!");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "User with such username doesn't exists";
+        }
+        String newPassword = jsonNode.get("password").asText();
+        String encryptedPassword = this.passwordService.encrypt(newPassword);
+        logger.info("Password changed for: " + username);
+        this.userService.changePassword(username, encryptedPassword);
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return "Password changed !";
+    }
+
     @RequestMapping(value = "/getInfo", method = RequestMethod.POST)
     public User getInfo(HttpServletResponse response) {
 
