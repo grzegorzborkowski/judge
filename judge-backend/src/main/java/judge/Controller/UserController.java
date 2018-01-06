@@ -13,13 +13,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static judge.Utils.RUNTIME_USERS_DIR_NAME;
 
 @CrossOrigin
 @RestController
@@ -78,51 +83,29 @@ public class UserController {
         return handleAddUserResponse(result, username, response);
     }
 
-    /**
-     * @param studentsJson [usernames, password, course]
-     */
-    @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addMultipleStudents(@RequestBody JsonNode studentsJson,
+
+    @RequestMapping(value = "/addMultipleStudents", method = RequestMethod.POST,
+            consumes = {"multipart/form-data"})
+    public String addMultipleStudents(@RequestBody MultipartFile file,
                                       HttpServletResponse response) {
 
         logger.info("Processing POST /user/addMultipleStudents");
 
-        int studentsCounter = 0;
+        String timestamp = new SimpleDateFormat("yyyyMMdd-HHmm").format(Calendar.getInstance().getTime());
+        String filename =  RUNTIME_USERS_DIR_NAME + "students-" + timestamp + ".csv";
+        System.out.println(filename);
+        Path localFilePath = Paths.get(filename);
 
-        String usernamesAll = studentsJson.get("usernames").asText();
-        String[] usernames = usernamesAll.split(",");
-        String password = studentsJson.get("password").asText();
-        String course = studentsJson.get("course").asText();
-
-        List<String> existingUsernames = new ArrayList<>();
-
-        for (String username : usernames) {
-            studentsCounter += 1;
-
-            User user = new User();
-            String encryptedPassword = this.passwordService.encrypt(password);
-
-            user.setUsername(username);
-            user.setRole("student");
-            user.setPassword(encryptedPassword);
-            user.setCourse(course);
-
-            logger.info("Add user: " + username);
-            AddUserStatus addUserStatus = this.userService.addUser(user);
-
-            if (addUserStatus == AddUserStatus.USER_ALREADY_EXISTS) {
-                logger.warn("User with username: " + username + " already exists");
-                existingUsernames.add(username);
-            }
-        }
-        if (existingUsernames.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            return "Added " + studentsCounter + " new student(s)";
-        } else {
-
+        try {
+            Files.write(localFilePath, file.getBytes());
+        } catch (IOException e) {
+            logger.warn("Error while storing file with students' details.");
+            logger.warn(e);
         }
 
-        return "Added " + studentsCounter + " new student(s)";
+        AddUserStatus result = userService.addStudentsFromFile(filename);
+
+        return handleAddMultipleStudentsResponse(result, response);
     }
 
     /**
@@ -168,6 +151,22 @@ public class UserController {
             default:
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return "Unexpected AddUserStatus code";
+        }
+    }
+
+    private String handleAddMultipleStudentsResponse(AddUserStatus result,
+                                         HttpServletResponse response) {
+        switch (result) {
+            case OK:
+                response.setStatus(HttpServletResponse.SC_CREATED);
+                return "Students have been added";
+            case USER_ALREADY_EXISTS:
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return "Redundant usernames. Some of the users already exist in database. " +
+                        "Students with unique usernames have been added";
+            default:
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return "Unexpected status code code";
         }
     }
 

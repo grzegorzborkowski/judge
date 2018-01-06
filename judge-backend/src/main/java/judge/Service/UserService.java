@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Service
 @Configurable
@@ -20,6 +23,8 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PasswordService passwordService;
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
@@ -53,6 +58,47 @@ public class UserService {
             logger.warn("User " + user.getUsername() + " already exists. Adding failed.");
             return AddUserStatus.USER_ALREADY_EXISTS;
         }
+    }
+
+    public AddUserStatus addStudentsFromFile(String filename) {
+        AddUserStatus status = AddUserStatus.OK;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+
+            String line;
+            Scanner scanner;
+            String data;
+
+            while ((line = reader.readLine()) != null) {
+                logger.info("Line: " + line);
+                User user = new User();
+                scanner = new Scanner(line);
+                scanner.useDelimiter(",");
+                while (scanner.hasNext()) {
+                    data = scanner.next();
+                        user.setUsername(data);
+                    data = scanner.next();
+                        user.setFirstName(data);
+                    data = scanner.next();
+                        user.setLastName(data);
+                    data = scanner.next();
+                        String encryptedPassword = this.passwordService.encrypt(data);
+                        user.setPassword(encryptedPassword);
+                }
+
+                user.setRole("student");
+                AddUserStatus currentStatus = addUser(user);
+
+                if (currentStatus==AddUserStatus.USER_ALREADY_EXISTS) {
+                    status = AddUserStatus.USER_ALREADY_EXISTS;
+                }
+            }
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+
+        return status;
     }
 
     public String changePassword(String username, String password) {
