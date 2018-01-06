@@ -29,6 +29,7 @@ class AddStudent extends RoleAwareComponent {
     }
 
       handleInputChange(event) {
+        event.preventDefault();
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -39,10 +40,9 @@ class AddStudent extends RoleAwareComponent {
       }
 
       handleSubmit(event) {
-          event.preventDefault();
+        event.preventDefault();
           if(this.validateInput()){
             this.submitUsers();
-            window.location.reload();
           }
       }
 
@@ -70,9 +70,11 @@ class AddStudent extends RoleAwareComponent {
         }).then(function (response) {
           console.log(response.data);
           alert(response.data);
+          window.location.reload();
         }).catch(function (error) {
           console.log(error.response);
           alert(error.response.data);
+          window.location.reload();
         })
       }
 

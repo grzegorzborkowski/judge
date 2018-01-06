@@ -27,7 +27,7 @@ class ChangePassword extends RoleAwareComponent {
     }
 
     handleInputChange(event) {
-        event.preventDefault();
+      event.preventDefault();
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -38,9 +38,9 @@ class ChangePassword extends RoleAwareComponent {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
         if(this.validateInput()){
             this.submitTeacher();
-            window.location.reload();
         }
     }
 
@@ -68,9 +68,11 @@ class ChangePassword extends RoleAwareComponent {
         }).then(function (response) {
             console.log(response.data);
             alert(response.data);
+            window.location.reload();
         }).catch(function (error) {
             console.log(error.response);
             alert(error.response.data);
+            window.location.reload();
         })
     }
 
@@ -81,7 +83,7 @@ class ChangePassword extends RoleAwareComponent {
     render() {
         return (
             <div>
-                <h2>Change user's password </h2>
+                <h2>Change users password </h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Username:
