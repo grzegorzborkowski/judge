@@ -1,7 +1,4 @@
 import React from 'react'
-import axios from 'axios';
-import * as constants from './util.js'
-import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import { Button } from 'react-bootstrap';
@@ -31,6 +28,9 @@ class AddUsers extends RoleAwareComponent {
           <br />
           <br />
           <Button><Link to={`/addUsers/teacher`}>Add teacher</Link></Button>
+          <br />
+          <br />
+          <Button><Link to={`/addUsers/changePassword`}> Change Password</Link></Button>
         </div>
       );
     }

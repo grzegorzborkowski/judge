@@ -20,6 +20,7 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import * as constants from './util.js'
+import ChangePassword from "./ChangePassword";
 
 const cookies = new Cookies();
 
@@ -69,7 +70,8 @@ class LoginControl extends React.Component {
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/addUsers/teacher" components={AddTeacher}>
                         </Route>
-
+                        <Route authorize={['teacher', 'admin']} path="/addUsers/changePassword" components={ChangePassword}>
+                        </Route>
                         <Route path="/solutions/:problemID" component={Solutions}/>
                     </Route>
                 </Router>;
