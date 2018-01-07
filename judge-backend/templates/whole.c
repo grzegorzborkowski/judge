@@ -15,8 +15,8 @@ typedef struct TestData
 
 bool compare(Output a, Output b);
 TestData generateTestInput();
-Output teachersFunction(Input input);
-Output studentsFunction(Input input);
+Output teachersFunction(Input in);
+Output studentsFunction(Input in);
 
 //------- teacher's part 1 ---------
 struct Input
@@ -44,18 +44,18 @@ TestData generateTestInput()
 	return testData;
 }
 
-Output teachersFunction(Input input)
+Output teachersFunction(Input in)
 {
-	Output Output;
-	return Output;
+	Output out;
+	return out;
 }
 
 //-------- student's part ----------
 
-Output studentsFunction(Input input)
+Output studentsFunction(Input in)
 {
-	Output Output;
-	return Output;
+	Output out;
+	return out;
 }
 
 //------- generated part 2 ---------

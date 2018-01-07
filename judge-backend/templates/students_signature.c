@@ -1,5 +1,5 @@
-Output studentsFunction(Input input)
+Output studentsFunction(Input in)
 {
-	Output output;
-	return output;
+	Output out;
+	return out;
 }

@@ -20,18 +20,18 @@ TestData generateTestInput()
 
 	for(i=0;i<testData.numberOfTests;i++)
     	{
-    	    Input input;
+    	    Input in;
     	    // define your input here, e.g.
     	    // input.n = rand();
 
-    	    testData.testInput[i] = input;
+    	    testData.testInput[i] = in;
     	}
 
 	return testData;
 }
 
-Output teachersFunction(Input input)
+Output teachersFunction(Input in)
 {
-	Output output;
-	return output;
+	Output out;
+	return out;
 }
