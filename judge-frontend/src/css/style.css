@@ -1,3 +1,7 @@
+body {
+  padding-top: 20px;
+}
+
 @media all and (min-width: 480px) {
   .Login {
     padding: 60px 0;

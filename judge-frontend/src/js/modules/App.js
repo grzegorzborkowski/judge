@@ -17,7 +17,7 @@ export default React.createClass({
 
   render() {
       const containerStyle = {
-          marginTop: "60px"
+          marginTop: "20px"
       };
 
     return (

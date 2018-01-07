@@ -38,7 +38,7 @@ class Navbar extends React.Component {
         const isTeacher = (cookies.get("judge.role")) ? (cookies.get("judge.role").indexOf("teacher") > -1) : false;
         const isAdmin = (cookies.get("judge.role")) ? (cookies.get("judge.role").indexOf("admin") > -1) : false;
         return (
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" onClick={this.toggleCollapse.bind(this)} >
