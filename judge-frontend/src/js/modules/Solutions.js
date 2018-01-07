@@ -10,7 +10,7 @@ class Solutions extends React.Component {
         super(props);
         this.state = {
             id: this.props.routeParams.problemID,
-
+            title: this.props.routeParams.problemTitle,
             data: []
         };
     }
@@ -34,18 +34,16 @@ class Solutions extends React.Component {
 
         return (
             <div>
-              <h2>Submissions</h2>
+              <h2>Submissions: {this.state.title}</h2>
               <div>
                   <Table bordered condensed hover>
                       <thead>
                       <tr>
                           <th>Submission ID</th>
-                          <th>Compilation</th>
-                          <th>Execution</th>
+                          <th>Status</th>
                           <th>Tests passed</th>
                           <th>Runtime [s]</th>
-                          <th>Code</th>
-                          <th>Edition</th>
+                          <th>View</th>
                           <th>Date</th>
                           <th>Result</th>
                       </tr>
@@ -54,12 +52,10 @@ class Solutions extends React.Component {
                       {this.state.data.map(submission =>
                           <tr key={submission.id}>
                               <td>{submission.id}</td>
-                              <td>{constants.getCompilationStatus(submission.compilationCode)}</td>
-                              <td>{constants.getRunStatus(submission.runCode)}</td>
+                              <td>{constants.getExecutionStatus(submission.compilationCode, submission.runCode)}</td>
                               <td>{submission.testsPositive}/{submission.testsTotal}</td>
                               <td>{submission.timeTaken} </td>
-                              <td><a onClick={() => { alert(submission.code) }}>View</a></td>
-                              <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Change</Link></td>
+                              <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Click</Link></td>
                               <td>{new Date(submission.date).toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options)} </td>
                               <td>{constants.getResultIcon(submission.runCode,
                                 submission.testsPositive, submission.testsTotal)}</td>

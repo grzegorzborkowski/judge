@@ -229,7 +229,7 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        logger.warn(username);
+        logger.info(username);
 
         return this.userService.getUserByUsername(username);
     }

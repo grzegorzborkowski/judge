@@ -8,6 +8,7 @@ export const ADD_STUDENT_ENDPOINT = "user/addOneStudent";
 export const ADD_STUDENTS_ENDPOINT = "user/addMultipleStudents";
 export const ADD_TEACHER_ENDPOINT = "user/addTeacher";
 export const SUBMISSIONS_FOR_USER_ENDPOINT = "submission/getAllForUser";
+export const ALL_SUBMISSIONS = "submission/getAll";
 // now unused
 export const SOLUTION_ENDPOINT = "submission/getAllForProblem?id=";
 export const SUBMISSION_PER_ID_ENDPOINT = "submission/getByID?id=";
@@ -42,6 +43,14 @@ export function getRunStatus(code) {
     if(code==RUN_SUCCESS_CODE) return "Within the time limit";
     if(code==RUN_FAILURE_CODE) return "Error while executing";
     if(code==TIMEOUT_CODE) return "Time limit exceeded";
+    return "Unknown";
+}
+
+export function getExecutionStatus(compilationCode, runCode) {
+    if(compilationCode==COMPILATION_FAILURE_CODE) return "Compilation failed";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==RUN_SUCCESS_CODE) return "OK";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==TIMEOUT_CODE) return "Time limit exceeded";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==RUN_FAILURE_CODE) return "Error while executing";
     return "Unknown";
 }
 
