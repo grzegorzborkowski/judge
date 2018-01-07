@@ -46,6 +46,14 @@ export function getRunStatus(code) {
     return "Unknown";
 }
 
+export function getExecutionStatus(compilationCode, runCode) {
+    if(compilationCode==COMPILATION_FAILURE_CODE) return "Compilation failed";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==RUN_SUCCESS_CODE) return "OK";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==TIMEOUT_CODE) return "Time limit exceeded";
+    if(compilationCode==COMPILATION_SUCCESS_CODE && runCode==RUN_FAILURE_CODE) return "Error while executing";
+    return "Unknown";
+}
+
 export function getResultIcon(runCode, testsPositive, testsTotal) {
   if (runCode==TIMEOUT_CODE)
     return (<span class="glyphicon glyphicon-time"></span>)

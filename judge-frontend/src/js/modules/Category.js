@@ -59,7 +59,7 @@ class Category extends React.Component {
                 <tr key={problem.id}>
                   <td><Link to={`/problem/${problem.id}`}>{problem.id}</Link></td>
                   <td><Link to={`/problem/${problem.id}`}>{problem.title}</Link></td>
-                  <td><Link to={`/solutions/${problem.id}`}>View</Link></td>
+                  <td><Link to={`/solutions/${problem.id}/${problem.title}`}>View</Link></td>
 
                   {
                   cookies.get('judge.role')=='admin' ?

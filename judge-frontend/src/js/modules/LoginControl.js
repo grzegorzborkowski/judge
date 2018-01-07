@@ -74,7 +74,7 @@ class LoginControl extends React.Component {
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/manageUsers/changePassword" components={ChangePassword}>
                         </Route>
-                        <Route path="/solutions/:problemID" component={Solutions}/>
+                        <Route path="/solutions/:problemID/:problemTitle" component={Solutions}/>
                         <Route authorize={['teacher', 'admin']} path="allSubmissions" components={AllSubmissions}>
                         </Route>
                     </Route>

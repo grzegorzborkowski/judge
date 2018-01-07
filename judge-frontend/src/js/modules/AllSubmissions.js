@@ -113,13 +113,11 @@ class AllSubmissions extends RoleAwareComponent {
                     <thead>
                     <tr>
                         <th>Submission ID</th>
-                        <th>Problem ID</th>
                         <th>Problem title</th>
-                        <th>Compilation</th>
-                        <th>Execution</th>
+                        <th>Status</th>
                         <th>Tests passed</th>
                         <th>Runtime [s]</th>
-                        <th>Edit</th>
+                        <th>View</th>
                         <th>Date</th>
                         <th>Result</th>
                     </tr>
@@ -128,10 +126,8 @@ class AllSubmissions extends RoleAwareComponent {
                     {this.state.data.map(submission =>
                         <tr key={submission.id}>
                             <td>{submission.id}</td>
-                            <td>{submission.problem.id}</td>
                             <td>{submission.problem.title}</td>
-                            <td>{constants.getCompilationStatus(submission.compilationCode)}</td>
-                            <td>{constants.getRunStatus(submission.runCode)}</td>
+                            <td>{constants.getExecutionStatus(submission.compilationCode, submission.runCode)}</td>
                             <td>{submission.testsPositive}/{submission.testsTotal}</td>
                             <td>{submission.timeTaken} </td>
                             <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Click</Link></td>
