@@ -16,6 +16,7 @@ class AllSubmissions extends RoleAwareComponent {
         super(props);
         this.state = {
             id: "",
+            allData: [],
             data: []
         };
 
@@ -25,6 +26,7 @@ class AllSubmissions extends RoleAwareComponent {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.findSubmission = this.findSubmission.bind(this);
+        this.resetSearch = this.resetSearch.bind(this);
     }
 
     componentWillMount() {
@@ -33,7 +35,8 @@ class AllSubmissions extends RoleAwareComponent {
             .then(function (response) {
                 let data = response['data'];
                 self.setState({
-                    data
+                    data: data,
+                    allData: data
                 });
             })
             .catch(function (error) {
@@ -58,23 +61,12 @@ class AllSubmissions extends RoleAwareComponent {
 
     findSubmission(){
       var self = this;
-      console.log(this.state.id)
-        axios.get(constants.BACKEND_ADDRESS + constants.SUBMISSION_PER_ID_ENDPOINT +
-            this.state.id
-        , {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(function (response) {
-          if(response['data'] != null && response['data'] != 'undefined' && response['data'] != '') {
-            let data = [response['data']];
-            self.setState({
-                data
-            });
-          } else {
-            alert("There is no such submission");
-          }
-        });
+      let newData = this.state.allData.filter(el => el.id == this.state.id);
+      this.setState({data: newData});
+    }
+
+    resetSearch(){
+      this.setState({data: this.state.allData})
     }
 
     render() {
@@ -103,6 +95,9 @@ class AllSubmissions extends RoleAwareComponent {
               <br/>
               <Button
                   type="submit">Find
+              </Button>
+              <Button
+                  onClick={this.resetSearch}>Reset
               </Button>
             </form>
             </div>
