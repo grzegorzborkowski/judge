@@ -14,5 +14,5 @@ typedef struct TestData
 
 bool compare(Output a, Output b);
 TestData generateTestInput();
-Output teachersFunction(Input input);
-Output studentsFunction(Input input);
+Output teachersFunction(Input in);
+Output studentsFunction(Input in);
