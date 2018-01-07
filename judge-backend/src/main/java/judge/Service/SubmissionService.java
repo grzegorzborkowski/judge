@@ -19,7 +19,7 @@ public class SubmissionService {
 
     public List<Submission> getAllSubmissions() {
         List<Submission> submissionList = new ArrayList<>();
-        Iterable<Submission> students = submissionDao.findAll();
+        Iterable<Submission> students = submissionDao.findAllByOrderByIdDesc();
         students.forEach(submissionList::add);
         return submissionList;
     }

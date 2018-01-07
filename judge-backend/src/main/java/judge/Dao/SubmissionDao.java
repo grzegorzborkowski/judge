@@ -13,6 +13,8 @@ public interface SubmissionDao extends CrudRepository<Submission, Integer> {
 
     List<Submission> findByProblemIdOrderByIdDesc(Integer id);
 
+    List<Submission> findAllByOrderByIdDesc();
+
     Submission findById(Integer id);
 
     void removeAllByProblemId(Integer id);
