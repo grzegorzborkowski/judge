@@ -69,7 +69,7 @@ class Navbar extends React.Component {
                           (<li><NavLink to="/categoryManagement">Category Management</NavLink></li>) : (null)
                         }
                         {(isTeacher || isAdmin) ?
-                          (<li><NavLink to="/addUsers">Add Users</NavLink></li>) : (null)
+                          (<li><NavLink to="/manageUsers">Manage Users</NavLink></li>) : (null)
                         }
 
                     </ul>

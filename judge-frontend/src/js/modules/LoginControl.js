@@ -12,7 +12,7 @@ import ProblemCreator from './ProblemCreator';
 import ProblemEditor from './ProblemEditor';
 import Problems from './Problems';
 import CategoryManagement from './CategoryManagement';
-import AddUsers from './AddUsers';
+import ManageUsers from './ManageUsers';
 import AddStudents from './AddStudents';
 import AddStudent from './AddStudent';
 import AddTeacher from './AddTeacher';
@@ -64,15 +64,15 @@ class LoginControl extends React.Component {
                         </Route>
                         <Route authorize={['teacher', 'admin']} path="/categoryManagement" components={CategoryManagement}>
                         </Route>
-                        <Route authorize={['teacher', 'admin']} path="/addUsers" components={AddUsers}>
+                        <Route authorize={['teacher', 'admin']} path="/manageUsers" components={ManageUsers}>
                         </Route>
-                        <Route authorize={['teacher', 'admin']} path="/addUsers/students" components={AddStudents}>
+                        <Route authorize={['teacher', 'admin']} path="/manageUsers/students" components={AddStudents}>
                         </Route>
-                        <Route authorize={['teacher', 'admin']} path="/addUsers/student" components={AddStudent}>
+                        <Route authorize={['teacher', 'admin']} path="/manageUsers/student" components={AddStudent}>
                         </Route>
-                        <Route authorize={['teacher', 'admin']} path="/addUsers/teacher" components={AddTeacher}>
+                        <Route authorize={['teacher', 'admin']} path="/manageUsers/teacher" components={AddTeacher}>
                         </Route>
-                        <Route authorize={['teacher', 'admin']} path="/addUsers/changePassword" components={ChangePassword}>
+                        <Route authorize={['teacher', 'admin']} path="/manageUsers/changePassword" components={ChangePassword}>
                         </Route>
                         <Route path="/solutions/:problemID" component={Solutions}/>
                         <Route authorize={['teacher', 'admin']} path="allSubmissions" components={AllSubmissions}>
