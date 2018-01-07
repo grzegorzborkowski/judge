@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const BACKEND_ADDRESS = "http://ec2-34-216-3-11.us-west-2.compute.amazonaws.com:8080/";
+export const BACKEND_ADDRESS = "http://ec2-34-212-249-16.us-west-2.compute.amazonaws.com:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
 export const ACCOUNT_ENDPOINT = "user/getInfo";
 export const ADD_USER_ENDPOINT = "user/add";
