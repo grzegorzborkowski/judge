@@ -4,4 +4,4 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-CMD ["mvn", "spring-boot:run", "-D connection.database.host=db", "-D connection.externalrunner.host=ec2-34-216-3-11.us-west-2.compute.amazonaws.com"]
+CMD ["mvn", "spring-boot:run", "-D connection.database.host=db", "-D connection.externalrunner.host=ec2-34-212-249-16.us-west-2.compute.amazonaws.com"]
