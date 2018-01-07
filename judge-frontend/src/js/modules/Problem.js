@@ -15,7 +15,7 @@ class Problem extends React.Component {
             description: "",
             title: "",
             signature: "",
-            structures:""
+            structures:"",
         };
         this.countStructuresHeight = this.countStructuresHeight.bind(this);
     }
@@ -36,6 +36,19 @@ class Problem extends React.Component {
             .catch(function (error) {
                 console.log(error);
             })
+        if (typeof this.props.params.submissionID != 'undefined')
+        {
+            axios.get(constants.BACKEND_ADDRESS + constants.SUBMISSION_PER_ID_ENDPOINT + this.props.params.submissionID)
+                .then(function (response) {
+                    let data = response['data'];
+                    self.setState({
+                        signature: data['code'],
+                    });})
+                .catch(function (error) {
+                    console.log(error);
+                })
+            
+        }
     }
 
     countStructuresHeight() {

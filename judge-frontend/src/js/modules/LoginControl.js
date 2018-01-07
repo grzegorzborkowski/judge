@@ -53,6 +53,7 @@ class LoginControl extends React.Component {
                         <Route path="/problems" components={Problems}>
                         </Route>
                         <Route path="/problem/:problemID" component={Problem} />
+                        <Route path="/problem/:problemID/:submissionID" component={Problem} />
                         <Route path="/submissions" component={Submissions}>
                         <Route path="/submissions/:userID/:submissionID" component={Submission}/>
                         </Route>

@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
 import { Table } from 'react-bootstrap';
+import {Link} from 'react-router';
 
 class Solutions extends React.Component {
 
@@ -44,6 +45,7 @@ class Solutions extends React.Component {
                           <th>Tests passed</th>
                           <th>Runtime [s]</th>
                           <th>Code</th>
+                          <th>Edit</th>
                           <th>Date</th>
                           <th>Result</th>
                       </tr>
@@ -57,6 +59,7 @@ class Solutions extends React.Component {
                               <td>{submission.testsPositive}/{submission.testsTotal}</td>
                               <td>{submission.timeTaken} </td>
                               <td><a onClick={() => { alert(submission.code) }}>Click</a></td>
+                              <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Click</Link></td>
                               <td>{new Date(submission.date).toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options)} </td>
                               <td>{constants.getResultIcon(submission.runCode,
                                 submission.testsPositive, submission.testsTotal)}</td>
