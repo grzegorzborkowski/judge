@@ -44,8 +44,7 @@ class Solutions extends React.Component {
                           <th>Execution</th>
                           <th>Tests passed</th>
                           <th>Runtime [s]</th>
-                          <th>Code</th>
-                          <th>Edition</th>
+                          <th>View</th>
                           <th>Date</th>
                           <th>Result</th>
                       </tr>
@@ -58,8 +57,7 @@ class Solutions extends React.Component {
                               <td>{constants.getRunStatus(submission.runCode)}</td>
                               <td>{submission.testsPositive}/{submission.testsTotal}</td>
                               <td>{submission.timeTaken} </td>
-                              <td><a onClick={() => { alert(submission.code) }}>View</a></td>
-                              <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Change</Link></td>
+                              <td><Link to={`/problem/${submission.problem.id}/${submission.id}`}>Click</Link></td>
                               <td>{new Date(submission.date).toLocaleDateString(window.navigator.userLanguage || window.navigator.language, options)} </td>
                               <td>{constants.getResultIcon(submission.runCode,
                                 submission.testsPositive, submission.testsTotal)}</td>
