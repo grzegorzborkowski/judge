@@ -15,8 +15,7 @@ class AddStudent extends RoleAwareComponent {
         username: "",
         firstName: "",
         lastName: "",
-        password: "",
-        course: ""
+        password: ""
       };
 
       this.userRoles = cookies.get("judge.role");
@@ -48,8 +47,7 @@ class AddStudent extends RoleAwareComponent {
 
       validateInput(){
         if(this.state.username.length<1 || this.state.firstName.length<1 ||
-          this.state.lastName.length<1 || this.state.password.length<1 ||
-          this.state.course.length<1) {
+          this.state.lastName.length<1 || this.state.password.length<1) {
           alert("Fill in the missing gaps")
           return false
         }
@@ -61,8 +59,7 @@ class AddStudent extends RoleAwareComponent {
             username: this.state.username,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
-            password: this.state.password,
-            course: this.state.course
+            password: this.state.password
         }, {
             headers: {
                 'Content-Type': 'application/json'
@@ -87,15 +84,6 @@ class AddStudent extends RoleAwareComponent {
           <div>
               <h2>Add new student</h2>
               <form onSubmit={this.handleSubmit}>
-                  <label>
-                      Course name:
-                      <br/>
-                      <textarea
-                          name="course"
-                          value={this.state.course}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
                   <label>
                       Initial password:
                       <br/>

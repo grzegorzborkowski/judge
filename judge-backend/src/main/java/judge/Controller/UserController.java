@@ -29,7 +29,7 @@ import static judge.Utils.RUNTIME_USERS_DIR_NAME;
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class    UserController {
     private static org.apache.log4j.Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
@@ -63,7 +63,6 @@ public class UserController {
         String firstName = studentsJson.get("firstName").asText();
         String lastName = studentsJson.get("lastName").asText();
         String password = studentsJson.get("password").asText();
-        String course = studentsJson.get("course").asText();
 
         User user = new User();
         String encryptedPassword = this.passwordService.encrypt(password);
@@ -73,7 +72,6 @@ public class UserController {
         user.setLastName(lastName);
         user.setRole("student");
         user.setPassword(encryptedPassword);
-        user.setCourse(course);
 
         logger.info("Add user: " + username);
 
