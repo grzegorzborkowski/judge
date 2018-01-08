@@ -59,7 +59,13 @@ class AddStudents extends RoleAwareComponent {
       }
 
       render() {
-        return (
+
+          var divStyle = {
+              paddingTop: '50px'
+          };
+
+
+          return (
           <div>
               <h2>Add new students</h2>
               <form onSubmit={this.handleSubmit}>
@@ -69,6 +75,15 @@ class AddStudents extends RoleAwareComponent {
                 <br />
                 <button type="submit">Upload</button>
               </form>
+
+              <div>
+                <div>
+                    <h5 style={divStyle}> Format of the file: </h5> </div>
+                <div>    username1,firstname1,lastname1,password1 </div>
+              <div>username2,firstname2,lastname2,password2 </div>
+              <div> ... </div>
+              <div> username_n, firstname_n, lastname_n, password_n</div>
+                </div>
            </div>
         );
       }
