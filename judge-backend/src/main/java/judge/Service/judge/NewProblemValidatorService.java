@@ -2,6 +2,7 @@ package judge.Service.judge;
 
 import judge.Component.JudgeResult;
 import judge.Entity.Problem;
+import judge.Service.FileService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -21,7 +22,9 @@ public class NewProblemValidatorService {
     @Autowired
     AgentService agentService;
     @Autowired
-    SourceCodeCreatorService sourceCodeCreatorService;
+    SourceCodeService sourceCodeService;
+    @Autowired
+    FileService fileService;
 
     /*
       Validates if a new problem is syntactically correct.
@@ -32,8 +35,9 @@ public class NewProblemValidatorService {
     public boolean validateNewProblem(Problem problem) {
         try {
             Path studentsSignature = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
-            String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
+            String sourceCodeFilename = sourceCodeService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
+            fileService.removeFile(sourceCodeFilename);
             if(externalExaminationResult.getCompilationCode()==COMPILATION_SUCCESS_CODE
                     && externalExaminationResult.getRunCode()==RUN_SUCCESS_CODE) return true;
         } catch (Exception e) {

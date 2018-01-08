@@ -3,6 +3,8 @@ package judge.Service.judge;
 import judge.Entity.Problem;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -14,8 +16,8 @@ import java.util.*;
 import static judge.Utils.*;
 
 @Service
-class SourceCodeCreatorService {
-    private static org.apache.log4j.Logger logger = Logger.getLogger(SourceCodeCreatorService.class);
+class SourceCodeService {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(SourceCodeService.class);
 
     /**
      * Generates .c source code file.

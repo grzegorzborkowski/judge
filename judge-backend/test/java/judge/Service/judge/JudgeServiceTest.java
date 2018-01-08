@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
  */
 public class JudgeServiceTest {
     private JudgeService judgeService = new JudgeService();
-    private SourceCodeCreatorService sourceCodeCreatorService = Mockito.mock(SourceCodeCreatorService.class);
+    private SourceCodeService sourceCodeService = Mockito.mock(SourceCodeService.class);
     private AgentService agentService = Mockito.mock(AgentService.class);
     private Submission expectedSubmission = new Submission();
     private String sourceCodeFile = "test/output/judge/Service/judge/source_code_01_ok.c";

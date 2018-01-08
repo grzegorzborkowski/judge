@@ -6,6 +6,7 @@ import judge.Dao.SubmissionDao;
 import judge.Entity.Problem;
 import judge.Entity.User;
 import judge.Entity.Submission;
+import judge.Service.FileService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 import static judge.Utils.PROCESSING_ERROR_CODE;
 
@@ -26,7 +26,9 @@ public class JudgeService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(JudgeService.class);
 
     @Autowired
-    SourceCodeCreatorService sourceCodeCreatorService;
+    SourceCodeService sourceCodeService;
+    @Autowired
+    FileService fileService;
     @Autowired
     AgentService agentService;
     @Autowired
@@ -54,7 +56,7 @@ public class JudgeService {
         submission.setAuthor(author);
         submission.setProblem(problem);
 
-        String sourceCodeFilename = sourceCodeCreatorService.createSourceCodeFile(code, problem);
+        String sourceCodeFilename = sourceCodeService.createSourceCodeFile(code, problem);
 
         try{
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
@@ -69,13 +71,15 @@ public class JudgeService {
             logger.error(e.toString());
         }
 
+        fileService.removeFile(sourceCodeFilename);
+
         this.submissionDao.save(submission);
         logger.info("Processing of the submission has finished.");
         return submission;
     }
 
-    public void setSourceCodeCreatorService(SourceCodeCreatorService sourceCodeCreatorService) {
-        this.sourceCodeCreatorService = sourceCodeCreatorService;
+    public void setSourceCodeService(SourceCodeService sourceCodeService) {
+        this.sourceCodeService = sourceCodeService;
     }
 
     public void setAgentService(AgentService agentService) {

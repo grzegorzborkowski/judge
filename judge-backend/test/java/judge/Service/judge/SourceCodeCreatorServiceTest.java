@@ -11,7 +11,7 @@ import static judge.TestUtils.HELLO_WORLD_SUBMISSION_CODE;
 import static org.junit.Assert.assertTrue;
 
 public class SourceCodeCreatorServiceTest {
-    private SourceCodeCreatorService sourceCodeCreatorService;
+    private SourceCodeService sourceCodeService;
 
     //TODO: rewrite it to fit oauth and database changes
     /*

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,8 @@ public class UserService {
     private UserDao userDao;
     @Autowired
     private PasswordService passwordService;
+    @Autowired
+    private FileService fileService;
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
@@ -77,7 +78,6 @@ public class UserService {
             String data;
 
             while ((line = reader.readLine()) != null) {
-                logger.info("Line: " + line);
                 User user = new User();
                 scanner = new Scanner(line);
                 scanner.useDelimiter(",");
@@ -104,6 +104,8 @@ public class UserService {
             status = AddUserStatus.FILE_PARSING_EXCEPTION;
             logger.warn(e);
         }
+
+        fileService.removeFile(filename);
 
         return status;
     }
