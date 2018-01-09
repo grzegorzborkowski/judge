@@ -85,27 +85,30 @@ class AddStudent extends RoleAwareComponent {
               <h2>Add new student</h2>
               <form onSubmit={this.handleSubmit}>
                   <label>
-                      Initial password:
-                      <br/>
-                      <textarea
-                          name="password"
-                          value={this.state.password}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
-                  <label>
                       Username:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="username"
                           value={this.state.username}
                           onChange={this.handleInputChange} />
                   </label>
                   <br />
                   <label>
+                      Initial password:
+                      <br/>
+                      <input
+                          type="password"
+                          name="password"
+                          value={this.state.password}
+                          onChange={this.handleInputChange} />
+                  </label>
+                  <br />
+                  <label>
                       First name:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="firstName"
                           value={this.state.firstName}
                           onChange={this.handleInputChange} />
@@ -114,7 +117,8 @@ class AddStudent extends RoleAwareComponent {
                   <label>
                       Last name:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="lastName"
                           value={this.state.lastName}
                           onChange={this.handleInputChange} />

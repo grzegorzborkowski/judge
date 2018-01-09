@@ -41,7 +41,6 @@ class AddTeacher extends RoleAwareComponent {
           event.preventDefault();
           if(this.validateInput()){
             this.submitTeacher();
-            window.location.reload();
           }
       }
 
@@ -67,9 +66,11 @@ class AddTeacher extends RoleAwareComponent {
         }).then(function (response) {
           console.log(response.data);
           alert(response.data);
+          window.location.reload();
         }).catch(function (error) {
           console.log(error.response);
           alert(error.response.data);
+          window.location.reload();
         })
       }
 
@@ -85,7 +86,8 @@ class AddTeacher extends RoleAwareComponent {
                   <label>
                       Username:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="username"
                           value={this.state.username}
                           onChange={this.handleInputChange} />
@@ -94,7 +96,8 @@ class AddTeacher extends RoleAwareComponent {
                   <label>
                       Default password:
                       <br/>
-                      <textarea
+                      <input
+                          type="password"
                           name="password"
                           value={this.state.password}
                           onChange={this.handleInputChange} />
@@ -103,7 +106,8 @@ class AddTeacher extends RoleAwareComponent {
                   <label>
                       First name:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="firstName"
                           value={this.state.firstName}
                           onChange={this.handleInputChange} />
@@ -112,7 +116,8 @@ class AddTeacher extends RoleAwareComponent {
                   <label>
                       Last name:
                       <br/>
-                      <textarea
+                      <input
+                          type="text"
                           name="lastName"
                           value={this.state.lastName}
                           onChange={this.handleInputChange} />
