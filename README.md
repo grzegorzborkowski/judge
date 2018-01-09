@@ -1,8 +1,5 @@
 # judge
 
-### Security part
+Web-based platform for algorithms education. 
 
-### 1. Call do endpointów które wymagają uwierzytelniania i autoryzacji
-
-[Sequence diagram](https://goo.gl/j8Gfqb)
-
+Created as a thesis project for AGH University of Science and Technology
