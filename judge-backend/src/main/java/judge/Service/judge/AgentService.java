@@ -99,7 +99,7 @@ class AgentService {
     }
 
     String prepareErrorMessage(String errorCode) {
-        String errorMessageRegex = "(source[_A-z\\d.]*[:\\d]*|.\\/.*)";
+        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]*[:\\d]*|.\\/.*)";
 
         String[] errorCode1 = errorCode.split("u001B\\[");
         String errorCode1Str = String.join(" ", errorCode1);
