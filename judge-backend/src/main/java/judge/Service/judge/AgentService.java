@@ -79,8 +79,9 @@ class AgentService {
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
+            String errorCode = bodyJson.get("ErrorCode").toString();
 
-            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken);
+            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken, errorCode);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());

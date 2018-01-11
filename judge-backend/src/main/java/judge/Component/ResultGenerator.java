@@ -17,6 +17,7 @@ public class ResultGenerator {
         result.put("testsPositive", submission.getTestsPositive());
         result.put("testsTotal", submission.getTestsTotal());
         result.put("timeTaken", submission.getTimeTaken());
+        result.put("errorCode", submission.getErrorCode());
         return result;
     }
 
