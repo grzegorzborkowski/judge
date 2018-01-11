@@ -17,7 +17,7 @@ class CodeFormComponent extends React.Component {
         super(props);
         console.log(props);
         this.state = {code : this.props.signature, compilationStatus : "", runStatus: "", testsTotal :"",
-          testsPositive: "", timeTaken: "", resultIcon: ""};
+          testsPositive: "", timeTaken: "", resultIcon: "", errorCode: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -52,7 +52,8 @@ class CodeFormComponent extends React.Component {
                 testsPositive : response["data"].testsPositive,
                 timeTaken : response["data"].timeTaken,
                 resultIcon : constants.getResultIcon(response["data"].runCode,
-                  response["data"].testsPositive, response["data"].testsTotal)
+                  response["data"].testsPositive, response["data"].testsTotal),
+                errorCode : response["data"].errorCode
             });
         }).catch(function (error) {
             console.log(error);
@@ -83,6 +84,10 @@ class CodeFormComponent extends React.Component {
                         </Button>
                     </form>
                     <br/>
+                    {
+                      this.state.errorCode != null && this.state.errorCode != 'unsigned' && this.state.errorCode != "" ?
+                        <div> Error message: <b>{this.state.errorCode} </b></div> : ''
+                    }
                     <div> Compilation: <b>{this.state.compilationStatus} </b></div>
                     <div> Execution: <b>{this.state.runStatus} </b></div>
                     <div> Tests passed: <b>{this.state.testsPositive}/{this.state.testsTotal} </b></div>
