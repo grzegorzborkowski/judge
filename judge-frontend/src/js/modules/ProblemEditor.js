@@ -23,6 +23,7 @@ class ProblemEditor extends RoleAwareComponent {
             structures: "",
             solution: "",
             categories:[],
+            errorCode: ""
         };
 
         this.userRoles = cookies.get("judge.role");
@@ -59,6 +60,7 @@ class ProblemEditor extends RoleAwareComponent {
     }
 
     submitProblem(){
+        var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.PROBLEM_EDITOR_ENDPOINT, {
             category: this.state.category,
             title: this.state.title,
@@ -71,8 +73,9 @@ class ProblemEditor extends RoleAwareComponent {
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
-          console.log(response.data);
-          alert(response.data);
+          self.setState({
+              errorCode: response.data.errorCode});
+          alert(response.data.message);
         });
     }
 
@@ -182,6 +185,10 @@ class ProblemEditor extends RoleAwareComponent {
                          onChange={this.handleChangeForSolution}/>
                     </label>
                     <br/>
+                    {
+                      this.state.errorCode != null && this.state.errorCode != 'unsigned' && this.state.errorCode != "" ?
+                        <div> Error message: <b>{this.state.errorCode}</b></div> : ''
+                    }
                     <br/>
                     <Button
                         type="submit">Submit

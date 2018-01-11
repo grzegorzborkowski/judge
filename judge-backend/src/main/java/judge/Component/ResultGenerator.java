@@ -34,4 +34,12 @@ public class ResultGenerator {
         result.put("runCode", PROCESSING_ERROR_CODE);
         return result;
     }
+
+    public JsonNode generateProblemValidationResult(String errorCode) {
+        ObjectNode result = JsonNodeFactory.instance.objectNode();
+        result.put("errorCode", errorCode);
+        if (errorCode.isEmpty()) result.put("message", "Problem has been saved.");
+        else result.put("message", "Validation of the problem has failed. Please check its correctness.");
+        return result;
+    }
 }
