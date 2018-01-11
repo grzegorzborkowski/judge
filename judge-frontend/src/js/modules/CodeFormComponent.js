@@ -20,7 +20,6 @@ class CodeFormComponent extends React.Component {
           testsPositive: "", timeTaken: "", resultIcon: "", errorCode: ""};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.escapeBashPrompt = this.escapeBashPrompt.bind(this);
     }
 
     handleChange(event) {
@@ -33,17 +32,6 @@ class CodeFormComponent extends React.Component {
         }
     }
 
-    escapeBashPrompt(text) {
-      var escapedText = text
-      .replace(/\[01m/g,"")
-      .replace(/\[K/g,"")
-      .replace(/\[m/g,"")
-      .replace(/\[01;31m/g,"")
-      .replace(/\[01;32m/g,"")
-      .replace(/\[01;35m/g,"")
-      .replace(/\^/g,"<br/>")
-      return escapedText;
-    }
 
     handleSubmit(event) {
         var cookies = new Cookies();
@@ -66,7 +54,7 @@ class CodeFormComponent extends React.Component {
                 timeTaken : response["data"].timeTaken,
                 resultIcon : constants.getResultIcon(response["data"].runCode,
                   response["data"].testsPositive, response["data"].testsTotal),
-                errorCode : this.escapeBashPrompt(response["data"].errorCode)
+                errorCode : response["data"].errorCode
             });
         }).catch(function (error) {
             console.log(error);

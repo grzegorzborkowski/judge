@@ -1,5 +1,6 @@
 package judge.Service.judge;
 
+import judge.Component.ErrorMessageParser;
 import judge.Component.JudgeResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,10 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * AgentService is responsible for communication with external runner.
@@ -81,7 +78,7 @@ class AgentService {
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
-            String errorCode = prepareErrorMessage(bodyJson.get("ErrorCode").toString());
+            String errorCode = ErrorMessageParser.parseErrorMessage(bodyJson.get("ErrorCode").toString());
 
             result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken, errorCode);
 
@@ -96,19 +93,5 @@ class AgentService {
             EntityUtils.consume(entity);
         }
         return result;
-    }
-
-    String prepareErrorMessage(String errorCode) {
-        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]*[:\\d]*|.\\/.*)";
-
-        String[] errorCode1 = errorCode.split("u001B\\[");
-        String errorCode1Str = String.join(" ", errorCode1);
-        String[] errorCode2 = errorCode1Str.split("u001B\\[K");
-        String errorCode2Str = String.join(" ", errorCode2);
-        String[] errorCodeWithoutFileNames = errorCode2Str.split(errorMessageRegex);
-        String errorCodeFinal = String.join(" ", errorCodeWithoutFileNames);
-        errorCodeFinal = errorCodeFinal.replace('^', '\n');
-
-        return errorCodeFinal;
     }
 }
