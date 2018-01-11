@@ -6,6 +6,7 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
+import { Button } from 'react-bootstrap';
 import Autocomplete from 'react-autocomplete';
 
 
@@ -106,7 +107,7 @@ class ProblemEditor extends RoleAwareComponent {
     //TODO: change structures's textarea to CodeForm
     render() {
           const problemEditorContent = (
-            <div>
+            <div className="ProblemInputForm">
                 <h2>My problem editor</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>
@@ -137,6 +138,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <textarea
                             name="title"
                             rows="2"
+                            maxlength="255"
                             value={this.state.title}
                             onChange={this.handleInputChange} />
                     </label>
@@ -147,6 +149,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <textarea
                             name="description"
                             rows="5"
+                            maxlength="255"
                             value={this.state.description}
                             onChange={this.handleInputChange} />
                     </label>
@@ -159,7 +162,7 @@ class ProblemEditor extends RoleAwareComponent {
                                    value={this.state.structures}
                                    width="600px"
                                    height="400px"
-                                   fontSize={18}
+                                   fontSize={constants.ACE_EDITOR_FONT_SIZE}
                                    wrapEnabled={true}
                                    name="structures"
                                    onChange={this.handleChangeForStructures}/>
@@ -173,14 +176,16 @@ class ProblemEditor extends RoleAwareComponent {
                          value={this.state.solution}
                          width="600px"
                          height="800px"
-                         fontSize={18}
+                         fontSize={constants.ACE_EDITOR_FONT_SIZE}
                          wrapEnabled={true}
                          name="solution"
                          onChange={this.handleChangeForSolution}/>
                     </label>
                     <br/>
                     <br/>
-                    <input type="submit" value="Submit" />
+                    <Button
+                        type="submit">Submit
+                    </Button>
                 </form>
             </div>
         );

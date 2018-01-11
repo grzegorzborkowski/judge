@@ -41,13 +41,13 @@ class Category extends React.Component {
                   <th>My submissions</th>
 
                     {
-                    cookies.get('judge.role')=='admin' ?
+                    cookies.get('judge.role')=='admin' || cookies.get('judge.role')=='teacher' ?
                       <th>Editor</th> : ''
                     }
 
 
                     {
-                    cookies.get('judge.role')=='admin' ?
+                    cookies.get('judge.role')=='admin' || cookies.get('judge.role')=='teacher' ?
                       <th>Delete</th> : ''
                     }
 
@@ -62,12 +62,12 @@ class Category extends React.Component {
                   <td><Link to={`/solutions/${problem.id}/${problem.title}`}>View</Link></td>
 
                   {
-                  cookies.get('judge.role')=='admin' ?
+                  cookies.get('judge.role')=='admin' || cookies.get('judge.role')=='teacher' ?
                     <td><Link to={`/problemEditor/${problem.id}`}>Edit</Link></td> : ''
                   }
 
                   {
-                  cookies.get('judge.role')=='admin' ?
+                  cookies.get('judge.role')=='admin' || cookies.get('judge.role')=='teacher' ?
                       <td><a onClick={() => {
                           axios.post(constants.BACKEND_ADDRESS + constants.PROBLEM_REMOVE_ENDPOINT
                             + problem.id).then(function(response){
