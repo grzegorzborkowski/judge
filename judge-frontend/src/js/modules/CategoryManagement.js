@@ -1,34 +1,37 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import AceEditor from 'react-ace';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
-import { Table } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-import { RoleAwareComponent } from 'react-router-role-authorization';
+import {Table, Modal, Popover} from 'react-bootstrap';
+import {Button, Tooltip} from 'react-bootstrap';
+import {RoleAwareComponent} from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
 class CategoryManagement extends RoleAwareComponent {
-  constructor(props) {
-      super(props);
-      this.state = {
-        categories: [],
-        category: ""
-      };
+    constructor(props) {
+        super(props);
+        this.state = {
+            categories: [],
+            category: "",
+            showModal: false
+        };
 
-      this.userRoles = cookies.get("judge.role");
-      this.allowedRoles = ["teacher", "admin"];
+        this.userRoles = cookies.get("judge.role");
+        this.allowedRoles = ["teacher", "admin"];
 
-      this.handleInputChange = this.handleInputChange.bind(this);
-      this.handleChangeForCategory = this.handleChangeForCategory.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.submitCategory = this.submitCategory.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleChangeForCategory = this.handleChangeForCategory.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitCategory = this.submitCategory.bind(this);
+        this.removeCategory = this.removeCategory.bind(this);
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
-      handleInputChange(event) {
+    handleInputChange(event) {
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -36,19 +39,19 @@ class CategoryManagement extends RoleAwareComponent {
         this.setState({
             [name]: value
         });
-      }
+    }
 
-      handleChangeForCategory(event) {
-          this.setState({category: event.value});
-      }
+    handleChangeForCategory(event) {
+        this.setState({category: event.value});
+    }
 
-      handleSubmit(event) {
-          event.preventDefault();
-          this.submitCategory();
-          window.location.reload();
-      }
+    handleSubmit(event) {
+        event.preventDefault();
+        this.submitCategory();
+        window.location.reload();
+    }
 
-      submitCategory(){
+    submitCategory() {
         axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_ADD_ENDPOINT, {
             name: this.state.category
         }, {
@@ -56,77 +59,120 @@ class CategoryManagement extends RoleAwareComponent {
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
-          console.log(response.data);
-          alert(response.data);
+            console.log(response.data);
+            alert(response.data);
         });
-      }
+    }
 
-      componentWillMount() {
-          var self = this;
-          axios.get(constants.BACKEND_ADDRESS + constants.CATEGORY_ENDPOINT)
-              .then(function (response) {
-                  let categories = response['data'];
-                  self.setState({
-                      categories
-                  });
-              })
-              .catch(function (error) {
-                  console.log(error);
-              })
-      }
 
-      render() {
-        return (
-        <div>
-          <div className="CategoryInputForm">
-              <h2>Category creator</h2>
-              <form onSubmit={this.handleSubmit}>
-                  <label>
-                      New category:
-                      <br/>
-                      <textarea
-                          name="category"
-                          value={this.state.category}
-                          onChange={this.handleInputChange} />
-                  </label>
-                  <br />
-                  <Button
-                      type="submit">Add
-                  </Button>
-              </form>
-           </div>
+    handleClose() {
+        this.setState({showModal: false});
+    }
 
-           <div>
-              <h2>{this.props.categoryName}</h2>
-              <Table bordered condensed hover>
-                <thead>
-                  <tr>
-                      <th>Category</th>
-                      <th>Delete</th>
-                  </tr>
-                </thead>
+    handleShow() {
+        console.log("Handle Show!");
+        this.setState({showModal: true});
+    }
 
-              <tbody>
-              {this.state.categories.map(category =>
-                  <tr key={category.id}>
-                    <td>{category.name}</td>
-                    <td><a onClick={() => {
-                        axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_REMOVE_ENDPOINT
-                          + category.id).then(function(response){
-                            alert(response['data'])
-                          }).catch(function(error){
-                            alert("You can't delete this category!")
-                          })
-                          window.location.reload();
-                     }}>Delete</a></td>
-                  </tr>
-              )}
-              </tbody>
-            </Table>
-          </div>
-        </div>
+
+    componentWillMount() {
+        var self = this;
+        axios.get(constants.BACKEND_ADDRESS + constants.CATEGORY_ENDPOINT)
+            .then(function (response) {
+                let categories = response['data'];
+                self.setState({
+                    categories
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    removeCategory(category_id) {
+        console.log("Calling removeCategory " + category_id);
+        axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_REMOVE_ENDPOINT
+            + category_id).then(function (response) {
+            console.log(response);
+            alert(response['data'])
+        }).catch(function (error) {
+            alert("You can't delete this category!")
+        });
+        this.handleClose();
+        window.location.reload();
+    }
+
+    render() {
+        const popover = (
+            <Popover id="modal-popover" title="popover">
+                very popover. such engagement
+            </Popover>
         );
-      }
+        const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
+
+        return (
+            <div>
+                <div className="CategoryInputForm">
+                    <h2>Category creator</h2>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            New category:
+                            <br/>
+                            <textarea
+                                name="category"
+                                value={this.state.category}
+                                onChange={this.handleInputChange}/>
+                        </label>
+                        <br/>
+                        <Button
+                            type="submit">Add
+                        </Button>
+                    </form>
+                </div>
+
+                <div>
+                    <h2>{this.props.categoryName}</h2>
+                    <Table bordered condensed hover>
+                        <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {this.state.categories.map(category =>
+                            <tr key={category.id}>
+                                <td>{category.name}</td>
+                                <td><a onClick={() => this.handleShow()}>Delete</a></td>
+
+                                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Deleting a category</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <h4>Are you sure you want to delete a category {category.name} and all problems
+                                            and
+                                            submissions related to this category? </h4>
+
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button bsStyle="danger" onClick={() => this.removeCategory(category.id)}
+                                                style={{float: 'left'}}> Yes (Delete) </Button>
+                                        <Button bsStyle="info" onClick={this.handleClose}> No (Close) </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            </tr>
+                        )}
+                        </tbody>
+                    </Table>
+                </div>
+            </div>
+
+
+
+        );
+    }
 }
 
 export default CategoryManagement;
