@@ -5,6 +5,7 @@ import judge.Component.JudgeResult;
 import judge.Entity.Problem;
 import judge.Service.FileService;
 import judge.Service.judge.structures.FileToExamine;
+import judge.Service.judge.structures.SourceCodeFileType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -38,7 +39,9 @@ public class NewProblemValidatorService {
     public String validateNewProblem(Problem problem) {
         try {
             Path studentsSignature = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
-            FileToExamine fileToExamine = sourceCodeService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
+            FileToExamine fileToExamine = sourceCodeService.createSourceCodeFile(
+                    String.join("",Files.readAllLines(studentsSignature)),
+                    problem, SourceCodeFileType.NEW_PROBLEM);
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(fileToExamine);
             fileService.removeFile(fileToExamine.getFilename());
             if(externalExaminationResult.getCompilationCode()==COMPILATION_SUCCESS_CODE

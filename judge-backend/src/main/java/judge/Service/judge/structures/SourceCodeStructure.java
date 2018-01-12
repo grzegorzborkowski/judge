@@ -5,6 +5,10 @@ import java.util.List;
 public class SourceCodeStructure {
 
     List<String> lines;
+    /*
+        For NEW_PROBLEM solution code is considered as custom code.
+        For SUBMISSION code provided by submitting person is considered as custom code.
+     */
     int lineWhereCustomCodeStarts;
 
     public List<String> getLines() {

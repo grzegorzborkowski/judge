@@ -60,7 +60,12 @@ public class ErrorMessageParser {
         while(m.find()) {
             sb.append(escapedErrorCodeSplited[i]);
             int lineNumber = Integer.parseInt(m.group(1))-lineWhereCustomCodeStarts+1;
-            sb.append("line " + lineNumber);
+
+            // The if-else statement is to handle a situation when NEW_PROBLEM is being processed
+            // and error comes in data structures definition. Then the line number is a negative number,
+            // as we don't count structures definition as custom code. Custom code starts with solution code.
+            if(lineNumber>0) sb.append("line " + lineNumber + ":");
+            else sb.append("In Structures definition:");
             i++;
         }
         sb.append(escapedErrorCodeSplited[i]);

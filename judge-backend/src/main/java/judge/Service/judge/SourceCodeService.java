@@ -3,6 +3,7 @@ package judge.Service.judge;
 import judge.Entity.Problem;
 import judge.Service.FileService;
 import judge.Service.judge.structures.FileToExamine;
+import judge.Service.judge.structures.SourceCodeFileType;
 import judge.Service.judge.structures.SourceCodeStructure;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,10 @@ class SourceCodeService {
      * @param code  student's input (now: program, target: function)
      * @return path to the created source code file
      */
-    FileToExamine createSourceCodeFile(String code, Problem problem) {
+    FileToExamine createSourceCodeFile(String code, Problem problem, SourceCodeFileType sourceCodeFileType) {
         FileToExamine fileToExamine = new FileToExamine();
 
-        SourceCodeStructure sourceCodeStructure = prepareSourceCode(code, problem);
+        SourceCodeStructure sourceCodeStructure = prepareSourceCode(code, problem, sourceCodeFileType);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         /*
             Math.random() will be replaced by user ID.
@@ -52,7 +53,7 @@ class SourceCodeService {
         return fileToExamine;
     }
 
-    private SourceCodeStructure prepareSourceCode(String code, Problem problem) {
+    private SourceCodeStructure prepareSourceCode(String code, Problem problem, SourceCodeFileType sourceCodeFileType) {
         SourceCodeStructure sourceCodeStructure = new SourceCodeStructure();
 
         List<String> result,generated_lines_1, generated_lines_2;
@@ -72,9 +73,17 @@ class SourceCodeService {
             result.addAll(Collections.singletonList(code));
             result.addAll(generated_lines_2);
 
+            /*
+               For NEW_PROBLEM we need to count headers and structures only,
+                as solution code is considered as custom code.
+               For SUBMISSION we need to count solution code too,
+                as code provided by a submitting person is considered as custom code.
+             */
             lineWhereCustomCodeStarts += generated_lines_1.size();
             lineWhereCustomCodeStarts += problem.getStructures().split("\n").length;
-            lineWhereCustomCodeStarts += problem.getSolution().split("\n").length;
+            if(sourceCodeFileType==SourceCodeFileType.SUBMISSION) {
+                lineWhereCustomCodeStarts += problem.getSolution().split("\n").length;
+            }
         }
         catch (IOException e) {
             logger.error("Exception happened while generating the source code.", e);
