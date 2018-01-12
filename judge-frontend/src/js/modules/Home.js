@@ -20,23 +20,28 @@ export default React.createClass({
                 You've entered main page of <i>Project Judge</i> - learning tool for fresh programmers!
                 <br/>
                 <br/>
-                <Table responsive hover>
-                    <tbody>
-                        <tr>
-                            <td>To solve a problem, choose one from the list first.</td>
-                            <td><img src={list_img} /></td>
-                        </tr>
-                        <tr>
-                            <td>In upper section, you can see problem's description and structure definitions</td>
-                            <td><img src={upper_img} /></td>
-                        </tr>
-                        <tr>
-                            <td>Here, you should write your code. When you submit it, you will receive the results of the run of your code</td>
-                            <td><img src={student_img} /></td>
-                        </tr>
-                    </tbody>
-                </Table>
-
+                <b>To solve a problem, choose one from the list first.</b>
+                <br/>
+                <br/>
+                <img src={list_img} />
+                <br/>
+                <br/>
+                <b>In upper section, you can see problem's description and structure definitions</b>
+                <br/>
+                <br/>
+                <img src={upper_img} />
+                <br/>
+                <br/>
+                <b>Here, you should write your code. When you submit it, you will receive the results of the run of your code</b>
+                <br/>
+                <br/>
+                <img src={student_img} />
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div>
                   <br/>
                   <i>Project Judge</i> has been created as a bachelor thesis project in 2018 by:

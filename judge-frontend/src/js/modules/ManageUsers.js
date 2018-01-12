@@ -21,16 +21,16 @@ class ManageUsers extends RoleAwareComponent {
     return (
         <div>
           <br />
-          <Button><Link to={`/manageUsers/student`}>Add one student</Link></Button>
+          <Link to={`/manageUsers/student`}>Add one student</Link>
           <br />
           <br />
-          <Button><Link to={`/manageUsers/students`}>Add multiple students</Link></Button>
+          <Link to={`/manageUsers/students`}>Add multiple students</Link>
           <br />
           <br />
-          <Button><Link to={`/manageUsers/teacher`}>Add teacher</Link></Button>
+          <Link to={`/manageUsers/teacher`}>Add teacher</Link>
           <br />
           <br />
-          <Button><Link to={`/manageUsers/changePassword`}>Change Password</Link></Button>
+          <Link to={`/manageUsers/changePassword`}>Change Password</Link>
         </div>
       );
     }
