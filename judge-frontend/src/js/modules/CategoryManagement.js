@@ -16,7 +16,9 @@ class CategoryManagement extends RoleAwareComponent {
             category: "",
             showRemoveModal: false,
             showEditNameModal: false,
-            newCategoryName: ""
+            newCategoryName: "",
+            categoryInModalName: "",
+            categoryInModalId: ""
         };
 
         this.userRoles = cookies.get("judge.role");
@@ -96,16 +98,20 @@ class CategoryManagement extends RoleAwareComponent {
         this.setState({showRemoveModal: false});
     }
 
-    handleShowRemoveModal() {
-        this.setState({showRemoveModal: true});
+    handleShowRemoveModal(categoryName, categoryId) {
+      this.setState({categoryInModalName: categoryName});
+      this.setState({categoryInModalId: categoryId});
+      this.setState({showRemoveModal: true});
     }
 
     handleCloseEditNameModal() {
         this.setState({showEditNameModal: false});
     }
 
-    handleShowEditNameModal() {
-        this.setState({showEditNameModal: true});
+    handleShowEditNameModal(categoryName, categoryId) {
+      this.setState({categoryInModalName: categoryName});
+      this.setState({categoryInModalId: categoryId});
+      this.setState({showEditNameModal: true});
     }
 
     handleNewCategoryAreaChange(event) {
@@ -165,21 +171,21 @@ class CategoryManagement extends RoleAwareComponent {
                         {this.state.categories.map(category =>
                             <tr key={category.id}>
                                 <td>{category.name}</td>
-                                <td><a onClick={() => this.handleShowEditNameModal()}> Edit Name </a></td>
-                                <td><a onClick={() => this.handleShowRemoveModal()}>Delete</a></td>
+                                <td><a onClick={() => this.handleShowEditNameModal(category.name, category.id)}> Edit Name </a></td>
+                                <td><a onClick={() => this.handleShowRemoveModal(category.name, category.id)}>Delete</a></td>
 
                                 <Modal show={this.state.showEditNameModal} onHide={this.handleCloseEditNameModal}>
                                     <Modal.Header closeButton>
                                         <Modal.Title>Changing a category name</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <h4>Please type in a new category name for a category {category.name} </h4>
+                                        <h4>Please type in a new category name for a category {this.state.categoryInModalName} </h4>
                                         <input type="text" value={this.state.newCategoryName}
                                                   onChange={this.handleNewCategoryAreaChange}>
                                         </input>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button bsStyle="danger" onClick={() => this.changeCategoryName(category.id, this.state.newCategoryName)}
+                                        <Button bsStyle="danger" onClick={() => this.changeCategoryName(this.state.categoryInModalId, this.state.newCategoryName)}
                                                 style={{float: 'left'}}> Change Name  </Button>
                                         <Button bsStyle="info" onClick={this.handleCloseEditNameModal}> Close </Button>
                                     </Modal.Footer>
@@ -191,13 +197,13 @@ class CategoryManagement extends RoleAwareComponent {
                                         <Modal.Title>Deleting a category</Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <h4>Are you sure you want to delete a category {category.name} and all problems
+                                        <h4>Are you sure you want to delete a category {this.state.categoryInModalName} and all problems
                                             and
                                             submissions related to this category? </h4>
 
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button bsStyle="danger" onClick={() => this.removeCategory(category.id)}
+                                        <Button bsStyle="danger" onClick={() => this.removeCategory(this.state.categoryInModalId)}
                                                 style={{float: 'left'}}> Yes (Delete) </Button>
                                         <Button bsStyle="info" onClick={this.handleCloseRemoveModal}> No (Close) </Button>
                                     </Modal.Footer>
