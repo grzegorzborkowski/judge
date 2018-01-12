@@ -2,22 +2,35 @@ package judge.Component;
 
 import org.apache.log4j.Logger;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ErrorMessageParser {
     private static org.apache.log4j.Logger logger = Logger.getLogger(ErrorMessageParser.class);
 
     public static String parseErrorMessage(String errorCode, int lineWhereCustomCodeStarts) {
-        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]*[:\\d]*|.\\/.*)";
+
+        // matches source code file name, e.g "source_code20180112_2334560.13831908083413236.c:"
+        // and a "./chain: ..." line
+        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]:|.\\/.*)";
 
         logger.debug("Custom code starts: " + lineWhereCustomCodeStarts);
 
-        String[] errorCode1 = errorCode.split("u001B\\[");
-        String errorCode1Str = String.join(" ", errorCode1);
-        String[] errorCode2 = errorCode1Str.split("u001B\\[K");
-        String errorCode2Str = String.join(" ", errorCode2);
-        String[] errorCodeWithoutFileNames = errorCode2Str.split(errorMessageRegex);
-        String errorCodeWithoutFilenameStr = String.join(" ", errorCodeWithoutFileNames);
-        String errorCodeFinal = escapeBashPrompt(errorCodeWithoutFilenameStr);
-        return errorCodeFinal;
+        try {
+            String[] errorCode1 = errorCode.split("u001B\\[");
+            String errorCode1Str = String.join(" ", errorCode1);
+            String[] errorCode2 = errorCode1Str.split("u001B\\[K");
+            String errorCode2Str = String.join(" ", errorCode2);
+            String[] errorCodeWithoutFileNames = errorCode2Str.split(errorMessageRegex);
+            String errorCodeWithoutFilenameStr = String.join(" ", errorCodeWithoutFileNames);
+            String escapedErrorCode = escapeBashPrompt(errorCodeWithoutFilenameStr);
+            String escapeCodeWithCorrectLines = extractAndChangeLineNumbers(escapedErrorCode, lineWhereCustomCodeStarts);
+
+            return escapeCodeWithCorrectLines;
+        } catch (Exception e) {
+            logger.error("Parsing error message failed. ", e.getCause());
+        }
+        return "";
     }
 
     private static String escapeBashPrompt(String text) {
@@ -30,5 +43,29 @@ public class ErrorMessageParser {
                 .replace("[01;35m","")
                 .replace("^","\n");
         return escapedText;
+    }
+
+    private static String extractAndChangeLineNumbers(String text, int lineWhereCustomCodeStarts) {
+
+        String lineNumberRegex = "(\\d+)(:)(\\d+)(:)";
+
+        Pattern p = Pattern.compile(lineNumberRegex);
+        Matcher m = p.matcher(text);
+
+        String escapedErrorCodeSplited[] = text.split(lineNumberRegex);
+
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+
+        while(m.find()) {
+            sb.append(escapedErrorCodeSplited[i]);
+            int lineNumber = Integer.parseInt(m.group(1))-lineWhereCustomCodeStarts+1;
+            sb.append("line " + lineNumber);
+            i++;
+        }
+        sb.append(escapedErrorCodeSplited[i]);
+
+        String escapeCodeWithCorrectLines = sb.toString();
+        return escapeCodeWithCorrectLines;
     }
 }
