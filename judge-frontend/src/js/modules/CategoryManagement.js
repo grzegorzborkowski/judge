@@ -1,10 +1,8 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import 'brace/mode/c_cpp';
-import 'brace/theme/dreamweaver';
-import {Table, Modal, Popover} from 'react-bootstrap';
-import {Button, Tooltip} from 'react-bootstrap';
+import {Table, Modal} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import {RoleAwareComponent} from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
 
@@ -70,7 +68,6 @@ class CategoryManagement extends RoleAwareComponent {
     }
 
     handleShow() {
-        console.log("Handle Show!");
         this.setState({showModal: true});
     }
 
@@ -90,7 +87,6 @@ class CategoryManagement extends RoleAwareComponent {
     }
 
     removeCategory(category_id) {
-        console.log("Calling removeCategory " + category_id);
         axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_REMOVE_ENDPOINT
             + category_id).then(function (response) {
             console.log(response);
@@ -103,13 +99,6 @@ class CategoryManagement extends RoleAwareComponent {
     }
 
     render() {
-        const popover = (
-            <Popover id="modal-popover" title="popover">
-                very popover. such engagement
-            </Popover>
-        );
-        const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
-
         return (
             <div>
                 <div className="CategoryInputForm">
