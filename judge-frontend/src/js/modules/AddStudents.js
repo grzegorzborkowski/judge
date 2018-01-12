@@ -1,8 +1,6 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import { Table } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
 
