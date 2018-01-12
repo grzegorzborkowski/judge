@@ -16,13 +16,11 @@ TestData generateTestInput()
 	testData.numberOfTests = 0;
 	testData.testInput = new Input[testData.numberOfTests];
 
-    int i;
-
-	for(i=0;i<testData.numberOfTests;i++)
+	for(int i=0;i<testData.numberOfTests;i++)
     	{
     	    Input in;
     	    // define your input here, e.g.
-    	    // input.n = rand();
+    	    // in.n = rand();
 
     	    testData.testInput[i] = in;
     	}

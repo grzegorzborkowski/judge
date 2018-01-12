@@ -1,6 +1,6 @@
 import React from 'react'
 
-//xport const BACKEND_ADDRESS = "http://ec2-34-210-35-124.us-west-2.compute.amazonaws.com:8080/";
+//export const BACKEND_ADDRESS = "http://ec2-34-210-35-124.us-west-2.compute.amazonaws.com:8080/";
 export const BACKEND_ADDRESS = "http://localhost:8080/";
 export const JUDGE_ENDPOINT = "judge/submit";
 export const ACCOUNT_ENDPOINT = "user/getInfo";

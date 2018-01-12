@@ -36,6 +36,15 @@ export default React.createClass({
                         </tr>
                     </tbody>
                 </Table>
+
+                <div>
+                  <br/>
+                  <i>Project Judge</i> has been created as a bachelor thesis project in 2018 by:
+                  <br/>
+                  Anna Anioł, Grzegorz Borkowski, Jakub Tustanowski
+                  <br/>
+                  <br/>
+                </div>
             </div>
         </div>
     )
