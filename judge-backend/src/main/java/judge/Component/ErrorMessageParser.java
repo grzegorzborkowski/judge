@@ -1,9 +1,14 @@
 package judge.Component;
 
-public class ErrorMessageParser {
+import org.apache.log4j.Logger;
 
-    public static String parseErrorMessage(String errorCode) {
+public class ErrorMessageParser {
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ErrorMessageParser.class);
+
+    public static String parseErrorMessage(String errorCode, int lineWhereCustomCodeStarts) {
         String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]*[:\\d]*|.\\/.*)";
+
+        logger.debug("Custom code starts: " + lineWhereCustomCodeStarts);
 
         String[] errorCode1 = errorCode.split("u001B\\[");
         String errorCode1Str = String.join(" ", errorCode1);
