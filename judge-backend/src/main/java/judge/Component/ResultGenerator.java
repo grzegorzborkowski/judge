@@ -17,6 +17,7 @@ public class ResultGenerator {
         result.put("testsPositive", submission.getTestsPositive());
         result.put("testsTotal", submission.getTestsTotal());
         result.put("timeTaken", submission.getTimeTaken());
+        result.put("errorCode", submission.getErrorCode());
         return result;
     }
 
@@ -31,6 +32,14 @@ public class ResultGenerator {
         ObjectNode result = JsonNodeFactory.instance.objectNode();
         result.put("compilationCode", PROCESSING_ERROR_CODE);
         result.put("runCode", PROCESSING_ERROR_CODE);
+        return result;
+    }
+
+    public JsonNode generateProblemValidationResult(String errorCode) {
+        ObjectNode result = JsonNodeFactory.instance.objectNode();
+        result.put("errorCode", errorCode);
+        if (errorCode.isEmpty()) result.put("message", "Problem has been saved.");
+        else result.put("message", "Validation of the problem has failed. Please check its correctness.");
         return result;
     }
 }

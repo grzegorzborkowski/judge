@@ -6,6 +6,7 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';
+import { Button } from 'react-bootstrap';
 import Autocomplete from 'react-autocomplete';
 
 
@@ -22,6 +23,7 @@ class ProblemEditor extends RoleAwareComponent {
             structures: "",
             solution: "",
             categories:[],
+            errorCode: ""
         };
 
         this.userRoles = cookies.get("judge.role");
@@ -58,6 +60,7 @@ class ProblemEditor extends RoleAwareComponent {
     }
 
     submitProblem(){
+        var self = this;
         axios.post(constants.BACKEND_ADDRESS + constants.PROBLEM_EDITOR_ENDPOINT, {
             category: this.state.category,
             title: this.state.title,
@@ -70,8 +73,9 @@ class ProblemEditor extends RoleAwareComponent {
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
-          console.log(response.data);
-          alert(response.data);
+          self.setState({
+              errorCode: response.data.errorCode});
+          alert(response.data.message);
         });
     }
 
@@ -106,7 +110,7 @@ class ProblemEditor extends RoleAwareComponent {
     //TODO: change structures's textarea to CodeForm
     render() {
           const problemEditorContent = (
-            <div>
+            <div className="ProblemInputForm">
                 <h2>My problem editor</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>
@@ -137,6 +141,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <textarea
                             name="title"
                             rows="2"
+                            maxlength="255"
                             value={this.state.title}
                             onChange={this.handleInputChange} />
                     </label>
@@ -147,6 +152,7 @@ class ProblemEditor extends RoleAwareComponent {
                         <textarea
                             name="description"
                             rows="5"
+                            maxlength="255"
                             value={this.state.description}
                             onChange={this.handleInputChange} />
                     </label>
@@ -159,7 +165,7 @@ class ProblemEditor extends RoleAwareComponent {
                                    value={this.state.structures}
                                    width="600px"
                                    height="400px"
-                                   fontSize={18}
+                                   fontSize={constants.ACE_EDITOR_FONT_SIZE}
                                    wrapEnabled={true}
                                    name="structures"
                                    onChange={this.handleChangeForStructures}/>
@@ -173,14 +179,20 @@ class ProblemEditor extends RoleAwareComponent {
                          value={this.state.solution}
                          width="600px"
                          height="800px"
-                         fontSize={18}
+                         fontSize={constants.ACE_EDITOR_FONT_SIZE}
                          wrapEnabled={true}
                          name="solution"
                          onChange={this.handleChangeForSolution}/>
                     </label>
                     <br/>
+                    {
+                      this.state.errorCode != null && this.state.errorCode != 'unsigned' && this.state.errorCode != "" ?
+                        <div> Error message: <b>{this.state.errorCode}</b></div> : ''
+                    }
                     <br/>
-                    <input type="submit" value="Submit" />
+                    <Button
+                        type="submit">Submit
+                    </Button>
                 </form>
             </div>
         );

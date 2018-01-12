@@ -1,5 +1,6 @@
 package judge.Service.judge;
 
+import judge.Component.ErrorMessageParser;
 import judge.Component.JudgeResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,8 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * AgentService is responsible for communication with external runner.
@@ -60,6 +59,7 @@ class AgentService {
         reqEntity.addPart("file", fileBody);
         HttpEntity entity = reqEntity.build();
         httppost.setEntity(entity);
+	System.out.println(externalRunnerUrl);
 
         System.out.println("executing request " + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
@@ -78,8 +78,9 @@ class AgentService {
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
+            String errorCode = ErrorMessageParser.parseErrorMessage(bodyJson.get("ErrorCode").toString());
 
-            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken);
+            result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken, errorCode);
 
             if (resEntity != null) {
                 logger.info("Response content length: " + resEntity.getContentLength());

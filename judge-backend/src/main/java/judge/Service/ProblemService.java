@@ -1,5 +1,6 @@
 package judge.Service;
 
+import judge.Component.ResultGenerator;
 import judge.Dao.ProblemDao;
 import judge.Entity.Problem;
 import judge.Entity.Submission;
@@ -28,6 +29,8 @@ public class ProblemService {
     private CategoryService categoryService;
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private ResultGenerator resultGenerator;
 
     public Collection<Problem> getAllProblems() {
         List<Problem> problemList = new ArrayList<>();
@@ -56,25 +59,30 @@ public class ProblemService {
             if(problem.getCategory() == null) {
                 return "Please specify a valid category";
             }
-            if(this.problemValidatorService.validateNewProblem(problem)) {
+
+            String validationErrorMessage = this.problemValidatorService.validateNewProblem(problem);
+
+            if(validationErrorMessage.isEmpty()) {
                 this.problemDao.save(problem);
-                return "New problem has been added.";
+                return resultGenerator.generateProblemValidationResult(validationErrorMessage).toString();
             } else {
-                return "Validation of the problem has failed. Please check its correctness.";
+                return resultGenerator.generateProblemValidationResult(validationErrorMessage).toString();
             }
         } else {
             logger.warn("Problem with the same title already exists.");
-            return "Problem with given title already exists. Adding failed.";
+            return resultGenerator.generateProblemValidationResult(
+                    "Problem with given title already exists. Adding failed.").toString();
         }
     }
 
     public String saveProblem(Problem problem) {
-        if(this.problemValidatorService.validateNewProblem(problem)) {
+        String validationErrorMessage = this.problemValidatorService.validateNewProblem(problem);
+
+        if(validationErrorMessage.isEmpty()) {
             this.problemDao.save(problem);
-            return "Problem has been edited.";
-        } else {
-            return "Problem invalid! Please double check your input and try again.";
         }
+
+        return resultGenerator.generateProblemValidationResult(validationErrorMessage).toString();
     }
 
     @Transactional

@@ -1,0 +1,9 @@
+!/bin/bash
+cd /home/ec2-user/judge2/judge
+docker-compose down
+docker-compose stop
+docker-compose build
+docker-compose up -d
+cd judge-external-runner/go
+go run server.go /tmp/examine &
+cd /home/ec2-user/judge

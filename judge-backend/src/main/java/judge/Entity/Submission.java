@@ -25,6 +25,7 @@ public class Submission {
     private Float timeTaken;
     private Problem problem;
     private String fullCode;
+    private String errorCode;
 
     public Submission(User author, Date date, String code, Integer compilationCode, Integer runCode, Integer testsTotal, Integer testsPositive, Float timeTaken, Problem problem) {
         this.author = author;
@@ -83,6 +84,11 @@ public class Submission {
         return timeTaken;
     }
 
+    @Transient
+    public String getErrorCode() {
+        return errorCode;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -119,6 +125,10 @@ public class Submission {
         this.timeTaken = timeTaken;
     }
 
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
     @ManyToOne
     @JoinColumn(name = "ProblemID")
     public Problem getProblem() {
@@ -143,5 +153,6 @@ public class Submission {
         this.setTestsPositive(result.getTestsPositive());
         this.setTestsTotal(result.getTestsTotal());
         this.setTimeTaken(result.getTimeTaken());
+        this.setErrorCode(result.getErrorCode());
     }
 }

@@ -1,5 +1,6 @@
 package judge.Service.judge;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import judge.Component.JudgeResult;
 import judge.Entity.Problem;
 import judge.Service.FileService;
@@ -28,21 +29,23 @@ public class NewProblemValidatorService {
 
     /*
       Validates if a new problem is syntactically correct.
+      Returns error message when problem is invalid and null if problem is fine.
       Generates source code file based on the teacher's input and a signature of student's function.
       It uploads the new file to examine and verifies if compilation and rune codes are OK.
       All the defined tests are expected to fail while this execution.
      */
-    public boolean validateNewProblem(Problem problem) {
+    public String validateNewProblem(Problem problem) {
         try {
             Path studentsSignature = Paths.get(TEMPLATES_DIR_NAME + STUDENTS_SIGNATURE_C);
             String sourceCodeFilename = sourceCodeService.createSourceCodeFile(String.join("",Files.readAllLines(studentsSignature)), problem);
             JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
             fileService.removeFile(sourceCodeFilename);
             if(externalExaminationResult.getCompilationCode()==COMPILATION_SUCCESS_CODE
-                    && externalExaminationResult.getRunCode()==RUN_SUCCESS_CODE) return true;
+                    && externalExaminationResult.getRunCode()==RUN_SUCCESS_CODE) return "";
+            return externalExaminationResult.getErrorCode();
         } catch (Exception e) {
             logger.error(e.toString());
         }
-        return false;
+        return "Validation has failed";
     }
 }

@@ -23,6 +23,7 @@ type Result struct {
     TestsPositive int
     TestsTotal int
     TimeTaken float64
+    ErrorCode string
 }
 
 const COMPILATION_SUCCESS_CODE = 0
@@ -61,7 +62,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
             return
         }
 
-        compilationCode, runCode, testsPositive, testsTotal, timeTaken := processWithDocker(baseName + handler.Filename, handler.Filename)
+        compilationCode, runCode, testsPositive, testsTotal, timeTaken, errorCode := processWithDocker(baseName + handler.Filename, handler.Filename)
 
         result := Result{
             CompilationCode: compilationCode,
@@ -69,6 +70,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
             TestsPositive: testsPositive,
             TestsTotal: testsTotal,
             TimeTaken: timeTaken,
+            ErrorCode: errorCode,
         }
         resultMarshaled, _ := json.Marshal(result)
         w.Write(resultMarshaled)
@@ -84,7 +86,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 // TODO: distinguish it from possible execution / time limit / memory limit error
 // http://stackoverflow.com/questions/18986943/in-golang-how-can-i-write-the-stdout-of-an-exec-cmd-to-a-file
 
-func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int, float64) {
+func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, int, int, int, float64, string) {
 
     ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
     defer cancel()
@@ -146,7 +148,7 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
             switch err {
             case context.DeadlineExceeded:
                 fmt.Println(err.Error())
-                return COMPILATION_SUCCESS_CODE, TIMEOUT_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
+                return COMPILATION_SUCCESS_CODE, TIMEOUT_CODE, NO_TESTS, NO_TESTS, ZERO_TIME, err.Error()
             default:
                 panic(err)
             }
@@ -194,20 +196,20 @@ func processWithDocker(filenameWithDir string, filenameWithoutDir string) (int, 
     var timeTaken=0.0
 
     if sErr!="" {
-        return COMPILATION_SUCCESS_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
+        return COMPILATION_SUCCESS_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME, sErr
     }
     if sOut!="" {
         matched, err := regexp.MatchString(`^[0-9]+ [0-9]+`, sOut)
         if matched {
             fmt.Sscanf(sOut, "%d %d %f", &testsPositive, &testsTotal, &timeTaken)
             fmt.Printf("Working")
-            return COMPILATION_SUCCESS_CODE, RUN_SUCCESS_CODE, testsPositive, testsTotal, timeTaken
+            return COMPILATION_SUCCESS_CODE, RUN_SUCCESS_CODE, testsPositive, testsTotal, timeTaken, ""
         }
         fmt.Println(matched, err)
-        return COMPILATION_FAILURE_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
+        return COMPILATION_FAILURE_CODE, RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME, sOut
     }
 
-    return COMPILATION_FAILURE_CODE,RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME
+    return COMPILATION_FAILURE_CODE,RUN_FAILURE_CODE, NO_TESTS, NO_TESTS, ZERO_TIME, ""
 }
 
 

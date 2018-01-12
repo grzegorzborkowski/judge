@@ -9,12 +9,15 @@ services:
   ports:
     - "5432:5432"
 
- go:
-  build:
-   context: judge-external-runner/go
-   dockerfile: Dockerfile
-  ports:
-   - "8123:8123"
+# go:
+#  privileged: true
+#  build:
+#   context: judge-external-runner/go
+#   dockerfile: Dockerfile
+#  ports:
+#   - "8123:8123"
+#  volumes:
+#   - "/var/run/docker.sock:/var/run/docker.sock"
 
  web-back:
   build:
@@ -24,7 +27,7 @@ services:
    - "8080:8080"
   depends_on:
    - "db"
-   - "go"
+#   - "go"
 
  web-front:
   build:
