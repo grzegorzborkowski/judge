@@ -40,4 +40,12 @@ public class CategoryController {
         logger.info("Processing POST /categories/remove");
         return categoryService.removeCategory(id);
     }
+
+    @RequestMapping(value = "/changeName", method = RequestMethod.POST)
+    public String changeCategoryNameById(@RequestParam Integer id,
+                                         @RequestBody JsonNode json) {
+        logger.info("Processing POST /categories/changeName");
+        String newName = json.get("name").asText();
+        return categoryService.changeCategoryName(id, newName);
+    }
 }

@@ -14,7 +14,9 @@ class CategoryManagement extends RoleAwareComponent {
         this.state = {
             categories: [],
             category: "",
-            showModal: false
+            showRemoveModal: false,
+            showEditNameModal: false,
+            newCategoryName: ""
         };
 
         this.userRoles = cookies.get("judge.role");
@@ -25,8 +27,12 @@ class CategoryManagement extends RoleAwareComponent {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.submitCategory = this.submitCategory.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        this.handleShowRemoveModal = this.handleShowRemoveModal.bind(this);
+        this.handleCloseRemoveModal = this.handleCloseRemoveModal.bind(this);
+        this.changeCategoryName = this.changeCategoryName.bind(this);
+        this.handleCloseEditNameModal = this.handleCloseEditNameModal.bind(this);
+        this.handleShowEditNameModal = this.handleShowEditNameModal.bind(this);
+        this.handleNewCategoryAreaChange = this.handleNewCategoryAreaChange.bind(this);
     }
 
     handleInputChange(event) {
@@ -62,13 +68,48 @@ class CategoryManagement extends RoleAwareComponent {
         });
     }
 
-
-    handleClose() {
-        this.setState({showModal: false});
+    removeCategory(category_id) {
+        axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_REMOVE_ENDPOINT
+            + category_id).then(function (response) {
+            console.log(response);
+            alert(response['data'])
+        }).catch(function (error) {
+            alert("You can't delete this category!")
+        });
+        this.handleCloseRemoveModal();
+        window.location.reload();
     }
 
-    handleShow() {
-        this.setState({showModal: true});
+    changeCategoryName(category_id, new_name) {
+        var self = this;
+        axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_CHANGE_NAME_ENDPOINT
+            + category_id, {
+            name: new_name
+        }).then(function (response) {
+            console.log("Succesfully changed name!" + response)
+            window.location.reload();
+        });
+    }
+
+
+    handleCloseRemoveModal() {
+        this.setState({showRemoveModal: false});
+    }
+
+    handleShowRemoveModal() {
+        this.setState({showRemoveModal: true});
+    }
+
+    handleCloseEditNameModal() {
+        this.setState({showEditNameModal: false});
+    }
+
+    handleShowEditNameModal() {
+        this.setState({showEditNameModal: true});
+    }
+
+    handleNewCategoryAreaChange(event) {
+        this.setState({newCategoryName: event.target.value});
     }
 
 
@@ -86,17 +127,7 @@ class CategoryManagement extends RoleAwareComponent {
             })
     }
 
-    removeCategory(category_id) {
-        axios.post(constants.BACKEND_ADDRESS + constants.CATEGORY_REMOVE_ENDPOINT
-            + category_id).then(function (response) {
-            console.log(response);
-            alert(response['data'])
-        }).catch(function (error) {
-            alert("You can't delete this category!")
-        });
-        this.handleClose();
-        window.location.reload();
-    }
+
 
     render() {
         return (
@@ -125,6 +156,7 @@ class CategoryManagement extends RoleAwareComponent {
                         <thead>
                         <tr>
                             <th>Category</th>
+                            <th>Edit Name </th>
                             <th>Delete</th>
                         </tr>
                         </thead>
@@ -133,9 +165,28 @@ class CategoryManagement extends RoleAwareComponent {
                         {this.state.categories.map(category =>
                             <tr key={category.id}>
                                 <td>{category.name}</td>
-                                <td><a onClick={() => this.handleShow()}>Delete</a></td>
+                                <td><a onClick={() => this.handleShowEditNameModal()}> Edit Name </a></td>
+                                <td><a onClick={() => this.handleShowRemoveModal()}>Delete</a></td>
 
-                                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                                <Modal show={this.state.showEditNameModal} onHide={this.handleCloseEditNameModal}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Changing a category name</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <h4>Please type in a new category name for a category {category.name} </h4>
+                                        <input type="text" value={this.state.newCategoryName}
+                                                  onChange={this.handleNewCategoryAreaChange}>
+                                        </input>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button bsStyle="danger" onClick={() => this.changeCategoryName(category.id, this.state.newCategoryName)}
+                                                style={{float: 'left'}}> Change Name  </Button>
+                                        <Button bsStyle="info" onClick={this.handleCloseEditNameModal}> Close </Button>
+                                    </Modal.Footer>
+                                </Modal>
+
+
+                                <Modal show={this.state.showRemoveModal} onHide={this.handleCloseRemoveModal}>
                                     <Modal.Header closeButton>
                                         <Modal.Title>Deleting a category</Modal.Title>
                                     </Modal.Header>
@@ -148,7 +199,7 @@ class CategoryManagement extends RoleAwareComponent {
                                     <Modal.Footer>
                                         <Button bsStyle="danger" onClick={() => this.removeCategory(category.id)}
                                                 style={{float: 'left'}}> Yes (Delete) </Button>
-                                        <Button bsStyle="info" onClick={this.handleClose}> No (Close) </Button>
+                                        <Button bsStyle="info" onClick={this.handleCloseRemoveModal}> No (Close) </Button>
                                     </Modal.Footer>
                                 </Modal>
                             </tr>

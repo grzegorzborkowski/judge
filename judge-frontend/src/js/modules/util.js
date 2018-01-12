@@ -22,6 +22,7 @@ export const PROBLEM_EDITOR_ENDPOINT = "problems/edit";
 export const CATEGORY_ENDPOINT = "categories/getAll";
 export const CATEGORY_ADD_ENDPOINT = "categories/add";
 export const CATEGORY_REMOVE_ENDPOINT = "categories/remove?id=";
+export const CATEGORY_CHANGE_NAME_ENDPOINT = "categories/changeName?id=";
 export const PROBLEMS_BY_CATEGORY_ENDPOINT = "problems/getByCategory?name=";
 export const PROBLEM_REMOVE_ENDPOINT = "problems/remove?id=";
 export const PASSWORD_CHANGE_ENDPOINT = "user/changePassword";

@@ -66,4 +66,15 @@ public class CategoryService {
             return "Category with the given id doesn't exist";
         }
     }
+
+    public String changeCategoryName(Integer id, String newName) {
+        Category category = this.categoryDao.findById(id);
+        if (category != null) {
+            category.setName(newName);
+            categoryDao.save(category);
+            return "Category name updated";
+        } else {
+            return "Category with the given id doesn't exists";
+        }
+    }
 }
