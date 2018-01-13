@@ -7,6 +7,9 @@ import judge.Entity.Problem;
 import judge.Entity.User;
 import judge.Entity.Submission;
 import judge.Service.FileService;
+import judge.Service.judge.structures.FileToExamine;
+import judge.Service.judge.structures.SourceCodeFileType;
+import judge.Service.judge.structures.SourceCodeStructure;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -56,10 +59,10 @@ public class JudgeService {
         submission.setAuthor(author);
         submission.setProblem(problem);
 
-        String sourceCodeFilename = sourceCodeService.createSourceCodeFile(code, problem);
+        FileToExamine fileToExamine = sourceCodeService.createSourceCodeFile(code, problem, SourceCodeFileType.SUBMISSION);
 
-        try{
-            JudgeResult externalExaminationResult = agentService.uploadFileToExamine(sourceCodeFilename);
+        try {
+            JudgeResult externalExaminationResult = agentService.uploadFileToExamine(fileToExamine);
             submission.fillWithResult(externalExaminationResult);
         } catch (Exception e) {
             submission.setCompilationCode(PROCESSING_ERROR_CODE);
@@ -71,7 +74,7 @@ public class JudgeService {
             logger.error(e.toString());
         }
 
-        fileService.removeFile(sourceCodeFilename);
+        fileService.removeFile(fileToExamine.getFilename());
 
         this.submissionDao.save(submission);
         logger.info("Processing of the submission has finished.");

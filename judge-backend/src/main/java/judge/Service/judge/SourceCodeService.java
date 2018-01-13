@@ -1,6 +1,10 @@
 package judge.Service.judge;
 
 import judge.Entity.Problem;
+import judge.Service.FileService;
+import judge.Service.judge.structures.FileToExamine;
+import judge.Service.judge.structures.SourceCodeFileType;
+import judge.Service.judge.structures.SourceCodeStructure;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +29,10 @@ class SourceCodeService {
      * @param code  student's input (now: program, target: function)
      * @return path to the created source code file
      */
-    String createSourceCodeFile(String code, Problem problem) {
-        List<String> lines = prepareSourceCode(code, problem);
+    FileToExamine createSourceCodeFile(String code, Problem problem, SourceCodeFileType sourceCodeFileType) {
+        FileToExamine fileToExamine = new FileToExamine();
+
+        SourceCodeStructure sourceCodeStructure = prepareSourceCode(code, problem, sourceCodeFileType);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         /*
             Math.random() will be replaced by user ID.
@@ -36,18 +42,26 @@ class SourceCodeService {
         System.out.println(fileName);
         Path file = Paths.get(fileName);
         try {
-            Files.write(file, lines, Charset.forName("UTF-8"));
+            Files.write(file, sourceCodeStructure.getLines(), Charset.forName("UTF-8"));
         } catch (IOException e) {
             logger.error("Exception happened while generating the source code file.", e);
         }
-        return fileName;
+
+        fileToExamine.setFilename(fileName);
+        fileToExamine.setLineWhereCustomCodeStarts(sourceCodeStructure.getLineWhereCustomCodeStarts());
+
+        return fileToExamine;
     }
 
-    private List<String> prepareSourceCode(String code, Problem problem) {
+    private SourceCodeStructure prepareSourceCode(String code, Problem problem, SourceCodeFileType sourceCodeFileType) {
+        SourceCodeStructure sourceCodeStructure = new SourceCodeStructure();
+
         List<String> result,generated_lines_1, generated_lines_2;
         result = new ArrayList<>();
         Path generated_file_1 = Paths.get(TEMPLATES_DIR_NAME + HEADER_C);
         Path generated_file_2 = Paths.get(TEMPLATES_DIR_NAME + MAIN_FUNCTION_C);
+
+        int lineWhereCustomCodeStarts = 1;
 
         try {
             generated_lines_1 = Files.readAllLines(generated_file_1);
@@ -58,11 +72,26 @@ class SourceCodeService {
             result.addAll(Collections.singletonList(problem.getSolution()));
             result.addAll(Collections.singletonList(code));
             result.addAll(generated_lines_2);
+
+            /*
+               For NEW_PROBLEM we need to count headers and structures only,
+                as solution code is considered as custom code.
+               For SUBMISSION we need to count solution code too,
+                as code provided by a submitting person is considered as custom code.
+             */
+            lineWhereCustomCodeStarts += generated_lines_1.size();
+            lineWhereCustomCodeStarts += problem.getStructures().split("\n").length;
+            if(sourceCodeFileType==SourceCodeFileType.SUBMISSION) {
+                lineWhereCustomCodeStarts += problem.getSolution().split("\n").length;
+            }
         }
         catch (IOException e) {
             logger.error("Exception happened while generating the source code.", e);
         }
-        return result;
 
+        sourceCodeStructure.setLines(result);
+        sourceCodeStructure.setLineWhereCustomCodeStarts(lineWhereCustomCodeStarts);
+
+        return sourceCodeStructure;
     }
 }

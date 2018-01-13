@@ -2,6 +2,7 @@ package judge.Service.judge;
 
 import judge.Component.ErrorMessageParser;
 import judge.Component.JudgeResult;
+import judge.Service.judge.structures.FileToExamine;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -45,21 +46,21 @@ class AgentService {
      * TODO: Change communication model - enable reading results from response body. Now they are in headers.
      */
     @Async
-    JudgeResult uploadFileToExamine(String filename) throws IOException {
+    JudgeResult uploadFileToExamine(FileToExamine fileToExamine) throws IOException {
 
 
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httppost = new HttpPost(externalRunnerUrl);
         JudgeResult result = null;
 
-        final File file = new File(filename);
+        final File file = new File(fileToExamine.getFilename());
         FileBody fileBody = new FileBody(file);
 
         MultipartEntityBuilder reqEntity = MultipartEntityBuilder.create();
         reqEntity.addPart("file", fileBody);
         HttpEntity entity = reqEntity.build();
         httppost.setEntity(entity);
-	System.out.println(externalRunnerUrl);
+	    System.out.println(externalRunnerUrl);
 
         System.out.println("executing request " + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
@@ -78,7 +79,8 @@ class AgentService {
             int testsTotal = Integer.parseInt(bodyJson.get("TestsTotal").toString());
             int testsPositive = Integer.parseInt(bodyJson.get("TestsPositive").toString());
             float timeTaken = Float.parseFloat(bodyJson.get("TimeTaken").toString());
-            String errorCode = ErrorMessageParser.parseErrorMessage(bodyJson.get("ErrorCode").toString());
+            String errorCode = ErrorMessageParser.parseErrorMessage(bodyJson.get("ErrorCode").toString(),
+                    fileToExamine.getLineWhereCustomCodeStarts());
 
             result = new JudgeResult(compilationCode, runCode, testsPositive, testsTotal, timeTaken, errorCode);
 
