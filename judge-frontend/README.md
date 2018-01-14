@@ -3,8 +3,6 @@
 * Install dependencies (npm required):
 ```
 npm install
-npm install react react-dom react-facebook-login
-npm install universal-cookie
 ```
 
 * Run in dev mode:
