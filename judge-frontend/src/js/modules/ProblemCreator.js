@@ -5,11 +5,8 @@ import AceEditor from 'react-ace';
 import Autocomplete from 'react-autocomplete';
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
-import {Link} from 'react-router';
-import { Table } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { RoleAwareComponent } from 'react-router-role-authorization';
-import $ from 'jquery';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();

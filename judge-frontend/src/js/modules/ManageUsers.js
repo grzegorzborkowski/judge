@@ -1,7 +1,6 @@
 import React from 'react'
 import 'brace/mode/c_cpp';
 import 'brace/theme/dreamweaver';
-import { Button } from 'react-bootstrap';
 import {Link} from 'react-router';
 import { RoleAwareComponent } from 'react-router-role-authorization';
 import Cookies from 'universal-cookie';

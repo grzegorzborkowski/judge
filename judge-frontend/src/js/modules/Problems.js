@@ -1,8 +1,6 @@
 import React from 'react'
 import axios from 'axios';
 import * as constants from './util.js'
-import {Link} from 'react-router';
-import { Table } from 'react-bootstrap';
 import Category from './Category.js';
 
 class Problems extends React.Component {

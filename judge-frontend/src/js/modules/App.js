@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from './Navbar';
-import { Button } from 'react-bootstrap';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
