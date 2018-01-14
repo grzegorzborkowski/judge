@@ -1,4 +1,4 @@
-To run, set up PostgresSQL locally.
+To run without docker, set up PostgresSQL locally.
 
 **First usage only:**
 * Install PostgresSQL - for Ubuntu:
@@ -24,52 +24,10 @@ createdb -h localhost -p 5432 -U postgres springbootdb
 
 `sudo -u postgres psql`
 
-***External runner***
-
-External runner is designed as a GO web server now.
-To run the project with external runner, you have to:
-* run external runner
-    (golang 1.3 or higher is needed)
-
-    `go run server.go`
-
-    server works on
-    `localhost:8123/submission`
-
 ***Spring application***
-* IntelliJ users: if IntelliJ didn't do it by itself, mark Beans.xml as a valid xml source for judge module
-* run Spring application
+* run Spring application using IDE or
+* Type in :
+```
+mvn spring-boot:run
+```
 
-
-
-****FLOW SUMMARY****
-
-Backend supports the following requests:
-
-**GET**
-
-* /student/getAll
-* /submission/getAll
-* /student/getById
-
-param: id = [student id]
-* /submission/getAllForUser
-
-param: id = [student id]
-
-
-**POST**
-
-* /judge/submit
-
-{   "code":"[code as string]",
-	"problemID":"[problem id]"
-}
-
-* /student/add
-
-{   "role":"[role]",
-    "email":"[email]",
-    "password":"[password]",
-    "username":"[username]"
-}
