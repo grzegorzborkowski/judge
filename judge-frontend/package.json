@@ -15,26 +15,16 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "brace": "^0.10.0",
-    "history": "^1.17.0",
-    "jquery": "^3.2.1",
-    "material-ui": "^0.19.4",
-    "prop-types": "^15.5.10",
+    "file-loader": "^1.1.6",
     "react": "^15.0.4",
     "react-ace": "^4.1.6",
     "react-autocomplete": "^1.7.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.0",
-    "react-facebook-login": "^3.6.2",
-    "react-facebook-login-component": "^0.7.0",
     "react-router": "^2.5.1",
     "universal-cookie": "^2.0.8",
-    "url-loader": "^0.6.2",
     "webpack": "^2.0.0",
-    "webpack-dev-server": "^1.14.1"
-  },
-  "devDependencies": {
-    "css-loader": "^0.28.7",
-    "file-loader": "^1.1.6",
+    "webpack-dev-server": "^1.14.1",
     "react-router-role-authorization": "^1.1.4"
   },
   "scripts": {

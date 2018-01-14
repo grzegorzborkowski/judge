@@ -3,7 +3,6 @@ import list_img from '../../../images/solve_problem_list.png'
 import upper_img from '../../../images/solve_problem_structs.png'
 import student_img from '../../../images/solve_problem_submit.png'
 
-import { Table } from 'react-bootstrap';
 
 export default React.createClass({
   render() {
