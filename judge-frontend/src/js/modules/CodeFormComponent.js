@@ -87,7 +87,7 @@ class CodeFormComponent extends React.Component {
                     <br/>
                     {
                       this.state.errorCode != null && this.state.errorCode != 'unsigned' && this.state.errorCode != "" ?
-                        <div> Error message: <b>{this.state.errorCode}</b></div> : ''
+                        <div> Error message: <b><pre>{this.state.errorCode}</pre></b></div> : ''
                     }
                     <div> Compilation: <b>{this.state.compilationStatus} </b></div>
                     <div> Execution: <b>{this.state.runStatus} </b></div>

@@ -12,7 +12,7 @@ public class ErrorMessageParser {
 
         // matches source code file name, e.g "source_code20180112_2334560.13831908083413236.c:"
         // and a "./chain: ..." line
-        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]:|.\\/.*)";
+        String errorMessageRegex = "(source[_A-z\\d.]*[\\-\\w.]:|.\\/.*(\\s|\\S)*)";
 
         logger.debug("Custom code starts: " + lineWhereCustomCodeStarts);
 
@@ -40,8 +40,7 @@ public class ErrorMessageParser {
                 .replace("[m","")
                 .replace("[01;31m","")
                 .replace("[01;32m","")
-                .replace("[01;35m","")
-                .replace("^","\n");
+                .replace("[01;35m","");
         return escapedText;
     }
 

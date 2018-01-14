@@ -187,7 +187,7 @@ class ProblemEditor extends RoleAwareComponent {
                     <br/>
                     {
                       this.state.errorCode != null && this.state.errorCode != 'unsigned' && this.state.errorCode != "" ?
-                        <div> Error message: <b>{this.state.errorCode}</b></div> : ''
+                        <div> Error message: <b><pre>{this.state.errorCode}</pre></b></div> : ''
                     }
                     <br/>
                     <Button
